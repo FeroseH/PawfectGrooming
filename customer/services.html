@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Services | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+
+<body class="dashboard-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="dashboard-header">
+
+        <a href="dashboard.html" class="dashboard-logo">
+            <span>🐾</span>
+
+            <div>
+                <h2>Pawfect Grooming</h2>
+                <small>Gentle care. Happy pets.</small>
+            </div>
+        </a>
+
+
+        <nav class="dashboard-nav">
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="pets.html">
+                My Pets
+            </a>
+
+            <a href="services.html" class="active">
+                Services
+            </a>
+
+            <a href="appointments.html">
+                Appointments
+            </a>
+
+            <a href="history.html">
+                History
+            </a>
+
+        </nav>
+
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+            type="button"
+        >
+            Log Out
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="dashboard-container services-page-container">
+
+
+        <!-- PAGE HEADING -->
+
+        <section class="services-page-heading">
+
+            <div>
+
+                <p class="small-label">
+                    GENTLE CARE FOR YOUR PET
+                </p>
+
+                <h1>
+                    Grooming Services
+                </h1>
+
+                <p>
+                    Choose the grooming service that best
+                    suits your furry friend's needs.
+                </p>
+
+            </div>
+
+
+            
+
+        </section>
+
+
+        <!-- =========================
+             SERVICES
+        ========================== -->
+
+        <section class="services-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Available Services
+                    </h2>
+
+                    <p id="serviceCount">
+                        Loading services...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="servicesList"
+                class="services-grid"
+            >
+
+                <div class="loading-state">
+                    Loading grooming services...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         SUPABASE
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/supabase.js"></script>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        let currentUser = null;
+
+
+        const servicesList =
+            document.getElementById("servicesList");
+
+        const serviceCount =
+            document.getElementById("serviceCount");
+
+        const logoutButton =
+            document.getElementById("logoutButton");
+
+
+        /* =========================
+           LOAD USER
+        ========================== */
+
+        async function loadUser() {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.getUser();
+
+
+            if (error || !data.user) {
+
+                window.location.href =
+                    "../login.html";
+
+                return;
+            }
+
+
+            currentUser = data.user;
+
+            await loadServices();
+
+        }
+
+
+        /* =========================
+           LOAD SERVICES
+        ========================== */
+
+        async function loadServices() {
+
+            servicesList.innerHTML = `
+                <div class="loading-state">
+                    Loading grooming services...
+                </div>
+            `;
+
+
+            const {
+                data: services,
+                error
+            } = await supabaseClient
+
+                .from("services")
+
+                .select("*")
+
+                .eq(
+                    "is_active",
+                    true
+                )
+
+                .order(
+                    "id",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "LOAD SERVICES ERROR:",
+                    error
+                );
+
+
+                serviceCount.textContent =
+                    "Unable to load services.";
+
+
+                servicesList.innerHTML = `
+                    <div class="empty-services">
+                        <p>
+                            We couldn't load the grooming services.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* =========================
+               NO SERVICES
+            ========================== */
+
+            if (
+                !services ||
+                services.length === 0
+            ) {
+
+                serviceCount.textContent =
+                    "No services available.";
+
+
+                servicesList.innerHTML = `
+                    <div class="empty-services">
+                        <p>
+                            There are currently no grooming services available.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* =========================
+               SERVICE COUNT
+            ========================== */
+
+            serviceCount.textContent =
+                services.length === 1
+                    ? "1 service available"
+                    : `${services.length} services available`;
+
+
+            servicesList.innerHTML = "";
+
+
+            /* =========================
+               CREATE SERVICE CARDS
+            ========================== */
+
+            services.forEach(
+                function (service) {
+
+                    const serviceCard =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    serviceCard.className =
+                        "service-card";
+
+
+                    serviceCard.innerHTML = `
+
+                        <div class="service-card-icon">
+                            ${getServiceIcon(service.name)}
+                        </div>
+
+
+                        <div class="service-card-content">
+
+                            <h3>
+                                ${escapeHTML(service.name)}
+                            </h3>
+
+
+                            <p class="service-description">
+                                ${
+                                    escapeHTML(
+                                        service.description ||
+                                        "Professional grooming care for your pet."
+                                    )
+                                }
+                            </p>
+
+
+                            <div class="service-details">
+
+                                <span>
+                                    
+                                    ${service.duration} minutes
+                                </span>
+
+                                <strong>
+                                    ₱${formatPrice(service.price)}
+                                </strong>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="book-service-button"
+                                data-service-id="${service.id}"
+                            >
+                                Book This Service
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    servicesList.appendChild(
+                        serviceCard
+                    );
+
+
+                    /* =========================
+                       BOOK BUTTON
+                    ========================== */
+
+                    const bookButton =
+                        serviceCard.querySelector(
+                            ".book-service-button"
+                        );
+
+
+                    bookButton.addEventListener(
+                        "click",
+                        function () {
+
+                            const serviceId =
+                                this.dataset.serviceId;
+
+
+                            window.location.href =
+                                `appointments.html?service=${serviceId}`;
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           SERVICE ICON
+        ========================== */
+
+        function getServiceIcon(name) {
+
+            const serviceName =
+                name.toLowerCase();
+
+
+            if (
+                serviceName.includes("bath")
+            ) {
+                return "🛁";
+            }
+
+
+            if (
+                serviceName.includes("groom")
+            ) {
+                return "✂️";
+            }
+
+
+            if (
+                serviceName.includes("nail")
+            ) {
+                return "🐾";
+            }
+
+
+            if (
+                serviceName.includes("ear")
+            ) {
+                return "🧼";
+            }
+
+
+            return "🐶";
+
+        }
+
+
+        /* =========================
+           FORMAT PRICE
+        ========================== */
+
+        function formatPrice(price) {
+
+            return Number(price).toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        }
+
+
+        /* =========================
+           ESCAPE HTML
+        ========================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+                window.location.href =
+                    "../login.html";
+
+            }
+        );
+
+
+        /* =========================
+           START
+        ========================== */
+
+        loadUser();
+
+    </script>
+
+</body>
+
+</html>

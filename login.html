@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-container">
+
+        <!-- LEFT SIDE -->
+        <section class="auth-visual">
+
+            <div class="auth-visual-content">
+
+                <a href="index.html" class="auth-logo">
+                    🐾 Pawfect Grooming
+                </a>
+
+                <div class="auth-message">
+
+                    
+
+                    <h1>
+                        Welcome back.<br>
+                        We've missed you.
+                    </h1>
+
+                    <p>
+                        Log in to manage your pets, book grooming
+                        appointments, and keep track of your queue.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="auth-form-section">
+
+            <div class="auth-form-container">
+
+                <a href="index.html" class="mobile-auth-logo">
+                    🐾 Pawfect Grooming
+                </a>
+
+
+                <div class="auth-heading">
+
+                    <span class="auth-small-title">
+                        WELCOME BACK
+                    </span>
+
+                    <h2>Log in to your account</h2>
+
+                    <p>
+                        Enter your account details to continue.
+                    </p>
+
+                </div>
+
+
+                <!-- LOGIN FORM -->
+                <form id="loginForm" class="auth-form">
+
+                    <div class="form-group">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="login-options">
+
+                        <label class="remember-me">
+
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                            >
+
+                            <span>Remember me</span>
+
+                        </label>
+
+                        <a href="#" class="forgot-password">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+
+                    <button type="submit" class="auth-button">
+                        Log In
+                    </button>
+
+                </form>
+
+
+                <div class="auth-divider">
+                    <span>Don't have an account?</span>
+                </div>
+
+
+                <a href="register.html" class="auth-secondary-button">
+                    Create an account
+                </a>
+
+
+                <p class="auth-back">
+
+                    <a href="index.html">
+                        ← Back to home
+                    </a>
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+
+</body>
+</html>

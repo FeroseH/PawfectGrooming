@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-container">
+
+        <section class="auth-visual">
+
+            <div class="auth-visual-content">
+
+                <a href="index.html" class="auth-logo">
+                    🐾 Pawfect Grooming
+                </a>
+
+                <div class="auth-message">
+                    <br>
+                    <br>
+
+                    <h1>
+                        Gentle care.<br>
+                        Happy pets.
+                    </h1>
+
+                    <p>
+                        Create an account and make grooming
+                        appointments easier for you and your furry friend.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="auth-form-section">
+
+            <div class="auth-form-container">
+
+                <a href="index.html" class="mobile-auth-logo">
+                    🐾 Pawfect Grooming
+                </a>
+
+                <div class="auth-heading">
+
+                    <span class="auth-small-title">
+                        WELCOME TO PAWFECT
+                    </span>
+
+                    <h2>Create your account</h2>
+
+                    <p>
+                        Join us and make your pet's grooming experience easier.
+                    </p>
+
+                </div>
+
+
+                <!-- REGISTER FORM -->
+                <form id="registerForm" class="auth-form">
+
+                    <div class="form-group">
+
+                        <label for="fullName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Confirm your password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="terms-text">
+
+                        By creating an account, you agree to our
+                        <a href="#">Terms of Service</a>
+                        and
+                        <a href="#">Privacy Policy</a>.
+
+                    </div>
+
+
+                    <button type="submit" class="auth-button">
+                        Create Account
+                    </button>
+
+                </form>
+
+
+                <div class="auth-divider">
+                    <span>Already have an account?</span>
+                </div>
+
+
+                <a href="login.html" class="auth-secondary-button">
+                    Log in instead
+                </a>
+
+
+                <p class="auth-back">
+
+                    <a href="index.html">
+                        ← Back to home
+                    </a>
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+
+</body>
+</html>

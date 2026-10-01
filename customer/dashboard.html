@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <header class="dashboard-header">
+
+        <div class="dashboard-logo">
+            <span>🐾</span>
+            <div>
+                <h2>Pawfect Grooming</h2>
+                <small>Gentle care. Happy pets.</small>
+            </div>
+        </div>
+
+        <nav class="dashboard-nav">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="history.html">History</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button">
+            Log Out
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="dashboard-container">
+
+        <!-- Welcome -->
+
+        <section class="welcome-section">
+
+            <div>
+                <p class="small-label">WELCOME BACK</p>
+
+                <h1>
+                    Hello, <span id="customerName">there</span>!
+                </h1>
+
+                <p>
+                    Ready to give your furry friend some extra care today?
+                </p>
+            </div>
+
+            
+
+        </section>
+
+
+        <!-- Quick Actions -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Quick Actions</h2>
+                    <p>What would you like to do?</p>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+
+                <a href="appointments.html" class="action-card">
+                    <div class="action-icon">📅</div>
+
+                    <div>
+                        <h3>Book Appointment</h3>
+                        <p>Schedule a grooming session.</p>
+                    </div>
+
+                    <span class="action-arrow">→</span>
+                </a>
+
+
+                <a href="pets.html" class="action-card">
+                    <div class="action-icon">🐶</div>
+
+                    <div>
+                        <h3>My Pets</h3>
+                        <p>View and manage your pets.</p>
+                    </div>
+
+                    <span class="action-arrow">→</span>
+                </a>
+
+
+                <a href="services.html" class="action-card">
+                    <div class="action-icon">✂️</div>
+
+                    <div>
+                        <h3>View Services</h3>
+                        <p>Explore our grooming services.</p>
+                    </div>
+
+                    <span class="action-arrow">→</span>
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- Dashboard Grid -->
+
+        <div class="dashboard-grid">
+
+
+            <!-- Upcoming Appointment -->
+
+            <section class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span class="card-label">NEXT APPOINTMENT</span>
+                        <h2>Upcoming Appointment</h2>
+                    </div>
+
+                    
+
+                </div>
+
+                <div id="appointmentContent">
+
+                    <div class="empty-state">
+                        <div></div>
+                        <p>No upcoming appointments.</p>
+
+                        <a href="appointments.html">
+                            Book an appointment
+                        </a>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Queue -->
+
+            <section class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span class="card-label">LIVE STATUS</span>
+                        <h2>Queue Status</h2>
+                    </div>
+
+                    
+
+                </div>
+
+                <div id="queueContent">
+
+                    <div class="empty-state">
+                        <div></div>
+                        <p>You don't have an active queue.</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- My Pets -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>My Pets</h2>
+                    <p>Your furry family members.</p>
+                </div>
+
+                <a href="pets.html" class="view-link">
+                    View all →
+                </a>
+
+            </div>
+
+
+            <div id="petsContainer" class="pets-preview">
+
+                <div class="loading-state">
+                    Loading your pets...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/supabase.js"></script>
+
+    <script src="../js/auth.js"></script>
+
+
+    <!-- Dashboard Script -->
+
+    <script>
+
+        async function loadDashboard() {
+
+            // Check if user is logged in
+            const {
+                data: { user },
+                error: userError
+            } = await supabaseClient.auth.getUser();
+
+
+            if (userError || !user) {
+
+                window.location.href = "../login.html";
+
+                return;
+            }
+
+
+            // Get customer profile
+            const { data: profile, error: profileError } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("full_name, email")
+                    .eq("id", user.id)
+                    .single();
+
+
+            if (profileError) {
+
+                console.error(profileError);
+
+            } else {
+
+                document.getElementById("customerName").textContent =
+                    profile.full_name.split(" ")[0];
+            }
+
+
+            // Load pets
+            const { data: pets, error: petsError } =
+                await supabaseClient
+                    .from("pets")
+                    .select("*")
+                    .eq("owner_id", user.id)
+                    .order("created_at", { ascending: false });
+
+
+            if (petsError) {
+
+                console.error(petsError);
+
+                return;
+            }
+
+
+            displayPets(pets);
+        }
+
+
+        function displayPets(pets) {
+
+            const container =
+                document.getElementById("petsContainer");
+
+
+            if (!pets || pets.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty-pets">
+                        <div>🐾</div>
+
+                        <h3>No pets added yet</h3>
+
+                        <p>
+                            Add your first pet to start managing
+                            their grooming records.
+                        </p>
+
+                        <a href="pets.html">
+                            Add a Pet
+                        </a>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML = pets
+                .slice(0, 3)
+                .map(pet => `
+
+                    <div class="pet-preview-card">
+
+                        <div class="pet-avatar">
+                            ${pet.species === "Dog" ? "🐶" : "🐱"}
+                        </div>
+
+                        <div>
+
+                            <h3>${pet.name}</h3>
+
+                            <p>
+                                ${pet.breed || pet.species}
+                                ${pet.age ? " • " + pet.age + (Number(pet.age) === 1 ? " year old" : " years old") : ""}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `)
+                .join("");
+        }
+
+
+        // Logout
+
+        document
+            .getElementById("logoutButton")
+            .addEventListener("click", async function () {
+
+                const { error } =
+                    await supabaseClient.auth.signOut();
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    alert("Unable to log out.");
+
+                    return;
+                }
+
+
+                window.location.href = "../login.html";
+
+            });
+
+
+        // Load dashboard
+
+        loadDashboard();
+
+    </script>
+
+</body>
+</html>

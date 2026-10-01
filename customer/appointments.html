@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointments | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="dashboard-header">
+
+        <a href="dashboard.html" class="dashboard-logo">
+            <span>🐾</span>
+
+            <div>
+                <h2>Pawfect Grooming</h2>
+                <small>Gentle care. Happy pets.</small>
+            </div>
+        </a>
+
+        <nav class="dashboard-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html" class="active">Appointments</a>
+            <a href="history.html">History</a>
+        </nav>
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+            type="button"
+        >
+            Log Out
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="dashboard-container appointments-page-container">
+
+
+        <!-- PAGE HEADING -->
+
+        <section class="appointments-page-heading">
+
+            <div>
+
+                <p class="small-label">
+                    RESERVE A GROOMING SESSION 
+                </p>
+
+                <h1>
+                    Book an Appointment
+                </h1>
+
+                <p>
+                    Choose your pet, service, and preferred
+                    schedule.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             BOOKING FORM
+        ========================== -->
+
+        <section class="appointment-form-card">
+
+            <div class="appointment-form-heading">
+
+                <div>
+                    <span class="card-label">
+                        APPOINTMENT DETAILS
+                    </span>
+
+                    <h2>
+                        Schedule a Grooming
+                    </h2>
+
+                    <p>
+                        Please provide the details below.
+                    </p>
+                </div>
+
+                
+
+            </div>
+
+
+            <form id="appointmentForm">
+
+                <div class="appointment-form-grid">
+
+
+                    <!-- PET -->
+
+                    <div class="form-group">
+
+                        <label for="appointmentPet">
+                            Select Pet *
+                        </label>
+
+                        <select
+                            id="appointmentPet"
+                            required
+                        >
+
+                            <option value="">
+                                Loading pets...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SERVICE -->
+
+                    <div class="form-group">
+
+                        <label for="appointmentService">
+                            Grooming Service *
+                        </label>
+
+                        <select
+                            id="appointmentService"
+                            required
+                        >
+
+                            <option value="">
+                                Loading services...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label for="appointmentDate">
+                            Preferred Date *
+                        </label>
+
+                        <input
+                            type="date"
+                            id="appointmentDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="form-group">
+
+                        <label for="appointmentTime">
+                            Preferred Time *
+                        </label>
+
+                        <select
+                            id="appointmentTime"
+                            required
+                        >
+
+                            <option value="">
+                                Select a time
+                            </option>
+
+                            <option value="09:00">
+                                9:00 AM
+                            </option>
+
+                            <option value="10:00">
+                                10:00 AM
+                            </option>
+
+                            <option value="11:00">
+                                11:00 AM
+                            </option>
+
+                            <option value="13:00">
+                                1:00 PM
+                            </option>
+
+                            <option value="14:00">
+                                2:00 PM
+                            </option>
+
+                            <option value="15:00">
+                                3:00 PM
+                            </option>
+
+                            <option value="16:00">
+                                4:00 PM
+                            </option>
+
+                            <option value="17:00">
+                                5:00 PM
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-group appointment-notes-group">
+
+                        <label for="appointmentNotes">
+                            Additional Notes
+                        </label>
+
+                        <textarea
+                            id="appointmentNotes"
+                            rows="4"
+                            maxlength="1000"
+                            placeholder="Anything we should know about your pet's grooming appointment?"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM FOOTER -->
+
+                <div class="appointment-form-footer">
+
+                    <p class="required-note">
+                        * Required fields
+                    </p>
+
+                    <button
+                        type="submit"
+                        id="bookAppointmentButton"
+                        class="appointment-submit-button"
+                    >
+                        <span id="bookAppointmentText">
+                            Book Appointment
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="appointmentMessage"
+                    class="appointment-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================
+             UPCOMING APPOINTMENTS
+        ========================== -->
+
+        <section class="my-appointments-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        My Appointments
+                    </h2>
+
+                    <p id="appointmentCount">
+                        Loading appointments...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="appointmentsList"
+                class="appointments-list"
+            >
+
+                <div class="loading-state">
+                    Loading your appointments...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- 
+         SUPABASE
+    -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/supabase.js"></script>
+
+
+    <!--
+         JAVASCRIPT
+    -->
+
+    <script>
+
+        let currentUser = null;
+
+
+        const appointmentForm =
+            document.getElementById(
+                "appointmentForm"
+            );
+
+        const appointmentPet =
+            document.getElementById(
+                "appointmentPet"
+            );
+
+        const appointmentService =
+            document.getElementById(
+                "appointmentService"
+            );
+
+        const appointmentDate =
+            document.getElementById(
+                "appointmentDate"
+            );
+
+        const appointmentTime =
+            document.getElementById(
+                "appointmentTime"
+            );
+
+        const appointmentNotes =
+            document.getElementById(
+                "appointmentNotes"
+            );
+
+        const appointmentsList =
+            document.getElementById(
+                "appointmentsList"
+            );
+
+        const appointmentCount =
+            document.getElementById(
+                "appointmentCount"
+            );
+
+        const appointmentMessage =
+            document.getElementById(
+                "appointmentMessage"
+            );
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
+        /* =========================
+           GET SERVICE FROM URL
+        ========================== */
+
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const selectedServiceId =
+            urlParams.get("service");
+
+
+        /* =========================
+           SET MINIMUM DATE
+        ========================== */
+
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+        appointmentDate.min = today;
+
+
+        /* =========================
+           LOAD USER
+        ========================== */
+
+        async function loadUser() {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .auth
+                .getUser();
+
+
+            if (
+                error ||
+                !data.user
+            ) {
+
+                window.location.href =
+                    "../login.html";
+
+                return;
+            }
+
+
+            currentUser =
+                data.user;
+
+
+            await loadPets();
+
+            await loadServices();
+
+            await loadAppointments();
+
+        }
+
+
+        /* =========================
+           LOAD PETS
+        ========================== */
+
+        async function loadPets() {
+
+            const {
+                data: pets,
+                error
+            } = await supabaseClient
+
+                .from("pets")
+
+                .select(
+                    "id, name, species"
+                )
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                )
+
+                .order(
+                    "name",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "LOAD PETS ERROR:",
+                    error
+                );
+
+                appointmentPet.innerHTML = `
+                    <option value="">
+                        Unable to load pets
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            if (
+                !pets ||
+                pets.length === 0
+            ) {
+
+                appointmentPet.innerHTML = `
+                    <option value="">
+                        No pets registered
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            appointmentPet.innerHTML = `
+                <option value="">
+                    Select your pet
+                </option>
+            `;
+
+
+            pets.forEach(
+                function (pet) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        pet.id;
+
+
+                    option.textContent =
+                        `${pet.name} (${pet.species})`;
+
+
+                    appointmentPet.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           LOAD SERVICES
+        ========================== */
+
+        async function loadServices() {
+
+            const {
+                data: services,
+                error
+            } = await supabaseClient
+
+                .from("services")
+
+                .select(
+                    "id, name, price, duration"
+                )
+
+                .eq(
+                    "is_active",
+                    true
+                )
+
+                .order(
+                    "id",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "LOAD SERVICES ERROR:",
+                    error
+                );
+
+                appointmentService.innerHTML = `
+                    <option value="">
+                        Unable to load services
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            if (
+                !services ||
+                services.length === 0
+            ) {
+
+                appointmentService.innerHTML = `
+                    <option value="">
+                        No services available
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            appointmentService.innerHTML = `
+                <option value="">
+                    Select a service
+                </option>
+            `;
+
+
+            services.forEach(
+                function (service) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        service.id;
+
+
+                    option.textContent =
+                        `${service.name} — ₱${formatPrice(service.price)}`;
+
+
+                    appointmentService.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            /* Automatically select service
+               coming from services.html */
+
+            if (selectedServiceId) {
+
+                const serviceExists =
+                    services.some(
+                        service =>
+                            String(service.id) ===
+                            String(selectedServiceId)
+                    );
+
+
+                if (serviceExists) {
+
+                    appointmentService.value =
+                        selectedServiceId;
+
+                }
+
+            }
+
+        }
+
+
+        /* =========================
+           BOOK APPOINTMENT
+        ========================== */
+
+        appointmentForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                appointmentMessage.textContent =
+                    "";
+
+
+                const petId =
+                    appointmentPet.value;
+
+
+                const serviceId =
+                    appointmentService.value;
+
+
+                const date =
+                    appointmentDate.value;
+
+
+                const time =
+                    appointmentTime.value;
+
+
+                const notes =
+                    appointmentNotes.value.trim();
+
+
+                /* =========================
+                   VALIDATION
+                ========================== */
+
+                if (
+                    !petId ||
+                    !serviceId ||
+                    !date ||
+                    !time
+                ) {
+
+                    appointmentMessage.textContent =
+                        "Please complete all required fields.";
+
+                    return;
+                }
+
+
+                /* =========================
+                   DISABLE BUTTON
+                ========================== */
+
+                const bookButton =
+                    document.getElementById(
+                        "bookAppointmentButton"
+                    );
+
+                const bookText =
+                    document.getElementById(
+                        "bookAppointmentText"
+                    );
+
+
+                bookButton.disabled =
+                    true;
+
+                bookText.textContent =
+                    "Booking...";
+
+
+                /* =========================
+                   SAVE APPOINTMENT
+                ========================== */
+
+                const {
+                    data: appointment,
+                    error
+                } = await supabaseClient
+
+                    .from("appointments")
+
+                    .insert({
+
+                        customer_id:
+                            currentUser.id,
+
+                        pet_id:
+                            petId,
+
+                        service_id:
+                            serviceId,
+
+                        appointment_date:
+                            date,
+
+                        appointment_time:
+                            time,
+
+                        status:
+                            "pending",
+
+                        notes:
+                            notes || null
+
+                    })
+
+                    .select()
+
+                    .single();
+
+
+                if (error) {
+
+                    console.error(
+                        "BOOKING ERROR:",
+                        error
+                    );
+
+
+                    bookButton.disabled =
+                        false;
+
+                    bookText.textContent =
+                        "Book Appointment";
+
+
+                    appointmentMessage.textContent =
+                        error.message;
+
+
+                    return;
+                }
+
+
+                /* =========================
+                   SUCCESS
+                ========================== */
+
+                appointmentMessage.textContent =
+                    "Appointment booked successfully! 🐾";
+
+
+                appointmentMessage.classList.add(
+                    "success"
+                );
+
+
+                appointmentForm.reset();
+
+
+                bookButton.disabled =
+                    false;
+
+                bookText.textContent =
+                    "Book Appointment";
+
+
+                /* Restore minimum date */
+
+                appointmentDate.min =
+                    today;
+
+
+                await loadAppointments();
+
+            }
+        );
+
+
+        /* =========================
+           LOAD APPOINTMENTS
+        ========================== */
+
+        async function loadAppointments() {
+
+            appointmentsList.innerHTML = `
+                <div class="loading-state">
+                    Loading your appointments...
+                </div>
+            `;
+
+
+            const {
+                data: appointments,
+                error
+            } = await supabaseClient
+
+                .from("appointments")
+
+                .select(`
+                    id,
+                    appointment_date,
+                    appointment_time,
+                    status,
+                    notes,
+                    pets (
+                        name,
+                        species
+                    ),
+                    services (
+                        name,
+                        price,
+                        duration
+                    )
+                `)
+
+                .eq(
+                    "customer_id",
+                    currentUser.id
+                )
+
+                .order(
+                    "appointment_date",
+                    {
+                        ascending: true
+                    }
+                )
+
+                .order(
+                    "appointment_time",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "LOAD APPOINTMENTS ERROR:",
+                    error
+                );
+
+
+                appointmentCount.textContent =
+                    "Unable to load appointments.";
+
+
+                appointmentsList.innerHTML = `
+                    <div class="empty-appointments">
+                        <p>
+                            We couldn't load your appointments.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            if (
+                !appointments ||
+                appointments.length === 0
+            ) {
+
+                appointmentCount.textContent =
+                    "No appointments yet.";
+
+
+                appointmentsList.innerHTML = `
+                    <div class="empty-appointments">
+                        <p>
+                            You don't have any appointments yet. 🐾
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            appointmentCount.textContent =
+                appointments.length === 1
+                    ? "1 appointment"
+                    : `${appointments.length} appointments`;
+
+
+            appointmentsList.innerHTML = "";
+
+
+            appointments.forEach(
+                function (appointment) {
+
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    card.className =
+                        "appointment-card";
+
+
+                    const petName =
+                        appointment.pets?.name ||
+                        "Unknown pet";
+
+
+                    const petSpecies =
+                        appointment.pets?.species ||
+                        "";
+
+
+                    const serviceName =
+                        appointment.services?.name ||
+                        "Unknown service";
+
+
+                    const price =
+                        appointment.services?.price ||
+                        0;
+
+
+                    const duration =
+                        appointment.services?.duration ||
+                        0;
+
+
+                    const formattedDate =
+                        formatDate(
+                            appointment.appointment_date
+                        );
+
+
+                    const formattedTime =
+                        formatTime(
+                            appointment.appointment_time
+                        );
+
+
+                    card.innerHTML = `
+
+                        <div class="appointment-card-top">
+
+                            <div>
+
+                                <span class="appointment-label">
+                                    ${formattedDate}
+                                </span>
+
+                                <h3>
+                                    ${escapeHTML(
+                                        serviceName
+                                    )}
+                                </h3>
+
+                            </div>
+
+
+                            <span
+                                class="appointment-status ${getStatusClass(appointment.status)}"
+                            >
+                                ${formatStatus(
+                                    appointment.status
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <div class="appointment-card-details">
+
+                            <p>
+                                <strong>
+                                    Pet
+                                </strong>
+
+                                ${escapeHTML(
+                                    petName
+                                )}
+                                ${
+                                    petSpecies
+                                        ? `(${escapeHTML(petSpecies)})`
+                                        : ""
+                                }
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Time
+                                </strong>
+
+                                ${formattedTime}
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Duration
+                                </strong>
+
+                                ${duration} minutes
+                            </p>
+
+
+                            <p>
+                                <strong>
+                                    Price
+                                </strong>
+
+                                ₱${formatPrice(price)}
+                            </p>
+
+                        </div>
+
+
+                        ${
+                            appointment.notes
+
+                                ? `
+                                    <div class="appointment-notes">
+                                        <strong>
+                                            Notes:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            appointment.notes
+                                        )}
+                                    </div>
+                                  `
+
+                                : ""
+                        }
+
+                    `;
+
+
+                    appointmentsList.appendChild(
+                        card
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           FORMAT DATE
+        ========================== */
+
+        function formatDate(dateString) {
+
+            const date =
+                new Date(
+                    dateString + "T00:00:00"
+                );
+
+
+            return date.toLocaleDateString(
+                "en-PH",
+                {
+                    weekday: "short",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            );
+
+        }
+
+
+        /* =========================
+           FORMAT TIME
+        ========================== */
+
+        function formatTime(timeString) {
+
+            const parts =
+                timeString.split(":");
+
+
+            let hours =
+                parseInt(parts[0]);
+
+
+            const minutes =
+                parts[1];
+
+
+            const period =
+                hours >= 12
+                    ? "PM"
+                    : "AM";
+
+
+            hours =
+                hours % 12 || 12;
+
+
+            return `${hours}:${minutes} ${period}`;
+
+        }
+
+
+        /* =========================
+           FORMAT PRICE
+        ========================== */
+
+        function formatPrice(price) {
+
+            return Number(price).toLocaleString(
+                "en-PH",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        }
+
+
+        /* =========================
+           FORMAT STATUS
+        ========================== */
+
+        function formatStatus(status) {
+
+            const statusNames = {
+
+                pending:
+                    "Pending",
+
+                confirmed:
+                    "Confirmed",
+
+                cancelled:
+                    "Cancelled",
+
+                completed:
+                    "Completed"
+
+            };
+
+
+            return (
+                statusNames[status] ||
+                status
+            );
+
+        }
+
+
+        /* =========================
+           STATUS CSS CLASS
+        ========================== */
+
+        function getStatusClass(status) {
+
+            return `status-${status}`;
+
+        }
+
+
+        /* =========================
+           ESCAPE HTML
+        ========================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+                window.location.href =
+                    "../login.html";
+
+            }
+        );
+
+
+        /* =========================
+           START PAGE
+        ========================== */
+
+        loadUser();
+
+    </script>
+
+</body>
+
+</html>

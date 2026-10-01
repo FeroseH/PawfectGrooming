@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Pets | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="dashboard-header">
+
+        <a href="dashboard.html" class="dashboard-logo pets-logo">
+            <span>🐾</span>
+
+            <div>
+                <h2>Pawfect Grooming</h2>
+                <small>Gentle care. Happy pets.</small>
+            </div>
+        </a>
+
+        <nav class="dashboard-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html" class="active">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="history.html">History</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button" type="button">
+            Log Out
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="dashboard-container pets-page-container">
+
+
+        <!-- PAGE HEADING -->
+
+        <section class="pets-page-heading">
+
+            <div>
+                <p class="small-label">YOUR FURRY FAMILY</p>
+
+                <h1>My Pets</h1>
+
+                <p>
+                    Keep your pets' information organized in one place.
+                </p>
+            </div>
+
+           
+        </section>
+
+
+        <!-- =========================
+             ADD PET FORM
+        ========================== -->
+
+        <section class="pet-form-card">
+
+            <div class="pet-form-heading">
+
+                <div>
+                    <span class="card-label">PET INFORMATION</span>
+
+                    <h2>Add a New Pet</h2>
+
+                    <p>
+                        Tell us a little about your furry friend.
+                    </p>
+                </div>
+
+                <span class="card-icon">＋</span>
+
+            </div>
+
+
+            <form id="petForm">
+
+                <div class="pet-form-grid">
+
+
+                    <!-- PET NAME -->
+
+                    <div class="form-group">
+
+                        <label for="petName">
+                            Pet's Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="petName"
+                            placeholder="e.g. Luna"
+                            maxlength="80"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SPECIES -->
+
+                    <div class="form-group">
+
+                        <label for="petSpecies">
+                            Species *
+                        </label>
+
+                        <select id="petSpecies" required>
+
+                            <option value="">
+                                Select species
+                            </option>
+
+                            <option value="Dog">
+                                Dog
+                            </option>
+
+                            <option value="Cat">
+                                Cat
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BREED -->
+
+                    <div class="form-group">
+
+                        <label for="petBreed">
+                            Breed
+                        </label>
+
+                        <input
+                            type="text"
+                            id="petBreed"
+                            placeholder="e.g. Shih Tzu"
+                            maxlength="100"
+                        >
+
+                    </div>
+
+
+                    <!-- AGE -->
+
+                    <div class="form-group">
+
+                        <label for="petAge">
+                            Age (years)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="petAge"
+                            placeholder="e.g. 3"
+                            min="0"
+                            max="100"
+                        >
+
+                    </div>
+
+
+                    <!-- PHOTO -->
+
+                    <div class="form-group">
+
+                        <label for="petPhoto">
+                            Pet Photo
+                        </label>
+
+                        <input
+                            type="file"
+                            id="petPhoto"
+                            accept="image/jpeg,image/png,image/webp"
+                        >
+
+                        <small>
+                            JPG, PNG, or WEBP • Maximum 5MB
+                        </small>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-group pet-notes-group">
+
+                        <label for="petNotes">
+                            Special Notes
+                        </label>
+
+                        <textarea
+                            id="petNotes"
+                            rows="3"
+                            maxlength="1000"
+                            placeholder="Allergies, behavior, preferences, or other important details..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM FOOTER -->
+
+                <div class="pet-form-footer">
+
+                    <p class="required-note">
+                        * Required fields
+                    </p>
+
+                    <button
+                        type="submit"
+                        id="savePetButton"
+                        class="pet-submit-button"
+                    >
+                        <span id="savePetText">
+                            ＋ Add Pet
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="petFormMessage"
+                    class="pet-form-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            </form>
+
+        </section>
+
+
+        <!-- =========================
+             PET RECORDS
+        ========================== -->
+
+        <section class="my-pets-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Your Pet Records</h2>
+
+                    <p id="petCount">
+                        Loading your pets...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="petsList"
+                class="pets-list"
+            >
+
+                <div class="loading-state">
+                    Loading your pet records...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         SUPABASE
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../js/supabase.js"></script>
+
+
+    <!-- =========================
+         PET PAGE JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+        let currentUser = null;
+
+
+        const petForm =
+            document.getElementById("petForm");
+
+        const petsList =
+            document.getElementById("petsList");
+
+        const petCount =
+            document.getElementById("petCount");
+
+        const logoutButton =
+            document.getElementById("logoutButton");
+
+
+        /* =========================
+           LOAD CURRENT USER
+        ========================== */
+
+        async function loadUser() {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.getUser();
+
+
+            if (error || !data.user) {
+
+                window.location.href = "../login.html";
+
+                return;
+            }
+
+
+            currentUser = data.user;
+
+            await loadPets();
+
+        }
+
+
+        /* =========================
+           LOAD PETS
+        ========================== */
+
+        async function loadPets() {
+
+            petsList.innerHTML = `
+                <div class="loading-state">
+                    Loading your pet records...
+                </div>
+            `;
+
+
+            const {
+                data: pets,
+                error
+            } = await supabaseClient
+
+                .from("pets")
+
+                .select("*")
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "LOAD PETS ERROR:",
+                    error
+                );
+
+                petCount.textContent =
+                    "Unable to load pets.";
+
+                petsList.innerHTML = `
+                    <div class="empty-pets">
+                        <p>
+                            We couldn't load your pet records.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* =========================
+               NO PETS
+            ========================== */
+
+            if (!pets || pets.length === 0) {
+
+                petCount.textContent =
+                    "No pets added yet.";
+
+
+                petsList.innerHTML = `
+                    <div class="empty-pets">
+                        <p>
+                            You haven't added any pets yet. 🐾
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            /* =========================
+               PET COUNT
+            ========================== */
+
+            petCount.textContent =
+                pets.length === 1
+                    ? "1 pet registered"
+                    : `${pets.length} pets registered`;
+
+
+            petsList.innerHTML = "";
+
+
+            /* =========================
+               CREATE PET CARDS
+            ========================== */
+
+            for (const pet of pets) {
+
+                let photoURL = "";
+
+
+                /* =========================
+                   CREATE SIGNED PHOTO URL
+                ========================== */
+
+                if (pet.photo_url) {
+
+                    const {
+                        data: signedURL,
+                        error: photoError
+                    } = await supabaseClient
+
+                        .storage
+
+                        .from("pet-photos")
+
+                        .createSignedUrl(
+                            pet.photo_url,
+                            3600
+                        );
+
+
+                    if (
+                        !photoError &&
+                        signedURL
+                    ) {
+
+                        photoURL =
+                            signedURL.signedUrl;
+
+                    }
+
+                }
+
+
+                /* =========================
+                   PET CARD
+                ========================== */
+
+                const petCard =
+                    document.createElement("div");
+
+                petCard.className =
+                    "pet-card";
+
+
+                petCard.innerHTML = `
+
+                    ${
+                        photoURL
+
+                            ? `
+                                <img
+                                    src="${photoURL}"
+                                    alt="${escapeHTML(pet.name)}"
+                                    class="pet-photo"
+                                >
+                              `
+
+                            : `
+                                <div class="pet-photo-placeholder">
+                                    🐾
+                                </div>
+                              `
+                    }
+
+
+                    <div class="pet-card-info">
+
+                        <h3>
+                            ${escapeHTML(pet.name)}
+                        </h3>
+
+
+                        <p>
+                            <strong>
+                                Species:
+                            </strong>
+
+                            ${escapeHTML(
+                                pet.species ||
+                                "Not specified"
+                            )}
+                        </p>
+
+
+                        <p>
+                            <strong>
+                                Breed:
+                            </strong>
+
+                            ${escapeHTML(
+                                pet.breed ||
+                                "Not specified"
+                            )}
+                        </p>
+
+
+                        <p>
+                            <strong>
+                                Age:
+                            </strong>
+
+                            ${
+                                pet.age !== null &&
+                                pet.age !== undefined &&
+                                pet.age !== ""
+
+                                    ? escapeHTML(
+                                        String(pet.age)
+                                      )
+
+                                    : "Not specified"
+                            }
+                        </p>
+
+
+                        ${
+                            pet.notes
+
+                                ? `
+                                    <p>
+                                        <strong>
+                                            Notes:
+                                        </strong>
+
+                                        ${escapeHTML(
+                                            pet.notes
+                                        )}
+                                    </p>
+                                  `
+
+                                : ""
+                        }
+
+
+                        <button
+                            type="button"
+                            class="delete-pet-button"
+                            data-pet-id="${pet.id}"
+                            data-photo-path="${escapeHTML(
+                                pet.photo_url || ""
+                            )}"
+                        >
+                            🗑 Delete Pet
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                petsList.appendChild(petCard);
+
+
+                /* =========================
+                   DELETE BUTTON EVENT
+                ========================== */
+
+                const deleteButton =
+                    petCard.querySelector(
+                        ".delete-pet-button"
+                    );
+
+
+                deleteButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const petId =
+                            this.dataset.petId;
+
+                        const photoPath =
+                            this.dataset.photoPath;
+
+
+                        deletePet(
+                            petId,
+                            photoPath
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        /* =========================
+           ADD PET
+        ========================== */
+
+        petForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const name =
+                    document
+                        .getElementById("petName")
+                        .value
+                        .trim();
+
+
+                const species =
+                    document
+                        .getElementById("petSpecies")
+                        .value;
+
+
+                const breed =
+                    document
+                        .getElementById("petBreed")
+                        .value
+                        .trim();
+
+
+                const age =
+                    document
+                        .getElementById("petAge")
+                        .value;
+
+
+                const notes =
+                    document
+                        .getElementById("petNotes")
+                        .value
+                        .trim();
+
+
+                const photoFile =
+                    document
+                        .getElementById("petPhoto")
+                        .files[0];
+
+
+                /* =========================
+                   BASIC VALIDATION
+                ========================== */
+
+                if (!name || !species) {
+
+                    alert(
+                        "Please enter your pet's name and species."
+                    );
+
+                    return;
+                }
+
+
+                /* =========================
+                   PHOTO VALIDATION
+                ========================== */
+
+                if (photoFile) {
+
+                    const allowedTypes = [
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp"
+                    ];
+
+
+                    if (
+                        !allowedTypes.includes(
+                            photoFile.type
+                        )
+                    ) {
+
+                        alert(
+                            "Please upload a JPG, PNG, or WEBP image."
+                        );
+
+                        return;
+                    }
+
+
+                    if (
+                        photoFile.size >
+                        5 * 1024 * 1024
+                    ) {
+
+                        alert(
+                            "Pet photo must be 5MB or smaller."
+                        );
+
+                        return;
+                    }
+
+                }
+
+
+                /* =========================
+                   DISABLE BUTTON
+                ========================== */
+
+                const saveButton =
+                    document.getElementById(
+                        "savePetButton"
+                    );
+
+                const saveText =
+                    document.getElementById(
+                        "savePetText"
+                    );
+
+
+                saveButton.disabled = true;
+
+                saveText.textContent =
+                    "Adding Pet...";
+
+
+                /* =========================
+                   CREATE PET RECORD
+                ========================== */
+
+                const {
+                    data: pet,
+                    error: petError
+                } = await supabaseClient
+
+                    .from("pets")
+
+                    .insert({
+
+                        owner_id:
+                            currentUser.id,
+
+                        name:
+                            name,
+
+                        species:
+                            species,
+
+                        breed:
+                            breed,
+
+                        age:
+                            age
+                                ? parseInt(age)
+                                : null,
+
+                        notes:
+                            notes
+
+                    })
+
+                    .select()
+
+                    .single();
+
+
+                if (petError) {
+
+                    console.error(
+                        "ADD PET ERROR:",
+                        petError
+                    );
+
+
+                    saveButton.disabled = false;
+
+                    saveText.textContent =
+                        "＋ Add Pet";
+
+
+                    alert(
+                        petError.message
+                    );
+
+                    return;
+                }
+
+
+                let photoPath = null;
+
+
+                /* =========================
+                   UPLOAD PHOTO
+                ========================== */
+
+                if (photoFile) {
+
+                    const fileExtension =
+                        photoFile.name
+                            .split(".")
+                            .pop()
+                            .toLowerCase();
+
+
+                    const fileName =
+                        `${currentUser.id}/${pet.id}-${Date.now()}.${fileExtension}`;
+
+
+                    const {
+                        error: uploadError
+                    } = await supabaseClient
+
+                        .storage
+
+                        .from("pet-photos")
+
+                        .upload(
+                            fileName,
+                            photoFile,
+                            {
+                                cacheControl:
+                                    "3600",
+
+                                upsert:
+                                    false,
+
+                                contentType:
+                                    photoFile.type
+                            }
+                        );
+
+
+                    if (uploadError) {
+
+                        console.error(
+                            "PHOTO UPLOAD ERROR:",
+                            uploadError
+                        );
+
+
+                        /* Remove pet if photo upload fails */
+
+                        await supabaseClient
+
+                            .from("pets")
+
+                            .delete()
+
+                            .eq(
+                                "id",
+                                pet.id
+                            )
+
+                            .eq(
+                                "owner_id",
+                                currentUser.id
+                            );
+
+
+                        saveButton.disabled = false;
+
+                        saveText.textContent =
+                            "＋ Add Pet";
+
+
+                        alert(
+                            "Pet was not added because the photo upload failed."
+                        );
+
+                        return;
+                    }
+
+
+                    photoPath =
+                        fileName;
+
+
+                    /* =========================
+                       SAVE PHOTO PATH
+                    ========================== */
+
+                    const {
+                        error: updateError
+                    } = await supabaseClient
+
+                        .from("pets")
+
+                        .update({
+
+                            photo_url:
+                                photoPath
+
+                        })
+
+                        .eq(
+                            "id",
+                            pet.id
+                        )
+
+                        .eq(
+                            "owner_id",
+                            currentUser.id
+                        );
+
+
+                    if (updateError) {
+
+                        console.error(
+                            "SAVE PHOTO PATH ERROR:",
+                            updateError
+                        );
+
+
+                        /* Remove uploaded photo */
+
+                        await supabaseClient
+
+                            .storage
+
+                            .from("pet-photos")
+
+                            .remove([
+                                photoPath
+                            ]);
+
+
+                        /* Remove pet */
+
+                        await supabaseClient
+
+                            .from("pets")
+
+                            .delete()
+
+                            .eq(
+                                "id",
+                                pet.id
+                            )
+
+                            .eq(
+                                "owner_id",
+                                currentUser.id
+                            );
+
+
+                        saveButton.disabled = false;
+
+                        saveText.textContent =
+                            "＋ Add Pet";
+
+
+                        alert(
+                            "Pet could not be saved completely."
+                        );
+
+                        return;
+                    }
+
+                }
+
+
+                /* =========================
+                   SUCCESS
+                ========================== */
+
+                alert(
+                    "Pet added successfully! 🐾"
+                );
+
+
+                petForm.reset();
+
+
+                saveButton.disabled = false;
+
+                saveText.textContent =
+                    "＋ Add Pet";
+
+
+                await loadPets();
+
+            }
+        );
+
+
+        /* =========================
+           DELETE PET
+        ========================== */
+
+        async function deletePet(
+            petId,
+            photoPath
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete this pet?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            /* =========================
+               FIND BUTTON
+            ========================== */
+
+            const button =
+                document.querySelector(
+                    `.delete-pet-button[data-pet-id="${petId}"]`
+                );
+
+
+            if (button) {
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Deleting...";
+
+            }
+
+
+            /* =========================
+               DELETE PET RECORD
+            ========================== */
+
+            const {
+                data: deletedPet,
+                error: deleteError
+            } = await supabaseClient
+
+                .from("pets")
+
+                .delete()
+
+                .eq(
+                    "id",
+                    petId
+                )
+
+                .eq(
+                    "owner_id",
+                    currentUser.id
+                )
+
+                .select("id")
+
+                .single();
+
+
+            if (deleteError) {
+
+                console.error(
+                    "DELETE PET ERROR:",
+                    deleteError
+                );
+
+
+                if (button) {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "🗑 Delete Pet";
+
+                }
+
+
+                alert(
+                    "We couldn't delete this pet.\n\n" +
+                    deleteError.message
+                );
+
+
+                return;
+            }
+
+
+            /* =========================
+               DELETE PHOTO
+            ========================== */
+
+            if (photoPath) {
+
+                const {
+                    error: photoError
+                } = await supabaseClient
+
+                    .storage
+
+                    .from("pet-photos")
+
+                    .remove([
+                        photoPath
+                    ]);
+
+
+                if (photoError) {
+
+                    console.error(
+                        "PHOTO DELETE ERROR:",
+                        photoError
+                    );
+
+
+                    alert(
+                        "The pet was deleted, but its photo could not be removed from storage."
+                    );
+
+                }
+
+            }
+
+
+            /* =========================
+               REFRESH PET LIST
+            ========================== */
+
+            await loadPets();
+
+        }
+
+
+        /* =========================
+           ESCAPE HTML
+        ========================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =========================
+           LOGOUT
+        ========================== */
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+                window.location.href =
+                    "../login.html";
+
+            }
+        );
+
+
+        /* =========================
+           START PAGE
+        ========================== */
+
+        loadUser();
+
+    </script>
+
+</body>
+
+</html>
