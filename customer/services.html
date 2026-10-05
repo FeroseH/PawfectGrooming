@@ -27,8 +27,7 @@
 
     <header class="dashboard-header">
 
-        <a href="dashboard.html" class="dashboard-logo">
-            <span>🐾</span>
+        
 
             <div>
                 <h2>Pawfect Grooming</h2>
@@ -318,9 +317,7 @@
 
                     serviceCard.innerHTML = `
 
-                        <div class="service-card-icon">
-                            ${getServiceIcon(service.name)}
-                        </div>
+                        
 
 
                         <div class="service-card-content">
@@ -328,7 +325,6 @@
                             <h3>
                                 ${escapeHTML(service.name)}
                             </h3>
-
 
                             <p class="service-description">
                                 ${
@@ -403,46 +399,32 @@
 
 
         /* =========================
-           SERVICE ICON
-        ========================== */
+   SERVICE ICON (NO EMOJIS)
+========================= */
 
-        function getServiceIcon(name) {
+function getServiceIcon(name) {
+    const serviceName = name.toLowerCase();
 
-            const serviceName =
-                name.toLowerCase();
+    if (serviceName.includes("bath")) {
+        return "";
+    }
 
+    if (serviceName.includes("groom")) {
+        return "icon-groom";
+    }
 
-            if (
-                serviceName.includes("bath")
-            ) {
-                return "🛁";
-            }
+    if (serviceName.includes("nail")) {
+        return "icon-nail";
+    }
 
+    if (serviceName.includes("ear")) {
+        return "icon-ear";
+    }
 
-            if (
-                serviceName.includes("groom")
-            ) {
-                return "✂️";
-            }
+    return "icon-pet";
+}
 
-
-            if (
-                serviceName.includes("nail")
-            ) {
-                return "🐾";
-            }
-
-
-            if (
-                serviceName.includes("ear")
-            ) {
-                return "🧼";
-            }
-
-
-            return "🐶";
-
-        }
+        
 
 
         /* =========================
