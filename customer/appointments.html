@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,25 +15,19 @@
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
         rel="stylesheet"
     >
-
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../customer-new.css">
 </head>
 
 <body class="dashboard-page">
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+    <!-- HEADER -->
 
     <header class="dashboard-header">
 
-        
-
-            <div>
-                <h2>Pawfect Grooming</h2>
-                <small>Gentle care. Happy pets.</small>
-            </div>
-        </a>
+        <div>
+            <h2>Pawfect Grooming</h2>
+            <small>Gentle care. Happy pets.</small>
+        </div>
 
         <nav class="dashboard-nav">
             <a href="dashboard.html">Dashboard</a>
@@ -40,6 +35,7 @@
             <a href="services.html">Services</a>
             <a href="appointments.html" class="active">Appointments</a>
             <a href="history.html">History</a>
+            <a href="account.html">Account</a>
         </nav>
 
         <button
@@ -53,191 +49,81 @@
     </header>
 
 
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
+    <!-- MAIN CONTENT -->
 
     <main class="dashboard-container appointments-page-container">
-
 
         <!-- PAGE HEADING -->
 
         <section class="appointments-page-heading">
-
             <div>
-
-                <p class="small-label">
-                    RESERVE A GROOMING SESSION 
-                </p>
-
-                <h1>
-                    Book an Appointment
-                </h1>
-
-                <p>
-                    Choose your pet, service, and preferred
-                    schedule.
-                </p>
-
+                <p class="small-label">RESERVE A GROOMING SESSION</p>
+                <h1>Book an Appointment</h1>
+                <p>Choose your pet, service, and preferred schedule.</p>
             </div>
-
         </section>
 
 
-        <!-- =========================
-             BOOKING FORM
-        ========================== -->
+        <!-- BOOKING FORM -->
 
         <section class="appointment-form-card">
 
             <div class="appointment-form-heading">
-
                 <div>
-                    <span class="card-label">
-                        APPOINTMENT DETAILS
-                    </span>
-
-                    <h2>
-                        Schedule a Grooming
-                    </h2>
-
-                    <p>
-                        Please provide the details below.
-                    </p>
+                    <span class="card-label">APPOINTMENT DETAILS</span>
+                    <h2>Schedule a Grooming</h2>
+                    <p>Please provide the details below.</p>
                 </div>
-
-                
-
             </div>
-
 
             <form id="appointmentForm">
 
                 <div class="appointment-form-grid">
 
-
-                    <!-- PET -->
-
                     <div class="form-group">
+                        <label for="appointmentPet">Select Pet *</label>
 
-                        <label for="appointmentPet">
-                            Select Pet *
-                        </label>
-
-                        <select
-                            id="appointmentPet"
-                            required
-                        >
-
-                            <option value="">
-                                Loading pets...
-                            </option>
-
+                        <select id="appointmentPet" required>
+                            <option value="">Loading pets...</option>
                         </select>
-
                     </div>
 
-
-                    <!-- SERVICE -->
-
                     <div class="form-group">
+                        <label for="appointmentService">Grooming Service *</label>
 
-                        <label for="appointmentService">
-                            Grooming Service *
-                        </label>
-
-                        <select
-                            id="appointmentService"
-                            required
-                        >
-
-                            <option value="">
-                                Loading services...
-                            </option>
-
+                        <select id="appointmentService" required>
+                            <option value="">Loading services...</option>
                         </select>
-
                     </div>
 
-
-                    <!-- DATE -->
-
                     <div class="form-group">
-
-                        <label for="appointmentDate">
-                            Preferred Date *
-                        </label>
+                        <label for="appointmentDate">Preferred Date *</label>
 
                         <input
                             type="date"
                             id="appointmentDate"
                             required
                         >
-
                     </div>
-
-
-                    <!-- TIME -->
 
                     <div class="form-group">
+                        <label for="appointmentTime">Preferred Time *</label>
 
-                        <label for="appointmentTime">
-                            Preferred Time *
-                        </label>
-
-                        <select
-                            id="appointmentTime"
-                            required
-                        >
-
-                            <option value="">
-                                Select a time
-                            </option>
-
-                            <option value="09:00">
-                                9:00 AM
-                            </option>
-
-                            <option value="10:00">
-                                10:00 AM
-                            </option>
-
-                            <option value="11:00">
-                                11:00 AM
-                            </option>
-
-                            <option value="13:00">
-                                1:00 PM
-                            </option>
-
-                            <option value="14:00">
-                                2:00 PM
-                            </option>
-
-                            <option value="15:00">
-                                3:00 PM
-                            </option>
-
-                            <option value="16:00">
-                                4:00 PM
-                            </option>
-
-                            <option value="17:00">
-                                5:00 PM
-                            </option>
-
+                        <select id="appointmentTime" required>
+                            <option value="">Select a time</option>
+                            <option value="09:00">9:00 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="13:00">1:00 PM</option>
+                            <option value="14:00">2:00 PM</option>
+                            <option value="15:00">3:00 PM</option>
+                            <option value="16:00">4:00 PM</option>
+                            <option value="17:00">5:00 PM</option>
                         </select>
-
                     </div>
 
-
-                    <!-- NOTES -->
-
                     <div class="form-group appointment-notes-group">
-
-                        <label for="appointmentNotes">
-                            Additional Notes
-                        </label>
+                        <label for="appointmentNotes">Additional Notes</label>
 
                         <textarea
                             id="appointmentNotes"
@@ -245,19 +131,12 @@
                             maxlength="1000"
                             placeholder="Anything we should know about your pet's grooming appointment?"
                         ></textarea>
-
                     </div>
 
                 </div>
 
-
-                <!-- FORM FOOTER -->
-
                 <div class="appointment-form-footer">
-
-                    <p class="required-note">
-                        * Required fields
-                    </p>
+                    <p class="required-note">* Required fields</p>
 
                     <button
                         type="submit"
@@ -268,9 +147,7 @@
                             Book Appointment
                         </span>
                     </button>
-
                 </div>
-
 
                 <p
                     id="appointmentMessage"
@@ -284,38 +161,21 @@
         </section>
 
 
-        <!-- =========================
-             UPCOMING APPOINTMENTS
-        ========================== -->
+        <!-- MY APPOINTMENTS -->
 
         <section class="my-appointments-section">
 
             <div class="section-heading">
-
                 <div>
-
-                    <h2>
-                        My Appointments
-                    </h2>
-
-                    <p id="appointmentCount">
-                        Loading appointments...
-                    </p>
-
+                    <h2>My Appointments</h2>
+                    <p id="appointmentCount">Loading appointments...</p>
                 </div>
-
             </div>
 
-
-            <div
-                id="appointmentsList"
-                class="appointments-list"
-            >
-
+            <div id="appointmentsList" class="appointments-list">
                 <div class="loading-state">
                     Loading your appointments...
                 </div>
-
             </div>
 
         </section>
@@ -323,977 +183,834 @@
     </main>
 
 
-    <!-- 
-         SUPABASE
-    -->
+<!-- TOAST NOTIFICATIONS -->
+<div
+    id="toastContainer"
+    class="toast-container"
+    aria-live="polite"
+    aria-atomic="false"
+></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- CANCELLATION CONFIRMATION MODAL -->
+<div
+    id="cancelModal"
+    class="cancel-modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cancelModalTitle"
+    aria-describedby="cancelModalDescription"
+    aria-hidden="true"
+>
+    <div class="cancel-modal">
+        <div class="cancel-modal-icon">
+            <svg
+                viewBox="0 0 24 24"
+                width="28"
+                height="28"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                <path d="M16 3v4M8 3v4M3 10h18"></path>
+                <path d="m9 14 6 4m0-4-6 4"></path>
+            </svg>
+        </div>
 
-    <script src="../js/supabase.js"></script>
+        <h2 id="cancelModalTitle">Cancel Appointment?</h2>
 
+        <p id="cancelModalDescription">
+            Are you sure you want to cancel this appointment?
+            You can still view your booking in your appointment history.
+        </p>
 
-    <!--
-         JAVASCRIPT
-    -->
+        <div class="cancel-modal-actions">
+            <button
+                type="button"
+                id="keepAppointmentButton"
+                class="keep-appointment-button"
+            >
+                Keep Appointment
+            </button>
+
+            <button
+                type="button"
+                id="confirmCancelButton"
+                class="confirm-cancel-button"
+            >
+                Yes, Cancel
+            </button>
+        </div>
+    </div>
+</div>
+    <!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Supabase client configuration -->
+<script src="../js/supabase.js"></script>
+
+<!-- Shared toast notifications -->
+<script src="../js/toast.js"></script>
+
+<!-- Authentication functions -->
+<script src="../js/auth.js"></script>
+
+<!-- Shared logout confirmation -->
+<script src="../js/logout.js"></script>
+
 
     <script>
-
         let currentUser = null;
 
-
         const appointmentForm =
-            document.getElementById(
-                "appointmentForm"
-            );
+            document.getElementById("appointmentForm");
 
         const appointmentPet =
-            document.getElementById(
-                "appointmentPet"
-            );
+            document.getElementById("appointmentPet");
 
         const appointmentService =
-            document.getElementById(
-                "appointmentService"
-            );
+            document.getElementById("appointmentService");
 
         const appointmentDate =
-            document.getElementById(
-                "appointmentDate"
-            );
+            document.getElementById("appointmentDate");
 
         const appointmentTime =
-            document.getElementById(
-                "appointmentTime"
-            );
+            document.getElementById("appointmentTime");
 
         const appointmentNotes =
-            document.getElementById(
-                "appointmentNotes"
-            );
+            document.getElementById("appointmentNotes");
 
         const appointmentsList =
-            document.getElementById(
-                "appointmentsList"
-            );
+            document.getElementById("appointmentsList");
 
         const appointmentCount =
-            document.getElementById(
-                "appointmentCount"
-            );
+            document.getElementById("appointmentCount");
 
         const appointmentMessage =
-            document.getElementById(
-                "appointmentMessage"
-            );
+            document.getElementById("appointmentMessage");
 
-        const logoutButton =
-            document.getElementById(
-                "logoutButton"
-            );
+        
+
+        const bookButton =
+            document.getElementById("bookAppointmentButton");
+
+        const bookText =
+            document.getElementById("bookAppointmentText");
 
 
-        /* =========================
-           GET SERVICE FROM URL
-        ========================== */
+        /* GET SERVICE FROM URL */
 
         const urlParams =
-            new URLSearchParams(
-                window.location.search
-            );
+            new URLSearchParams(window.location.search);
 
         const selectedServiceId =
             urlParams.get("service");
 
 
-        /* =========================
-           SET MINIMUM DATE
-        ========================== */
+        /* SET MINIMUM DATE */
 
-        const today =
-            new Date()
-                .toISOString()
-                .split("T")[0];
+        function getLocalDateString() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
+        }
+
+        const today = getLocalDateString();
 
         appointmentDate.min = today;
 
 
-        /* =========================
-           LOAD USER
-        ========================== */
+        /* LOAD USER */
 
         async function loadUser() {
+            const { data, error } =
+                await supabaseClient.auth.getUser();
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-                .auth
-                .getUser();
-
-
-            if (
-                error ||
-                !data.user
-            ) {
-
-                window.location.href =
-                    "../login.html";
-
+            if (error || !data.user) {
+                window.location.href = "../login.html";
                 return;
             }
 
-
-            currentUser =
-                data.user;
-
+            currentUser = data.user;
 
             await loadPets();
-
             await loadServices();
-
             await loadAppointments();
-
         }
 
 
-        /* =========================
-           LOAD PETS
-        ========================== */
+        /* LOAD PETS */
 
         async function loadPets() {
-
-            const {
-                data: pets,
-                error
-            } = await supabaseClient
-
-                .from("pets")
-
-                .select(
-                    "id, name, species"
-                )
-
-                .eq(
-                    "owner_id",
-                    currentUser.id
-                )
-
-                .order(
-                    "name",
-                    {
-                        ascending: true
-                    }
-                );
-
+            const { data: pets, error } =
+                await supabaseClient
+                    .from("pets")
+                    .select("id, name, species")
+                    .eq("owner_id", currentUser.id)
+                    .order("name", { ascending: true });
 
             if (error) {
+                console.error("LOAD PETS ERROR:", error);
 
-                console.error(
-                    "LOAD PETS ERROR:",
-                    error
-                );
-
-                appointmentPet.innerHTML = `
-                    <option value="">
-                        Unable to load pets
-                    </option>
-                `;
+                appointmentPet.innerHTML =
+                    `<option value="">Unable to load pets</option>`;
 
                 return;
             }
 
-
-            if (
-                !pets ||
-                pets.length === 0
-            ) {
-
-                appointmentPet.innerHTML = `
-                    <option value="">
-                        No pets registered
-                    </option>
-                `;
+            if (!pets || pets.length === 0) {
+                appointmentPet.innerHTML =
+                    `<option value="">No pets registered</option>`;
 
                 return;
             }
 
+            appointmentPet.innerHTML =
+                `<option value="">Select your pet</option>`;
 
-            appointmentPet.innerHTML = `
-                <option value="">
-                    Select your pet
-                </option>
-            `;
+            pets.forEach(function (pet) {
+                const option = document.createElement("option");
 
+                option.value = pet.id;
+                option.textContent = `${pet.name} (${pet.species})`;
 
-            pets.forEach(
-                function (pet) {
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
-
-
-                    option.value =
-                        pet.id;
-
-
-                    option.textContent =
-                        `${pet.name} (${pet.species})`;
-
-
-                    appointmentPet.appendChild(
-                        option
-                    );
-
-                }
-            );
-
+                appointmentPet.appendChild(option);
+            });
         }
 
 
-        /* =========================
-           LOAD SERVICES
-        ========================== */
+        /* LOAD SERVICES */
 
         async function loadServices() {
-
-            const {
-                data: services,
-                error
-            } = await supabaseClient
-
-                .from("services")
-
-                .select(
-                    "id, name, price, duration"
-                )
-
-                .eq(
-                    "is_active",
-                    true
-                )
-
-                .order(
-                    "id",
-                    {
-                        ascending: true
-                    }
-                );
-
+            const { data: services, error } =
+                await supabaseClient
+                    .from("services")
+                    .select("id, name, price, duration")
+                    .eq("is_active", true)
+                    .order("id", { ascending: true });
 
             if (error) {
+                console.error("LOAD SERVICES ERROR:", error);
 
-                console.error(
-                    "LOAD SERVICES ERROR:",
-                    error
-                );
-
-                appointmentService.innerHTML = `
-                    <option value="">
-                        Unable to load services
-                    </option>
-                `;
+                appointmentService.innerHTML =
+                    `<option value="">Unable to load services</option>`;
 
                 return;
             }
 
-
-            if (
-                !services ||
-                services.length === 0
-            ) {
-
-                appointmentService.innerHTML = `
-                    <option value="">
-                        No services available
-                    </option>
-                `;
+            if (!services || services.length === 0) {
+                appointmentService.innerHTML =
+                    `<option value="">No services available</option>`;
 
                 return;
             }
 
+            appointmentService.innerHTML =
+                `<option value="">Select a service</option>`;
 
-            appointmentService.innerHTML = `
-                <option value="">
-                    Select a service
-                </option>
-            `;
+            services.forEach(function (service) {
+                const option = document.createElement("option");
 
+                option.value = service.id;
+                option.textContent =
+                    `${service.name} — ₱${formatPrice(service.price)}`;
 
-            services.forEach(
-                function (service) {
-
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
-
-
-                    option.value =
-                        service.id;
-
-
-                    option.textContent =
-                        `${service.name} — ₱${formatPrice(service.price)}`;
-
-
-                    appointmentService.appendChild(
-                        option
-                    );
-
-                }
-            );
-
-
-            /* Automatically select service
-               coming from services.html */
+                appointmentService.appendChild(option);
+            });
 
             if (selectedServiceId) {
-
-                const serviceExists =
-                    services.some(
-                        service =>
-                            String(service.id) ===
-                            String(selectedServiceId)
-                    );
-
+                const serviceExists = services.some(
+                    service =>
+                        String(service.id) === String(selectedServiceId)
+                );
 
                 if (serviceExists) {
-
-                    appointmentService.value =
-                        selectedServiceId;
-
+                    appointmentService.value = selectedServiceId;
                 }
-
             }
-
         }
 
 
-        /* =========================
-           BOOK APPOINTMENT
-        ========================== */
+        /* BOOK APPOINTMENT */
 
-        appointmentForm.addEventListener(
-            "submit",
-            async function (event) {
+        appointmentForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
 
-                event.preventDefault();
+            appointmentMessage.textContent = "";
+            appointmentMessage.classList.remove("success");
 
+            if (!currentUser) {
+    showToast(
+        "Please log in again to book an appointment.",
+        "error",
+        "Session expired"
+    );
+    return;
+}
 
-                appointmentMessage.textContent =
-                    "";
+            const petId = appointmentPet.value;
+            const serviceId = appointmentService.value;
+            const date = appointmentDate.value;
+            const time = appointmentTime.value;
+            const notes = appointmentNotes.value.trim();
 
+            if (!petId || !serviceId || !date || !time) {
+    showToast(
+        "Please complete all required fields.",
+        "error",
+        "Missing information"
+    );
+    return;
+}
 
-                const petId =
-                    appointmentPet.value;
+            if (date < getLocalDateString()) {
+    showToast(
+        "Please select today or a future date.",
+        "error",
+        "Invalid date"
+    );
+    return;
+}
 
+            bookButton.disabled = true;
+            bookText.textContent = "Booking...";
 
-                const serviceId =
-                    appointmentService.value;
-
-
-                const date =
-                    appointmentDate.value;
-
-
-                const time =
-                    appointmentTime.value;
-
-
-                const notes =
-                    appointmentNotes.value.trim();
-
-
-                /* =========================
-                   VALIDATION
-                ========================== */
-
-                if (
-                    !petId ||
-                    !serviceId ||
-                    !date ||
-                    !time
-                ) {
-
-                    appointmentMessage.textContent =
-                        "Please complete all required fields.";
-
-                    return;
-                }
-
-
-                /* =========================
-                   DISABLE BUTTON
-                ========================== */
-
-                const bookButton =
-                    document.getElementById(
-                        "bookAppointmentButton"
-                    );
-
-                const bookText =
-                    document.getElementById(
-                        "bookAppointmentText"
-                    );
-
-
-                bookButton.disabled =
-                    true;
-
-                bookText.textContent =
-                    "Booking...";
-
-
-                /* =========================
-                   SAVE APPOINTMENT
-                ========================== */
-
-                const {
-                    data: appointment,
-                    error
-                } = await supabaseClient
-
+            try {
+                const { error } = await supabaseClient
                     .from("appointments")
-
                     .insert({
-
-                        customer_id:
-                            currentUser.id,
-
-                        pet_id:
-                            petId,
-
-                        service_id:
-                            serviceId,
-
-                        appointment_date:
-                            date,
-
-                        appointment_time:
-                            time,
-
-                        status:
-                            "pending",
-
-                        notes:
-                            notes || null
-
-                    })
-
-                    .select()
-
-                    .single();
-
+                        customer_id: currentUser.id,
+                        pet_id: petId,
+                        service_id: serviceId,
+                        appointment_date: date,
+                        appointment_time: time,
+                        status: "pending",
+                        notes: notes || null
+                    });
 
                 if (error) {
+                    console.error("BOOKING ERROR:", error);
 
-                    console.error(
-                        "BOOKING ERROR:",
-                        error
-                    );
+showToast(
+    "We couldn't book your appointment. Please try again.",
+    "error",
+    "Booking failed"
+);
 
-
-                    bookButton.disabled =
-                        false;
-
-                    bookText.textContent =
-                        "Book Appointment";
-
-
-                    appointmentMessage.textContent =
-                        error.message;
-
-
-                    return;
+return;
                 }
 
-
-                /* =========================
-                   SUCCESS
-                ========================== */
-
-                appointmentMessage.textContent =
-                    "Appointment booked successfully! 🐾";
-
-
-                appointmentMessage.classList.add(
-                    "success"
-                );
-
-
                 appointmentForm.reset();
+appointmentDate.min = getLocalDateString();
 
+showToast(
+    "Your grooming appointment has been booked successfully.",
+    "success",
+    "Appointment booked"
+);
 
-                bookButton.disabled =
-                    false;
+await loadAppointments();
 
-                bookText.textContent =
-                    "Book Appointment";
+            } catch (error) {
+               console.error("BOOKING ERROR:", error);
 
-
-                /* Restore minimum date */
-
-                appointmentDate.min =
-                    today;
-
-
-                await loadAppointments();
-
+showToast(
+    "Something went wrong while booking. Please try again.",
+    "error",
+    "Booking failed"
+);
+            } finally {
+                bookButton.disabled = false;
+                bookText.textContent = "Book Appointment";
             }
-        );
+        });
 
 
-        /* =========================
-           LOAD APPOINTMENTS
-        ========================== */
+        /* LOAD APPOINTMENTS */
 
         async function loadAppointments() {
-
             appointmentsList.innerHTML = `
                 <div class="loading-state">
                     Loading your appointments...
                 </div>
             `;
 
-
-            const {
-                data: appointments,
-                error
-            } = await supabaseClient
-
-                .from("appointments")
-
-                .select(`
-                    id,
-                    appointment_date,
-                    appointment_time,
-                    status,
-                    notes,
-                    pets (
-                        name,
-                        species
-                    ),
-                    services (
-                        name,
-                        price,
-                        duration
-                    )
-                `)
-
-                .eq(
-                    "customer_id",
-                    currentUser.id
-                )
-
-                .order(
-                    "appointment_date",
-                    {
-                        ascending: true
-                    }
-                )
-
-                .order(
-                    "appointment_time",
-                    {
-                        ascending: true
-                    }
-                );
-
+            const { data: appointments, error } = await supabaseClient
+    .from("appointments")
+    .select(`
+        id,
+        appointment_date,
+        appointment_time,
+        status,
+        notes,
+        pets(name, species),
+        services(name, price, duration)
+    `)
+    .eq("customer_id", currentUser.id)
+    .neq("status", "cancelled")
+    .order("appointment_date", { ascending: true });
 
             if (error) {
-
-                console.error(
-                    "LOAD APPOINTMENTS ERROR:",
-                    error
-                );
-
+                console.error("LOAD APPOINTMENTS ERROR:", error);
 
                 appointmentCount.textContent =
                     "Unable to load appointments.";
 
-
                 appointmentsList.innerHTML = `
                     <div class="empty-appointments">
-                        <p>
-                            We couldn't load your appointments.
-                        </p>
+                        <p>We couldn't load your appointments.</p>
                     </div>
                 `;
 
                 return;
             }
 
-
-            if (
-                !appointments ||
-                appointments.length === 0
-            ) {
-
-                appointmentCount.textContent =
-                    "No appointments yet.";
-
+            if (!appointments || appointments.length === 0) {
+                appointmentCount.textContent = "No appointments yet.";
 
                 appointmentsList.innerHTML = `
                     <div class="empty-appointments">
-                        <p>
-                            You don't have any appointments yet. 🐾
-                        </p>
+                        <p>You don't have any appointments yet.</p>
                     </div>
                 `;
 
                 return;
             }
-
 
             appointmentCount.textContent =
                 appointments.length === 1
                     ? "1 appointment"
                     : `${appointments.length} appointments`;
 
-
             appointmentsList.innerHTML = "";
 
+            appointments.forEach(function (appointment) {
+                const card = document.createElement("div");
+                card.className = "appointment-card";
 
-            appointments.forEach(
-                function (appointment) {
+                const petName =
+                    appointment.pets?.name || "Unknown pet";
 
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
+                const petSpecies =
+                    appointment.pets?.species || "";
 
+                const serviceName =
+                    appointment.services?.name || "Unknown service";
 
-                    card.className =
-                        "appointment-card";
+                const price =
+                    appointment.services?.price ?? 0;
 
+                const duration =
+                    appointment.services?.duration ?? 0;
 
-                    const petName =
-                        appointment.pets?.name ||
-                        "Unknown pet";
+                const formattedDate =
+                    formatDate(appointment.appointment_date);
 
+                const formattedTime =
+                    formatTime(appointment.appointment_time);
 
-                    const petSpecies =
-                        appointment.pets?.species ||
-                        "";
+                const canCancel =
+                    ["pending", "confirmed"].includes(appointment.status);
 
-
-                    const serviceName =
-                        appointment.services?.name ||
-                        "Unknown service";
-
-
-                    const price =
-                        appointment.services?.price ||
-                        0;
-
-
-                    const duration =
-                        appointment.services?.duration ||
-                        0;
-
-
-                    const formattedDate =
-                        formatDate(
-                            appointment.appointment_date
-                        );
-
-
-                    const formattedTime =
-                        formatTime(
-                            appointment.appointment_time
-                        );
-
-
-                    card.innerHTML = `
-
-                        <div class="appointment-card-top">
-
-                            <div>
-
-                                <span class="appointment-label">
-                                    ${formattedDate}
-                                </span>
-
-                                <h3>
-                                    ${escapeHTML(
-                                        serviceName
-                                    )}
-                                </h3>
-
-                            </div>
-
-
-                            <span
-                                class="appointment-status ${getStatusClass(appointment.status)}"
-                            >
-                                ${formatStatus(
-                                    appointment.status
-                                )}
+                card.innerHTML = `
+                    <div class="appointment-card-top">
+                        <div>
+                            <span class="appointment-label">
+                                ${escapeHTML(formattedDate)}
                             </span>
 
+                            <h3>
+                                ${escapeHTML(serviceName)}
+                            </h3>
                         </div>
 
+                        <span class="appointment-status ${getStatusClass(appointment.status)}">
+                            ${escapeHTML(formatStatus(appointment.status))}
+                        </span>
+                    </div>
 
-                        <div class="appointment-card-details">
+                    <div class="appointment-card-details">
+                        <p>
+                            <strong>Pet</strong>
+                            ${escapeHTML(petName)}
+                            ${petSpecies ? `(${escapeHTML(petSpecies)})` : ""}
+                        </p>
 
-                            <p>
-                                <strong>
-                                    Pet
-                                </strong>
+                        <p>
+                            <strong>Time</strong>
+                            ${escapeHTML(formattedTime)}
+                        </p>
 
-                                ${escapeHTML(
-                                    petName
-                                )}
-                                ${
-                                    petSpecies
-                                        ? `(${escapeHTML(petSpecies)})`
-                                        : ""
-                                }
-                            </p>
+                        <p>
+                            <strong>Duration</strong>
+                            ${escapeHTML(duration)} minutes
+                        </p>
 
+                        <p>
+                            <strong>Price</strong>
+                            ₱${escapeHTML(formatPrice(price))}
+                        </p>
+                    </div>
 
-                            <p>
-                                <strong>
-                                    Time
-                                </strong>
+                    ${
+                        appointment.notes
+                            ? `
+                                <div class="appointment-notes">
+                                    <strong>Notes:</strong>
+                                    ${escapeHTML(appointment.notes)}
+                                </div>
+                            `
+                            : ""
+                    }
 
-                                ${formattedTime}
-                            </p>
+                    ${
+                        canCancel
+                            ? `
+                                <div class="appointment-card-actions">
+                                    <button
+                                        type="button"
+                                        class="cancel-appointment-button"
+                                    >
+                                        Cancel Appointment
+                                    </button>
+                                </div>
+                            `
+                            : ""
+                    }
+                `;
 
-
-                            <p>
-                                <strong>
-                                    Duration
-                                </strong>
-
-                                ${duration} minutes
-                            </p>
-
-
-                            <p>
-                                <strong>
-                                    Price
-                                </strong>
-
-                                ₱${formatPrice(price)}
-                            </p>
-
-                        </div>
-
-
-                        ${
-                            appointment.notes
-
-                                ? `
-                                    <div class="appointment-notes">
-                                        <strong>
-                                            Notes:
-                                        </strong>
-
-                                        ${escapeHTML(
-                                            appointment.notes
-                                        )}
-                                    </div>
-                                  `
-
-                                : ""
-                        }
-
-                    `;
-
-
-                    appointmentsList.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* =========================
-           FORMAT DATE
-        ========================== */
-
-        function formatDate(dateString) {
-
-            const date =
-                new Date(
-                    dateString + "T00:00:00"
+                const cancelButton = card.querySelector(
+                    ".cancel-appointment-button"
                 );
 
-
-            return date.toLocaleDateString(
-                "en-PH",
-                {
-                    weekday: "short",
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
+                if (cancelButton) {
+                    cancelButton.addEventListener("click", async function () {
+                        await cancelAppointment(appointment.id, cancelButton);
+                    });
                 }
+
+                appointmentsList.appendChild(card);
+            });
+        }
+
+
+
+/* TOAST NOTIFICATIONS */
+
+function showToast(message, type = "success", title = "") {
+    const container = document.getElementById("toastContainer");
+    if (!container) return;
+
+    const settings = {
+        success: {
+            title: "Success",
+            icon: "✓"
+        },
+        error: {
+            title: "Something went wrong",
+            icon: "!"
+        },
+        info: {
+            title: "Notice",
+            icon: "i"
+        }
+    };
+
+    const config = settings[type] || settings.info;
+    const toast = document.createElement("div");
+
+    toast.className = `toast toast-${type}`;
+    toast.setAttribute("role", type === "error" ? "alert" : "status");
+
+    const icon = document.createElement("div");
+    icon.className = "toast-icon";
+    icon.textContent = config.icon;
+    icon.setAttribute("aria-hidden", "true");
+
+    const content = document.createElement("div");
+    content.className = "toast-content";
+
+    const heading = document.createElement("p");
+    heading.className = "toast-title";
+    heading.textContent = title || config.title;
+
+    const description = document.createElement("p");
+    description.className = "toast-message";
+    description.textContent = message;
+
+    const close = document.createElement("button");
+    close.className = "toast-close";
+    close.type = "button";
+    close.textContent = "×";
+    close.setAttribute("aria-label", "Dismiss notification");
+
+    const progress = document.createElement("div");
+    progress.className = "toast-progress";
+
+    content.append(heading, description);
+    toast.append(icon, content, close, progress);
+    container.appendChild(toast);
+
+    let dismissed = false;
+
+    function dismissToast() {
+        if (dismissed) return;
+        dismissed = true;
+
+        toast.classList.add("toast-exit");
+
+        toast.addEventListener("animationend", () => {
+            toast.remove();
+        }, { once: true });
+
+        // Fallback if animations are disabled.
+        setTimeout(() => toast.remove(), 300);
+    }
+
+    close.addEventListener("click", dismissToast);
+    setTimeout(dismissToast, 4000);
+}
+
+
+/* CUSTOM CANCELLATION CONFIRMATION */
+
+const cancelModal = document.getElementById("cancelModal");
+const keepAppointmentButton =
+    document.getElementById("keepAppointmentButton");
+const confirmCancelButton =
+    document.getElementById("confirmCancelButton");
+
+let cancelModalResolver = null;
+
+function confirmAppointmentCancellation() {
+    return new Promise((resolve) => {
+        cancelModalResolver = resolve;
+
+        cancelModal.classList.add("show");
+        cancelModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        keepAppointmentButton.focus();
+    });
+}
+
+function closeCancellationModal(confirmed) {
+    cancelModal.classList.remove("show");
+    cancelModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+
+    if (cancelModalResolver) {
+        const resolve = cancelModalResolver;
+        cancelModalResolver = null;
+        resolve(confirmed);
+    }
+}
+
+keepAppointmentButton.addEventListener("click", () => {
+    closeCancellationModal(false);
+});
+
+confirmCancelButton.addEventListener("click", () => {
+    closeCancellationModal(true);
+});
+
+// Clicking outside the modal closes it without cancelling.
+cancelModal.addEventListener("click", (event) => {
+    if (event.target === cancelModal) {
+        closeCancellationModal(false);
+    }
+});
+
+// Escape closes the confirmation without cancelling.
+document.addEventListener("keydown", (event) => {
+    if (
+        event.key === "Escape" &&
+        cancelModal.classList.contains("show")
+    ) {
+        closeCancellationModal(false);
+    }
+});
+
+
+/* CANCEL APPOINTMENT */
+
+async function cancelAppointment(appointmentId, cancelButton) {
+    const confirmed = await confirmAppointmentCancellation();
+
+    if (!confirmed) return;
+
+    cancelButton.disabled = true;
+    cancelButton.textContent = "Cancelling...";
+
+    try {
+        const { data: authData, error: authError } =
+            await supabaseClient.auth.getUser();
+
+        const user = authData?.user;
+
+        if (authError || !user) {
+            showToast(
+                "Your session has expired. Please log in again.",
+                "error",
+                "Session expired"
             );
 
+            setTimeout(() => {
+                window.location.href = "../login.html";
+            }, 1200);
+
+            return;
         }
 
+        const { data, error } = await supabaseClient
+            .from("appointments")
+            .update({ status: "cancelled" })
+            .eq("id", appointmentId)
+            .eq("customer_id", user.id)
+            .in("status", ["pending", "confirmed"])
+            .select("id");
 
-        /* =========================
-           FORMAT TIME
-        ========================== */
+        if (error) {
+            console.error("CANCEL APPOINTMENT ERROR:", error);
 
-        function formatTime(timeString) {
-
-            const parts =
-                timeString.split(":");
-
-
-            let hours =
-                parseInt(parts[0]);
-
-
-            const minutes =
-                parts[1];
-
-
-            const period =
-                hours >= 12
-                    ? "PM"
-                    : "AM";
-
-
-            hours =
-                hours % 12 || 12;
-
-
-            return `${hours}:${minutes} ${period}`;
-
-        }
-
-
-        /* =========================
-           FORMAT PRICE
-        ========================== */
-
-        function formatPrice(price) {
-
-            return Number(price).toLocaleString(
-                "en-PH",
-                {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }
+            showToast(
+                "We couldn't cancel your appointment. Please try again.",
+                "error",
+                "Cancellation failed"
             );
 
+            return;
         }
 
-
-        /* =========================
-           FORMAT STATUS
-        ========================== */
-
-        function formatStatus(status) {
-
-            const statusNames = {
-
-                pending:
-                    "Pending",
-
-                confirmed:
-                    "Confirmed",
-
-                cancelled:
-                    "Cancelled",
-
-                completed:
-                    "Completed"
-
-            };
-
-
-            return (
-                statusNames[status] ||
-                status
+        if (!data || data.length === 0) {
+            showToast(
+                "This appointment may already be cancelled or completed.",
+                "info",
+                "Appointment not changed"
             );
 
+            await loadAppointments();
+            return;
         }
 
+        // Refresh the list; cancelled appointments are filtered out.
+        await loadAppointments();
 
-        /* =========================
-           STATUS CSS CLASS
-        ========================== */
-
-        function getStatusClass(status) {
-
-            return `status-${status}`;
-
-        }
-
-
-        /* =========================
-           ESCAPE HTML
-        ========================== */
-
-        function escapeHTML(value) {
-
-            return String(value)
-
-                .replace(
-                    /&/g,
-                    "&amp;"
-                )
-
-                .replace(
-                    /</g,
-                    "&lt;"
-                )
-
-                .replace(
-                    />/g,
-                    "&gt;"
-                )
-
-                .replace(
-                    /"/g,
-                    "&quot;"
-                )
-
-                .replace(
-                    /'/g,
-                    "&#039;"
-                );
-
-        }
-
-
-        /* =========================
-           LOGOUT
-        ========================== */
-
-        logoutButton.addEventListener(
-            "click",
-            async function () {
-
-                await supabaseClient
-                    .auth
-                    .signOut();
-
-                window.location.href =
-                    "../login.html";
-
-            }
+        showToast(
+            "Your appointment has been cancelled successfully.",
+            "success",
+            "Appointment cancelled"
         );
 
+    } catch (error) {
+        console.error("CANCEL APPOINTMENT ERROR:", error);
 
-        /* =========================
-           START PAGE
-        ========================== */
+        showToast(
+            "Something went wrong. Please try again.",
+            "error",
+            "Cancellation failed"
+        );
+
+    } finally {
+        if (cancelButton.isConnected) {
+            cancelButton.disabled = false;
+            cancelButton.textContent = "Cancel Appointment";
+        }
+    }
+}
+
+        /* FORMAT DATE */
+
+        function formatDate(dateString) {
+            const date = new Date(dateString + "T00:00:00");
+
+            return date.toLocaleDateString("en-PH", {
+                weekday: "short",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+        }
+
+
+        /* FORMAT TIME */
+
+        function formatTime(timeString) {
+            const parts = timeString.split(":");
+
+            let hours = parseInt(parts[0], 10);
+            const minutes = parts[1];
+
+            const period = hours >= 12 ? "PM" : "AM";
+            hours = hours % 12 || 12;
+
+            return `${hours}:${minutes} ${period}`;
+        }
+
+
+        /* FORMAT PRICE */
+
+        function formatPrice(price) {
+            return Number(price).toLocaleString("en-PH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+
+        /* FORMAT STATUS */
+
+        function formatStatus(status) {
+            const statusNames = {
+                pending: "Pending",
+                confirmed: "Confirmed",
+                cancelled: "Cancelled",
+                completed: "Completed"
+            };
+
+            return statusNames[status] || status;
+        }
+
+
+        /* STATUS CSS CLASS */
+
+        function getStatusClass(status) {
+            return `status-${status}`;
+        }
+
+
+        /* ESCAPE HTML */
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (char) {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                };
+
+                return entities[char];
+            });
+        }
+
+
+        
+
+
+        /* START PAGE */
 
         loadUser();
 
     </script>
 
 </body>
-
 </html>
+

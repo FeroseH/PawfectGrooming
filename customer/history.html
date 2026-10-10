@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>History | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../customer-new.css">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+        <div class="brand">
+            <h2>Pawfect Grooming</h2>
+            <small>Gentle care. Happy pets.</small>
+        </div>
+
+        <nav class="dashboard-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="history.html" class="active">History</a>
+            <a href="account.html">Account</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button" type="button">
+            Log Out
+        </button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-container history-page">
+
+        <section class="history-heading">
+            <p class="small-label">YOUR GROOMING RECORDS</p>
+            <h1>Appointment History</h1>
+            <p>Keep track of your pets' grooming appointments.</p>
+        </section>
+
+        <!-- SUMMARY -->
+        <section class="history-summary">
+            <div class="history-summary-card">
+                <span>Total Appointments</span>
+                <h2 id="totalCount">—</h2>
+            </div>
+
+            <div class="history-summary-card">
+                <span>Pending</span>
+                <h2 id="pendingCount">—</h2>
+            </div>
+
+            <div class="history-summary-card">
+                <span>Confirmed</span>
+                <h2 id="confirmedCount">—</h2>
+            </div>
+
+            <div class="history-summary-card">
+                <span>Completed</span>
+                <h2 id="completedCount">—</h2>
+            </div>
+        </section>
+
+        <!-- HISTORY PANEL -->
+        <section class="history-panel">
+
+            <div class="history-toolbar">
+                <div>
+                    <h2>Your Appointments</h2>
+                    <p>View and search your grooming records.</p>
+                </div>
+
+                <div class="history-toolbar-actions">
+                    <button
+                        type="button"
+                        id="clearHistoryButton"
+                        class="clear-history-button"
+                    >
+                        Clear History
+                    </button>
+
+                    <a href="appointments.html" class="history-book-link">
+                        Book Appointment
+                    </a>
+                </div>
+            </div>
+
+            <!-- SEARCH AND FILTER -->
+            <div class="history-filters">
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Search pet or service..."
+                    aria-label="Search pet or service"
+                >
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="all">All statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <p id="historyMessage" class="history-message" role="status">
+                Loading your appointments...
+            </p>
+
+            <div id="historyList" class="history-list"></div>
+
+        </section>
+    </main>
+
+    <!-- CLEAR HISTORY CONFIRMATION MODAL -->
+    <div
+        class="history-modal-overlay"
+        id="clearHistoryModal"
+        aria-hidden="true"
+    >
+        <div
+            class="history-confirm-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clearHistoryTitle"
+            aria-describedby="clearHistoryDescription"
+            tabindex="-1"
+        >
+            <div class="history-modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                        d="M12 8V12"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                    />
+                    <circle cx="12" cy="16" r="0.8" fill="currentColor"/>
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                    />
+                </svg>
+            </div>
+
+            <h2 id="clearHistoryTitle">Clear your history?</h2>
+
+            <p id="clearHistoryDescription">
+                This will hide your appointment history from your account.
+                Your appointment records will not be deleted, and the admin
+                can still view them.
+            </p>
+
+            <div class="history-modal-actions">
+                <button type="button" id="cancelClearHistory">
+                    Keep History
+                </button>
+
+                <button type="button" id="confirmClearHistory">
+                    Clear History
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div
+        id="historyToast"
+        class="history-toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/logout.js"></script>
+
+    <script>
+        // ========================================
+        // ELEMENTS AND VARIABLES
+        // ========================================
+
+        const historyList = document.getElementById("historyList");
+        const historyMessage = document.getElementById("historyMessage");
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+
+        const clearHistoryButton =
+            document.getElementById("clearHistoryButton");
+
+        const clearHistoryModal =
+            document.getElementById("clearHistoryModal");
+
+        const cancelClearHistory =
+            document.getElementById("cancelClearHistory");
+
+        const confirmClearHistory =
+            document.getElementById("confirmClearHistory");
+
+        const historyToast =
+            document.getElementById("historyToast");
+
+        const modalDialog =
+            clearHistoryModal.querySelector(".history-confirm-modal");
+
+        let appointments = [];
+        let toastTimeout;
+        let previousFocus = null;
+
+        // ========================================
+        // ESCAPE HTML
+        // ========================================
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character]);
+        }
+
+        // ========================================
+        // DATE AND TIME FORMATTING
+        // ========================================
+
+        function formatDate(dateValue) {
+            if (!dateValue) return "Date unavailable";
+
+            const date = new Date(dateValue + "T00:00:00");
+
+            if (Number.isNaN(date.getTime())) {
+                return dateValue;
+            }
+
+            return date.toLocaleDateString("en-PH", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+        }
+
+        function formatTime(timeValue) {
+            if (!timeValue) return "Time unavailable";
+
+            const parts = timeValue.split(":");
+
+            if (parts.length < 2) return timeValue;
+
+            const date = new Date();
+            date.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
+
+            return date.toLocaleTimeString("en-PH", {
+                hour: "numeric",
+                minute: "2-digit"
+            });
+        }
+
+        // ========================================
+        // SUMMARY COUNTS
+        // ========================================
+
+        function updateSummary() {
+            document.getElementById("totalCount").textContent =
+                appointments.length;
+
+            document.getElementById("pendingCount").textContent =
+                appointments.filter(a => a.status === "pending").length;
+
+            document.getElementById("confirmedCount").textContent =
+                appointments.filter(a => a.status === "confirmed").length;
+
+            document.getElementById("completedCount").textContent =
+                appointments.filter(a => a.status === "completed").length;
+        }
+
+        // ========================================
+        // RENDER APPOINTMENTS
+        // ========================================
+
+        function renderAppointments() {
+            const search = searchInput.value.trim().toLowerCase();
+            const selectedStatus = statusFilter.value;
+
+            const filtered = appointments.filter(appointment => {
+                const petName = appointment.pets?.name || "";
+                const serviceName = appointment.services?.name || "";
+
+                const matchesSearch =
+                    petName.toLowerCase().includes(search) ||
+                    serviceName.toLowerCase().includes(search);
+
+                const matchesStatus =
+                    selectedStatus === "all" ||
+                    appointment.status === selectedStatus;
+
+                return matchesSearch && matchesStatus;
+            });
+
+            historyList.innerHTML = "";
+
+            if (filtered.length === 0) {
+                historyMessage.textContent = appointments.length === 0
+                    ? "You haven't booked any visible appointments yet."
+                    : "No appointments match your search or filter.";
+
+                return;
+            }
+
+            historyMessage.textContent =
+                `${filtered.length} appointment${filtered.length === 1 ? "" : "s"} found.`;
+
+            historyList.innerHTML = filtered.map(appointment => {
+                const petName = escapeHTML(
+                    appointment.pets?.name || "Pet details unavailable"
+                );
+
+                const serviceName = escapeHTML(
+                    appointment.services?.name || "Service details unavailable"
+                );
+
+                const status = String(
+                    appointment.status || "pending"
+                ).toLowerCase();
+
+                const statusLabel = escapeHTML(
+                    status.charAt(0).toUpperCase() + status.slice(1)
+                );
+
+                return `
+                    <article class="history-appointment-card">
+                        <div class="history-appointment-main">
+                            <div>
+                                <p class="history-card-label">PET</p>
+                                <h3>${petName}</h3>
+                            </div>
+
+                            <span class="history-status status-${escapeHTML(status)}">
+                                ${statusLabel}
+                            </span>
+                        </div>
+
+                        <div class="history-details">
+                            <div>
+                                <span>Service</span>
+                                <p>${serviceName}</p>
+                            </div>
+
+                            <div>
+                                <span>Date</span>
+                                <p>${escapeHTML(formatDate(appointment.appointment_date))}</p>
+                            </div>
+
+                            <div>
+                                <span>Time</span>
+                                <p>${escapeHTML(formatTime(appointment.appointment_time))}</p>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        // ========================================
+        // TOAST NOTIFICATIONS
+        // ========================================
+
+        function showHistoryToast(message, isError = false) {
+            clearTimeout(toastTimeout);
+
+            historyToast.textContent = message;
+            historyToast.classList.toggle("error", isError);
+            historyToast.classList.add("show");
+
+            toastTimeout = setTimeout(() => {
+                historyToast.classList.remove("show");
+            }, 3500);
+        }
+
+        // ========================================
+        // MODAL OPEN AND CLOSE
+        // ========================================
+
+        function openClearHistoryModal() {
+            if (appointments.length === 0) {
+                showHistoryToast(
+                    "There is no appointment history to clear.",
+                    true
+                );
+                return;
+            }
+
+            previousFocus = document.activeElement;
+
+            clearHistoryModal.classList.add("show");
+            clearHistoryModal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+
+            cancelClearHistory.focus();
+        }
+
+        function closeClearHistoryModal() {
+            clearHistoryModal.classList.remove("show");
+            clearHistoryModal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+
+            if (previousFocus && document.contains(previousFocus)) {
+                previousFocus.focus();
+            } else {
+                clearHistoryButton.focus();
+            }
+        }
+
+        cancelClearHistory.addEventListener(
+            "click",
+            closeClearHistoryModal
+        );
+
+        clearHistoryModal.addEventListener("click", event => {
+            if (event.target === clearHistoryModal) {
+                closeClearHistoryModal();
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if (
+                event.key === "Escape" &&
+                clearHistoryModal.classList.contains("show") &&
+                !confirmClearHistory.disabled
+            ) {
+                closeClearHistoryModal();
+            }
+        });
+
+        // ========================================
+        // LOAD HISTORY FROM SUPABASE
+        // ========================================
+
+        async function loadHistory() {
+            historyMessage.textContent = "Loading your appointments...";
+            clearHistoryButton.disabled = true;
+
+            try {
+                const {
+                    data: { user },
+                    error: authError
+                } = await supabaseClient.auth.getUser();
+
+                if (authError || !user) {
+                    window.location.href = "../login.html";
+                    return false;
+                }
+
+                // Fetch appointment IDs hidden by this customer.
+                const {
+                    data: hiddenRecords,
+                    error: hiddenError
+                } = await supabaseClient
+                    .from("hidden_appointment_history")
+                    .select("appointment_id")
+                    .eq("customer_id", user.id);
+
+                if (hiddenError) {
+                    console.error("HIDDEN HISTORY ERROR:", hiddenError);
+
+                    historyMessage.textContent =
+                        "Unable to load your history preferences. Please try again.";
+
+                    return false;
+                }
+
+                const hiddenIds = new Set(
+                    (hiddenRecords || []).map(record =>
+                        String(record.appointment_id)
+                    )
+                );
+
+                // Fetch this customer's appointment records.
+                const { data, error } = await supabaseClient
+                    .from("appointments")
+                    .select(`
+                        id,
+                        customer_id,
+                        appointment_date,
+                        appointment_time,
+                        status,
+                        pets(name),
+                        services(name)
+                    `)
+                    .eq("customer_id", user.id)
+                    .order("appointment_date", { ascending: false })
+                    .order("appointment_time", { ascending: false });
+
+                if (error) {
+                    console.error("HISTORY LOAD ERROR:", error);
+
+                    historyMessage.textContent =
+                        "Unable to load appointments. Please try again.";
+
+                    return false;
+                }
+
+                // Hide only records the customer has cleared.
+                appointments = (data || []).filter(
+                    appointment => !hiddenIds.has(String(appointment.id))
+                );
+
+                updateSummary();
+                renderAppointments();
+
+                return true;
+
+            } catch (error) {
+                console.error("HISTORY ERROR:", error);
+
+                historyMessage.textContent =
+                    "Something went wrong while loading your history.";
+
+                return false;
+
+            } finally {
+                clearHistoryButton.disabled = false;
+            }
+        }
+
+        // ========================================
+        // CLEAR HISTORY
+        // Original appointments are NOT deleted.
+        // ========================================
+
+        async function clearHistory() {
+            if (appointments.length === 0) {
+                closeClearHistoryModal();
+
+                showHistoryToast(
+                    "There is no appointment history to clear.",
+                    true
+                );
+
+                return;
+            }
+
+            confirmClearHistory.disabled = true;
+            cancelClearHistory.disabled = true;
+            confirmClearHistory.textContent = "Clearing...";
+
+            let shouldRestoreFocus = true;
+
+            try {
+                const {
+                    data: { user },
+                    error: authError
+                } = await supabaseClient.auth.getUser();
+
+                if (authError || !user) {
+                    closeClearHistoryModal();
+                    shouldRestoreFocus = false;
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                const recordsToHide = appointments.map(appointment => ({
+                    customer_id: user.id,
+                    appointment_id: appointment.id
+                }));
+
+                const { error } = await supabaseClient
+                    .from("hidden_appointment_history")
+                    .insert(recordsToHide);
+
+                if (error) {
+                    console.error("CLEAR HISTORY ERROR:", error);
+
+                    closeClearHistoryModal();
+
+                    showHistoryToast(
+                        "Couldn't clear your history. Please try again.",
+                        true
+                    );
+
+                    return;
+                }
+
+                closeClearHistoryModal();
+
+                const refreshed = await loadHistory();
+
+                if (refreshed) {
+                    showHistoryToast(
+                        "Your appointment history has been cleared."
+                    );
+                } else {
+                    showHistoryToast(
+                        "History was cleared, but the list couldn't refresh. Reload the page to check.",
+                        true
+                    );
+                }
+
+            } catch (error) {
+                console.error("CLEAR HISTORY ERROR:", error);
+
+                closeClearHistoryModal();
+
+                showHistoryToast(
+                    "Something went wrong. Please try again.",
+                    true
+                );
+
+            } finally {
+                confirmClearHistory.disabled = false;
+                cancelClearHistory.disabled = false;
+                confirmClearHistory.textContent = "Clear History";
+
+                if (!shouldRestoreFocus) {
+                    document.body.style.overflow = "";
+                }
+            }
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+
+        searchInput.addEventListener("input", renderAppointments);
+
+        statusFilter.addEventListener("change", renderAppointments);
+
+        clearHistoryButton.addEventListener(
+            "click",
+            openClearHistoryModal
+        );
+
+        confirmClearHistory.addEventListener(
+            "click",
+            clearHistory
+        );
+
+        // ========================================
+        // INITIALIZE
+        // ========================================
+
+        loadHistory();
+    </script>
+
+</body>
+</html>

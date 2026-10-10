@@ -1,0 +1,839 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Account | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../customer-new.css">
+</head>
+
+<body class="dashboard-page">
+
+    <header class="dashboard-header">
+        <div>
+            <h2>Pawfect Grooming</h2>
+            <small>Gentle care. Happy pets.</small>
+        </div>
+
+        <nav class="dashboard-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="history.html">History</a>
+            <a href="account.html" class="active">Account</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button" type="button">
+            Log Out
+        </button>
+    </header>
+
+    <main class="dashboard-container account-page">
+
+        <section class="account-heading">
+            <p class="small-label">ACCOUNT SETTINGS</p>
+            <h1>My Account</h1>
+            <p>Manage your personal information and account security.</p>
+        </section>
+
+        <section class="account-profile-banner">
+            <div class="account-avatar" id="accountAvatar">
+                <span id="accountInitials">U</span>
+                <img
+                    id="accountAvatarImage"
+                    alt="Profile picture"
+                    hidden
+                >
+            </div>
+
+            <div class="account-profile-intro">
+                <p class="account-eyebrow">YOUR PROFILE</p>
+                <h2 id="profileDisplayName">Loading profile...</h2>
+                <p id="profileDisplayEmail">Loading email...</p>
+
+                <div class="account-photo-actions">
+                    <label for="avatarFile" class="account-photo-button">
+                        Upload Photo
+                    </label>
+
+                    <input
+                        type="file"
+                        id="avatarFile"
+                        accept="image/jpeg,image/png,image/webp"
+                        hidden
+                    >
+
+                    <button
+                        type="button"
+                        id="removeAvatarButton"
+                        hidden
+                    >
+                        Remove Photo
+                    </button>
+
+                    <small id="avatarMessage"
+                        role="status"
+                        aria-live="polite">
+                        Optional · JPG, PNG, or WebP · Maximum 2 MB
+                    </small>
+                </div>
+            </div>
+        </section>
+
+        <section class="account-overview">
+            <a href="pets.html" class="account-overview-card">
+                <div class="account-overview-top">
+                    <span class="account-overview-label">
+                        REGISTERED PETS
+                    </span>
+                </div>
+
+                <strong id="petCount">—</strong>
+                <span class="account-overview-link">View My Pets →</span>
+            </a>
+
+            <a href="appointments.html" class="account-overview-card">
+                <div class="account-overview-top">
+                    <span class="account-overview-label">
+                        UPCOMING APPOINTMENTS
+                    </span>
+                </div>
+
+                <strong id="upcomingCount">—</strong>
+                <span class="account-overview-link">
+                    View Appointments →
+                </span>
+            </a>
+        </section>
+
+        <section class="account-card">
+            <div class="account-card-heading">
+                <div>
+                    <p class="account-section-label">PROFILE DETAILS</p>
+                    <h2>Personal Information</h2>
+                    <p>Keep your contact information up to date.</p>
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="account-form-grid">
+
+                    <div class="account-field">
+                        <label for="fullName">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Enter your full name"
+                            maxlength="100"
+                            autocomplete="name"
+                            required
+                        >
+                    </div>
+
+                    <div class="account-field">
+                        <label for="phone">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="09171234567"
+                            inputmode="numeric"
+                            pattern="09[0-9]{9}"
+                            minlength="11"
+                            maxlength="11"
+                            title="Enter exactly 11 digits starting with 09."
+                            autocomplete="tel"
+                            aria-describedby="phoneHint"
+                            required
+                        >
+                        <small id="phoneHint">
+                            Enter exactly 11 digits, starting with 09.
+                        </small>
+                    </div>
+
+                    <div class="account-field account-field-full">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            readonly
+                            aria-describedby="emailHint"
+                        >
+                        <small id="emailHint">
+                            Your email address is linked to your login account.
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="account-form-actions">
+                    <button
+                        type="submit"
+                        id="saveProfileButton"
+                        class="account-button"
+                    >
+                        Save Changes
+                    </button>
+                </div>
+
+                <p id="profileMessage"
+                    class="account-message"
+                    role="status"
+                    aria-live="polite"></p>
+            </form>
+        </section>
+
+        <section class="account-card">
+            <div class="account-card-heading">
+                <div>
+                    <p class="account-section-label">ACCOUNT PROTECTION</p>
+                    <h2>Security</h2>
+                    <p>
+                        Update your password to help keep your account secure.
+                    </p>
+                </div>
+            </div>
+
+            <form id="passwordForm">
+                <div class="account-form-grid">
+
+                    <div class="account-field">
+                        <label for="newPassword">New Password</label>
+                        <input
+                            type="password"
+                            id="newPassword"
+                            minlength="6"
+                            autocomplete="new-password"
+                            placeholder="At least 6 characters"
+                            required
+                        >
+                    </div>
+
+                    <div class="account-field">
+                        <label for="confirmPassword">
+                            Confirm New Password
+                        </label>
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            minlength="6"
+                            autocomplete="new-password"
+                            placeholder="Re-enter your new password"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div class="account-form-actions">
+                    <button
+                        type="submit"
+                        id="changePasswordButton"
+                        class="account-button"
+                    >
+                        Update Password
+                    </button>
+                </div>
+
+                <p id="passwordMessage"
+                    class="account-message"
+                    role="status"
+                    aria-live="polite"></p>
+            </form>
+        </section>
+
+        <p class="account-footer-note">
+            Your pet's comfort starts with a well-managed grooming account.
+        </p>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/logout.js"></script>
+
+    <script>
+        // ELEMENTS
+
+        const profileForm = document.getElementById("profileForm");
+        const passwordForm = document.getElementById("passwordForm");
+
+        const profileMessage = document.getElementById("profileMessage");
+        const passwordMessage = document.getElementById("passwordMessage");
+
+        const fullNameInput = document.getElementById("fullName");
+        const phoneInput = document.getElementById("phone");
+        const emailInput = document.getElementById("email");
+
+        const saveProfileButton =
+            document.getElementById("saveProfileButton");
+
+        const changePasswordButton =
+            document.getElementById("changePasswordButton");
+
+        const accountInitials =
+            document.getElementById("accountInitials");
+
+        const accountAvatarImage =
+            document.getElementById("accountAvatarImage");
+
+        const avatarFileInput =
+            document.getElementById("avatarFile");
+
+        const removeAvatarButton =
+            document.getElementById("removeAvatarButton");
+
+        const avatarMessage =
+            document.getElementById("avatarMessage");
+
+        const profileDisplayName =
+            document.getElementById("profileDisplayName");
+
+        const profileDisplayEmail =
+            document.getElementById("profileDisplayEmail");
+
+        // SETTINGS
+
+        const AVATAR_BUCKET = "avatars";
+        const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
+
+        let currentUser = null;
+        let currentAvatarPath = null;
+        let selectedAvatarFile = null;
+        let removeAvatarRequested = false;
+
+        // MESSAGES
+
+        function showMessage(element, message, success = false) {
+            element.textContent = message;
+            element.className =
+                "account-message " +
+                (success ? "message-success" : "message-error");
+        }
+
+        // INITIALS AVATAR
+
+        function getInitials(name) {
+            const parts = String(name || "")
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean);
+
+            if (parts.length === 0) return "U";
+
+            if (parts.length === 1) {
+                return parts[0].slice(0, 2).toUpperCase();
+            }
+
+            return (
+                parts[0][0] +
+                parts[parts.length - 1][0]
+            ).toUpperCase();
+        }
+
+        function updateProfileHeader(name, email) {
+            profileDisplayName.textContent =
+                name.trim() || "Your Account";
+
+            profileDisplayEmail.textContent = email || "";
+            accountInitials.textContent = getInitials(name);
+        }
+
+        // DISPLAY SAVED AVATAR
+
+        async function displaySavedAvatar(path) {
+            currentAvatarPath = path || null;
+
+            if (!currentAvatarPath) {
+                accountAvatarImage.hidden = true;
+                accountAvatarImage.removeAttribute("src");
+                accountInitials.hidden = false;
+                removeAvatarButton.hidden = true;
+                return;
+            }
+
+            const { data } = supabaseClient.storage
+                .from(AVATAR_BUCKET)
+                .getPublicUrl(currentAvatarPath);
+
+            accountAvatarImage.onload = () => {
+                accountAvatarImage.hidden = false;
+                accountInitials.hidden = true;
+                removeAvatarButton.hidden = false;
+            };
+
+            accountAvatarImage.onerror = () => {
+                accountAvatarImage.hidden = true;
+                accountInitials.hidden = false;
+                removeAvatarButton.hidden = true;
+            };
+
+            accountAvatarImage.src = data.publicUrl;
+        }
+
+        // VALIDATION
+
+        function isValidPhilippineMobileNumber(phone) {
+            return /^09[0-9]{9}$/.test(phone);
+        }
+
+        // LOAD ACCOUNT
+
+        async function initializeAccount() {
+            try {
+                const {
+                    data: { user },
+                    error: authError
+                } = await supabaseClient.auth.getUser();
+
+                if (authError || !user) {
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                currentUser = user;
+                emailInput.value = user.email || "";
+
+                const {
+                    data: profile,
+                    error: profileError
+                } = await supabaseClient
+                    .from("profiles")
+                    .select("full_name, phone, avatar_path")
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+                if (profileError) {
+                    console.error("PROFILE LOAD ERROR:", profileError);
+
+                    showMessage(
+                        profileMessage,
+                        "Unable to load your profile. Check your profile table and try again."
+                    );
+
+                    updateProfileHeader(
+                        user.user_metadata?.full_name || "",
+                        user.email || ""
+                    );
+
+                    return;
+                }
+
+                const fullName =
+                    profile?.full_name ||
+                    user.user_metadata?.full_name ||
+                    "";
+
+                fullNameInput.value = fullName;
+                phoneInput.value = profile?.phone || "";
+
+                updateProfileHeader(fullName, user.email || "");
+                await displaySavedAvatar(profile?.avatar_path || null);
+
+                await loadAccountOverview(user.id);
+
+            } catch (error) {
+                console.error("ACCOUNT INITIALIZATION ERROR:", error);
+
+                showMessage(
+                    profileMessage,
+                    "Something went wrong while loading your account."
+                );
+            }
+        }
+
+        // ACCOUNT OVERVIEW
+
+        async function loadAccountOverview(userId) {
+            const petCountElement = document.getElementById("petCount");
+            const upcomingCountElement =
+                document.getElementById("upcomingCount");
+
+            try {
+                const { data: pets, error: petsError } =
+                    await supabaseClient
+                        .from("pets")
+                        .select("id")
+                        .eq("owner_id", userId);
+
+                if (petsError) {
+                    console.error("PET COUNT ERROR:", petsError);
+                    petCountElement.textContent = "—";
+                } else {
+                    petCountElement.textContent = (pets || []).length;
+                }
+
+                const today = new Date();
+                const todayString = [
+                    today.getFullYear(),
+                    String(today.getMonth() + 1).padStart(2, "0"),
+                    String(today.getDate()).padStart(2, "0")
+                ].join("-");
+
+                const {
+                    data: upcoming,
+                    error: appointmentsError
+                } = await supabaseClient
+                    .from("appointments")
+                    .select("id, appointment_date, status")
+                    .eq("customer_id", userId)
+                    .gte("appointment_date", todayString)
+                    .in("status", ["pending", "confirmed"]);
+
+                if (appointmentsError) {
+                    console.error(
+                        "UPCOMING APPOINTMENTS ERROR:",
+                        appointmentsError
+                    );
+
+                    upcomingCountElement.textContent = "—";
+                } else {
+                    upcomingCountElement.textContent =
+                        (upcoming || []).length;
+                }
+
+            } catch (error) {
+                console.error("ACCOUNT OVERVIEW ERROR:", error);
+                petCountElement.textContent = "—";
+                upcomingCountElement.textContent = "—";
+            }
+        }
+
+        // SELECT PROFILE PHOTO
+
+        avatarFileInput.addEventListener("change", () => {
+            const file = avatarFileInput.files?.[0];
+            if (!file) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                avatarMessage.textContent =
+                    "Please choose a JPG, PNG, or WebP image.";
+
+                avatarFileInput.value = "";
+                selectedAvatarFile = null;
+                return;
+            }
+
+            if (file.size > MAX_AVATAR_SIZE) {
+                avatarMessage.textContent =
+                    "Your image must be 2 MB or smaller.";
+
+                avatarFileInput.value = "";
+                selectedAvatarFile = null;
+                return;
+            }
+
+            selectedAvatarFile = file;
+            removeAvatarRequested = false;
+
+            avatarMessage.textContent =
+                "Photo selected. Click Save Changes to upload it.";
+        });
+
+        // REMOVE PROFILE PHOTO
+
+        removeAvatarButton.addEventListener("click", () => {
+            selectedAvatarFile = null;
+            avatarFileInput.value = "";
+            removeAvatarRequested = true;
+
+            accountAvatarImage.hidden = true;
+            accountAvatarImage.removeAttribute("src");
+            accountInitials.hidden = false;
+            removeAvatarButton.hidden = true;
+
+            avatarMessage.textContent =
+                "Photo removal selected. Click Save Changes to confirm.";
+        });
+
+        // SAVE PROFILE AND PHOTO
+
+        profileForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            if (!currentUser) return;
+
+            const fullName = fullNameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!fullName) {
+                showMessage(
+                    profileMessage,
+                    "Please enter your full name."
+                );
+                fullNameInput.focus();
+                return;
+            }
+
+            if (!isValidPhilippineMobileNumber(phone)) {
+                showMessage(
+                    profileMessage,
+                    "Please enter a valid 11-digit mobile number starting with 09."
+                );
+                phoneInput.focus();
+                return;
+            }
+
+            saveProfileButton.disabled = true;
+            saveProfileButton.textContent = "Saving...";
+
+            let newlyUploadedPath = null;
+            const previousAvatarPath = currentAvatarPath;
+
+            try {
+                // Upload a new photo if selected.
+
+                let avatarPathToSave = currentAvatarPath;
+
+                if (selectedAvatarFile) {
+                    const extensionMap = {
+                        "image/jpeg": "jpg",
+                        "image/png": "png",
+                        "image/webp": "webp"
+                    };
+
+                    const extension =
+                        extensionMap[selectedAvatarFile.type];
+
+                    const uniqueName =
+                        `${currentUser.id}/${crypto.randomUUID()}.${extension}`;
+
+                    const { data: uploadData, error: uploadError } =
+                        await supabaseClient.storage
+                            .from(AVATAR_BUCKET)
+                            .upload(uniqueName, selectedAvatarFile, {
+                                contentType: selectedAvatarFile.type,
+                                upsert: false
+                            });
+
+                    if (uploadError) throw uploadError;
+
+                    newlyUploadedPath = uploadData.path;
+                    avatarPathToSave = uploadData.path;
+                }
+
+                if (removeAvatarRequested) {
+                    avatarPathToSave = null;
+                }
+
+                // Find the existing profile.
+
+                const {
+                    data: existingProfile,
+                    error: lookupError
+                } = await supabaseClient
+                    .from("profiles")
+                    .select("id")
+                    .eq("id", currentUser.id)
+                    .maybeSingle();
+
+                if (lookupError) throw lookupError;
+
+                const profileData = {
+                    id: currentUser.id,
+                    full_name: fullName,
+                    phone: phone,
+                    avatar_path: avatarPathToSave
+                };
+
+                let saveQuery;
+
+                if (existingProfile) {
+                    saveQuery = await supabaseClient
+                        .from("profiles")
+                        .update({
+                            full_name: fullName,
+                            phone: phone,
+                            avatar_path: avatarPathToSave
+                        })
+                        .eq("id", currentUser.id);
+                } else {
+                    saveQuery = await supabaseClient
+                        .from("profiles")
+                        .insert(profileData);
+                }
+
+                if (saveQuery.error) throw saveQuery.error;
+
+                // Update the name in Supabase Auth metadata.
+
+                const { error: metadataError } =
+                    await supabaseClient.auth.updateUser({
+                        data: { full_name: fullName }
+                    });
+
+                if (metadataError) {
+                    console.error(
+                        "METADATA UPDATE ERROR:",
+                        metadataError
+                    );
+                }
+
+                // Update the interface after the profile is saved.
+
+                updateProfileHeader(fullName, currentUser.email || "");
+                await displaySavedAvatar(avatarPathToSave);
+
+                selectedAvatarFile = null;
+                removeAvatarRequested = false;
+                avatarFileInput.value = "";
+
+                avatarMessage.textContent = avatarPathToSave
+                    ? "Your profile photo is saved."
+                    : "You can upload a profile photo anytime.";
+
+                // Delete the old photo only after the new profile path
+                // has been successfully saved.
+
+                if (
+                    previousAvatarPath &&
+                    previousAvatarPath !== avatarPathToSave
+                ) {
+                    const { error: deleteError } =
+                        await supabaseClient.storage
+                            .from(AVATAR_BUCKET)
+                            .remove([previousAvatarPath]);
+
+                    if (deleteError) {
+                        console.error(
+                            "OLD AVATAR CLEANUP ERROR:",
+                            deleteError
+                        );
+                    }
+                }
+
+                showMessage(
+                    profileMessage,
+                    "Your profile has been updated.",
+                    true
+                );
+
+            } catch (error) {
+                console.error("PROFILE UPDATE ERROR:", error);
+
+                // Remove a newly uploaded file if saving the profile failed.
+
+                if (newlyUploadedPath) {
+                    const { error: cleanupError } =
+                        await supabaseClient.storage
+                            .from(AVATAR_BUCKET)
+                            .remove([newlyUploadedPath]);
+
+                    if (cleanupError) {
+                        console.error(
+                            "UPLOAD CLEANUP ERROR:",
+                            cleanupError
+                        );
+                    }
+                }
+
+                showMessage(
+                    profileMessage,
+                    error.message ||
+                        "Unable to save your changes. Please try again."
+                );
+
+                // Restore the previous avatar if removal was not saved.
+                if (!removeAvatarRequested) {
+                    await displaySavedAvatar(previousAvatarPath);
+                }
+
+            } finally {
+                saveProfileButton.disabled = false;
+                saveProfileButton.textContent = "Save Changes";
+            }
+        });
+
+        // CHANGE PASSWORD
+
+        passwordForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            if (!currentUser) return;
+
+            const newPassword =
+                document.getElementById("newPassword").value;
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            if (newPassword.length < 6) {
+                showMessage(
+                    passwordMessage,
+                    "Your password must be at least 6 characters."
+                );
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showMessage(
+                    passwordMessage,
+                    "The passwords do not match."
+                );
+                return;
+            }
+
+            changePasswordButton.disabled = true;
+            changePasswordButton.textContent = "Updating...";
+
+            try {
+                const { error } = await supabaseClient.auth.updateUser({
+                    password: newPassword
+                });
+
+                if (error) throw error;
+
+                passwordForm.reset();
+
+                showMessage(
+                    passwordMessage,
+                    "Your password has been updated.",
+                    true
+                );
+
+            } catch (error) {
+                console.error("PASSWORD UPDATE ERROR:", error);
+
+                showMessage(
+                    passwordMessage,
+                    error.message ||
+                        "Unable to update your password. Please try again."
+                );
+
+            } finally {
+                changePasswordButton.disabled = false;
+                changePasswordButton.textContent = "Update Password";
+            }
+        });
+
+        // LOG OUT IS HANDLED BY ../js/logout.js
+
+        // INITIALIZE PAGE
+
+        initializeAccount();
+    </script>
+
+</body>
+</html>

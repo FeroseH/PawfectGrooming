@@ -1,135 +1,265 @@
-// ============================================
-// PAWFECT GROOMING - AUTHENTICATION
-// ============================================
-console.log("AUTH.JS IS LOADING");
+
+/* ============================================
+   PAWFECT GROOMING - AUTHENTICATION
+============================================ */
+
+
+/* SAVE A TOAST FOR THE NEXT PAGE */
+
+function saveToastForRedirect(message, type = "success", title = "") {
+    sessionStorage.setItem(
+        "pawfect-toast",
+        JSON.stringify({ message, type, title })
+    );
+}
+
+
+/* ============================================
+   REGISTRATION
+============================================ */
 
 const registerForm = document.getElementById("registerForm");
 
-if (registerForm !== null) {
-
+if (registerForm) {
     registerForm.addEventListener("submit", async function (event) {
-
         event.preventDefault();
 
-        const fullName = document.getElementById("fullName").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
+        const fullName =
+            document.getElementById("fullName").value.trim();
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            alert("Passwords do not match.");
-            return;
-        }
+        const email =
+            document.getElementById("email").value.trim();
 
-        // Check password length
-        if (password.length < 6) {
-            alert("Password must be at least 6 characters.");
-            return;
-        }
+        const password =
+            document.getElementById("password").value;
 
-        // Register the user with Supabase
-        const { data, error } = await supabaseClient.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-        data: {
-            full_name: fullName
-        }
-    }
-});
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
 
-console.log("SIGN UP DATA:", data);
-console.log("SIGN UP ERROR:", error);
-
-        // Handle Supabase error
-        if (error) {
-            console.error(error);
-            alert(error.message);
-            return;
-        }
-
-        // Registration successful
-        console.log("Registration successful:", data);
-
-        alert(
-            "Registration successful! " +
-            "Please check your email to verify your account."
+        const submitButton = registerForm.querySelector(
+            'button[type="submit"]'
         );
 
-        window.location.href = "login.html";
+        if (password !== confirmPassword) {
+            showToast(
+                "Please make sure both passwords match.",
+                "error",
+                "Passwords don't match"
+            );
+            return;
+        }
+
+        if (password.length < 6) {
+            showToast(
+                "Your password must contain at least 6 characters.",
+                "error",
+                "Password too short"
+            );
+            return;
+        }
+
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+
+        try {
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: fullName
+                        }
+                    }
+                });
+
+            console.log("SIGN UP DATA:", data);
+
+            if (error) {
+                console.error("REGISTRATION ERROR:", error);
+
+                showToast(
+                    error.message,
+                    "error",
+                    "Registration failed"
+                );
+                return;
+            }
+
+            console.log("Registration successful:", data);
+
+            saveToastForRedirect(
+                "Please check your email for the account verification link.",
+                "success",
+                "Registration successful"
+            );
+
+            window.location.href = "login.html";
+
+        } catch (error) {
+            console.error("REGISTRATION ERROR:", error);
+
+            showToast(
+                "Something went wrong while creating your account. Please try again.",
+                "error",
+                "Registration failed"
+            );
+
+        } finally {
+            if (submitButton && submitButton.isConnected) {
+                submitButton.disabled = false;
+            }
+        }
     });
 }
 
-// ============================================
-// LOGIN
-// ============================================
+
+/* ============================================
+   LOGIN
+============================================ */
 
 const loginForm = document.getElementById("loginForm");
 
-if (loginForm !== null) {
+if (loginForm) {
 
-    loginForm.addEventListener("submit", async function (event) {
+    /* REDIRECT BASED ON ACCOUNT ROLE */
 
-        event.preventDefault();
-
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
-
-
-        // Log in using Supabase Authentication
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-
-        // Handle login error
-        if (error) {
-
-            console.error(error);
-
-            alert(error.message);
-
-            return;
-        }
-
-
-        // Get the logged-in user's ID
-        const userId = data.user.id;
-
-
-        // Get the user's profile and role
-        const { data: profile, error: profileError } =
-            await supabaseClient
+    async function redirectToDashboard(userId, showWelcome = false) {
+        try {
+            const { data: profile, error } = await supabaseClient
                 .from("profiles")
                 .select("role")
                 .eq("id", userId)
                 .single();
 
+            if (error || !profile) {
+                console.error("PROFILE ERROR:", error);
 
-        // Handle profile error
-        if (profileError) {
+                showToast(
+                    "We couldn't load your account details. Please try again.",
+                    "error",
+                    "Account error"
+                );
 
-            console.error(profileError);
+                return;
+            }
 
-            alert("Login successful, but we couldn't retrieve your account information.");
+            if (showWelcome) {
+                saveToastForRedirect(
+                    "You have successfully logged in to your account.",
+                    "success",
+                    "Welcome back!"
+                );
+            }
 
-            return;
+            if (profile.role === "admin") {
+                window.location.href = "admin/dashboard.html";
+            } else {
+                window.location.href = "customer/dashboard.html";
+            }
+
+        } catch (error) {
+            console.error("DASHBOARD REDIRECT ERROR:", error);
+
+            showToast(
+                "Something went wrong while opening your dashboard.",
+                "error",
+                "Unable to continue"
+            );
+        }
+    }
+
+
+    /* CHECK EXISTING SESSION */
+
+    async function redirectIfLoggedIn() {
+        try {
+            const { data, error } =
+                await supabaseClient.auth.getSession();
+
+            if (error) {
+                console.error("SESSION CHECK ERROR:", error);
+                return;
+            }
+
+            if (data.session) {
+                await redirectToDashboard(data.session.user.id);
+            }
+
+        } catch (error) {
+            console.error("SESSION CHECK ERROR:", error);
+        }
+    }
+
+    //redirectIfLoggedIn();
+
+
+    /* HANDLE LOGIN */
+
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const email =
+            document.getElementById("loginEmail").value.trim();
+
+        const password =
+            document.getElementById("loginPassword").value;
+
+        const rememberCheckbox =
+            document.getElementById("rememberMe");
+
+        const rememberMe = rememberCheckbox
+            ? rememberCheckbox.checked
+            : false;
+
+        const submitButton = loginForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        localStorage.setItem(
+            "pawfect-remember-session",
+            rememberMe ? "local" : "session"
+        );
+
+        if (submitButton) {
+            submitButton.disabled = true;
         }
 
+        try {
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                });
 
-        // Send user to the correct dashboard
-        if (profile.role === "admin") {
+            if (error) {
+                console.error("LOGIN ERROR:", error);
 
-            window.location.href = "admin/dashboard.html";
+                showToast(
+                    "Please check your email and password, then try again.",
+                    "error",
+                    "Login failed"
+                );
 
-        } else {
+                return;
+            }
 
-            window.location.href = "customer/dashboard.html";
+            await redirectToDashboard(data.user.id, true);
 
+        } catch (error) {
+            console.error("LOGIN ERROR:", error);
+
+            showToast(
+                "Something went wrong while logging in. Please try again.",
+                "error",
+                "Login failed"
+            );
+
+        } finally {
+            if (submitButton && submitButton.isConnected) {
+                submitButton.disabled = false;
+            }
         }
-
     });
-
 }

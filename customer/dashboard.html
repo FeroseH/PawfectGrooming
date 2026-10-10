@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,22 +12,15 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../customer-new.css">
 </head>
 
 <body class="dashboard-page">
 
-    <!-- =========================
-         NAVIGATION
-    ========================== -->
-
     <header class="dashboard-header">
-
-        
-            <div>
-                <h2>Pawfect Grooming</h2>
-                <small>Gentle care. Happy pets.</small>
-            </div>
+        <div>
+            <h2>Pawfect Grooming</h2>
+            <small>Gentle care. Happy pets.</small>
         </div>
 
         <nav class="dashboard-nav">
@@ -35,25 +29,17 @@
             <a href="services.html">Services</a>
             <a href="appointments.html">Appointments</a>
             <a href="history.html">History</a>
+            <a href="account.html">Account</a>
         </nav>
 
         <button id="logoutButton" class="logout-button">
             Log Out
         </button>
-
     </header>
-
-
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
 
     <main class="dashboard-container">
 
-        <!-- Welcome -->
-
         <section class="welcome-section">
-
             <div>
                 <p class="small-label">WELCOME BACK</p>
 
@@ -65,16 +51,9 @@
                     Ready to give your furry friend some extra care today?
                 </p>
             </div>
-
-            
-
         </section>
 
-
-        <!-- Quick Actions -->
-
         <section class="dashboard-section">
-
             <div class="section-heading">
                 <div>
                     <h2>Quick Actions</h2>
@@ -83,171 +62,207 @@
             </div>
 
             <div class="quick-actions">
-
                 <a href="appointments.html" class="action-card">
-
                     <div>
                         <h3>Book Appointment</h3>
                         <p>Schedule a grooming session.</p>
                     </div>
-
                     <span class="action-arrow">→</span>
                 </a>
 
-
                 <a href="pets.html" class="action-card">
-
                     <div>
                         <h3>My Pets</h3>
                         <p>View and manage your pets.</p>
                     </div>
-
                     <span class="action-arrow">→</span>
                 </a>
 
-
                 <a href="services.html" class="action-card">
-
                     <div>
                         <h3>View Services</h3>
                         <p>Explore our grooming services.</p>
                     </div>
-
                     <span class="action-arrow">→</span>
                 </a>
-
             </div>
-
         </section>
-
-
-        <!-- Dashboard Grid -->
 
         <div class="dashboard-grid">
 
-
-            <!-- Upcoming Appointment -->
-
             <section class="dashboard-card">
-
                 <div class="card-heading">
-
                     <div>
                         <span class="card-label">NEXT APPOINTMENT</span>
                         <h2>Upcoming Appointment</h2>
                     </div>
-
-                    
-
                 </div>
 
                 <div id="appointmentContent">
-
                     <div class="empty-state">
-                        
                         <p>No upcoming appointments.</p>
-
-                        <a href="appointments.html">
-                            Book an appointment
-                        </a>
+                        <a href="appointments.html">Book an appointment</a>
                     </div>
-
                 </div>
-
             </section>
 
-
-            <!-- Queue -->
-
             <section class="dashboard-card">
-
                 <div class="card-heading">
-
                     <div>
                         <span class="card-label">LIVE STATUS</span>
                         <h2>Queue Status</h2>
                     </div>
-
-                    
-
                 </div>
 
                 <div id="queueContent">
-
                     <div class="empty-state">
                         <div></div>
                         <p>You don't have an active queue.</p>
                     </div>
-
                 </div>
-
             </section>
 
         </div>
 
-
-        <!-- My Pets -->
-
         <section class="dashboard-section">
-
             <div class="section-heading">
-
                 <div>
                     <h2>My Pets</h2>
                     <p>Your furry family members.</p>
                 </div>
 
-                <a href="pets.html" class="view-link">
-                    View all →
-                </a>
-
+                <a href="pets.html" class="view-link">View all →</a>
             </div>
 
-
             <div id="petsContainer" class="pets-preview">
-
                 <div class="loading-state">
                     Loading your pets...
                 </div>
-
             </div>
-
         </section>
 
     </main>
 
-
-    <!-- Supabase -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <script src="../js/supabase.js"></script>
-
+    <script src="../js/toast.js"></script>
     <script src="../js/auth.js"></script>
-
-
-    <!-- Dashboard Script -->
+    <script src="../js/logout.js"></script>
 
     <script>
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, function (char) {
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                };
+
+                return entities[char];
+            });
+        }
+
+        async function loadUpcomingAppointment(userId) {
+            const appointmentContent =
+                document.getElementById("appointmentContent");
+
+            if (!appointmentContent) return;
+
+            appointmentContent.innerHTML = `
+                <div class="empty-state">
+                    <p>Loading appointments...</p>
+                </div>
+            `;
+
+            const today = new Date().toLocaleDateString("en-CA");
+
+            const { data, error } = await supabaseClient
+                .from("appointments")
+                .select(`
+                    appointment_date,
+                    appointment_time,
+                    status,
+                    pets(name),
+                    services(name)
+                `)
+                .eq("customer_id", userId)
+                .in("status", ["pending", "confirmed"])
+                .gte("appointment_date", today)
+                .order("appointment_date", { ascending: true })
+                .order("appointment_time", { ascending: true })
+                .limit(1);
+
+            if (error) {
+                console.error("UPCOMING APPOINTMENT ERROR:", error);
+
+                appointmentContent.innerHTML = `
+                    <div class="empty-state">
+                        <p>Unable to load your upcoming appointment.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                appointmentContent.innerHTML = `
+                    <div class="empty-state">
+                        <p>No upcoming appointments.</p>
+                        <a href="appointments.html">Book an appointment</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const appointment = data[0];
+
+            const date = new Date(
+                appointment.appointment_date + "T00:00:00"
+            ).toLocaleDateString("en-PH", {
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+
+            const time = new Date(
+                "2000-01-01T" + appointment.appointment_time
+            ).toLocaleTimeString("en-PH", {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            });
+
+            const petName = appointment.pets?.name || "Your pet";
+            const serviceName =
+                appointment.services?.name || "Grooming service";
+
+            appointmentContent.innerHTML = `
+                <div class="appointment-summary">
+                    <h3>${escapeHTML(petName)}</h3>
+                    <p>${escapeHTML(serviceName)}</p>
+                    <p><strong>Date:</strong> ${escapeHTML(date)}</p>
+                    <p><strong>Time:</strong> ${escapeHTML(time)}</p>
+                    <p><strong>Status:</strong> ${escapeHTML(appointment.status)}</p>
+                    <a href="appointments.html">View appointments</a>
+                </div>
+            `;
+        }
 
         async function loadDashboard() {
-
-            // Check if user is logged in
             const {
                 data: { user },
                 error: userError
             } = await supabaseClient.auth.getUser();
 
-
             if (userError || !user) {
-
                 window.location.href = "../login.html";
-
                 return;
             }
 
+            await loadUpcomingAppointment(user.id);
 
-            // Get customer profile
+            // Load customer profile
             const { data: profile, error: profileError } =
                 await supabaseClient
                     .from("profiles")
@@ -255,19 +270,16 @@
                     .eq("id", user.id)
                     .single();
 
-
             if (profileError) {
-
-                console.error(profileError);
-
+                console.error("PROFILE ERROR:", profileError);
             } else {
+                const fullName = profile?.full_name || "there";
 
                 document.getElementById("customerName").textContent =
-                    profile.full_name.split(" ")[0];
+                    fullName.split(" ")[0];
             }
 
-
-            // Load pets
+            // Fetch the customer's pets
             const { data: pets, error: petsError } =
                 await supabaseClient
                     .from("pets")
@@ -275,103 +287,121 @@
                     .eq("owner_id", user.id)
                     .order("created_at", { ascending: false });
 
-
             if (petsError) {
+                console.error("PETS ERROR:", petsError);
 
-                console.error(petsError);
-
+                document.getElementById("petsContainer").innerHTML = `
+                    <div class="empty-pets">
+                        <h3>Unable to load your pets</h3>
+                        <p>Please refresh the page and try again.</p>
+                    </div>
+                `;
                 return;
             }
 
+            // Generate temporary display URLs for private pet photos
+            for (const pet of pets || []) {
+                pet.photoDisplayUrl = null;
+
+                if (!pet.photo_url) continue;
+
+                const { data: photoData, error: photoError } =
+                    await supabaseClient
+                        .storage
+                        .from("pet-photos")
+                        .createSignedUrl(pet.photo_url, 3600);
+
+                if (photoError) {
+                    console.error(
+                        "PHOTO URL ERROR FOR " + pet.name + ":",
+                        photoError
+                    );
+                    continue;
+                }
+
+                pet.photoDisplayUrl = photoData?.signedUrl || null;
+            }
 
             displayPets(pets);
         }
 
-
         function displayPets(pets) {
-
-            const container =
-                document.getElementById("petsContainer");
-
+            const container = document.getElementById("petsContainer");
 
             if (!pets || pets.length === 0) {
-
                 container.innerHTML = `
                     <div class="empty-pets">
-                        <div>🐾</div>
-
                         <h3>No pets added yet</h3>
-
                         <p>
                             Add your first pet to start managing
                             their grooming records.
                         </p>
-
-                        <a href="pets.html">
-                            Add a Pet
-                        </a>
+                        <a href="pets.html">Add a Pet</a>
                     </div>
                 `;
-
                 return;
             }
 
+            container.innerHTML = pets.slice(0, 3).map(pet => {
+                const name = escapeHTML(pet.name || "Unnamed pet");
+                const breed = escapeHTML(pet.breed || pet.species || "Pet");
+                const age = pet.age !== null &&
+                            pet.age !== undefined &&
+                            pet.age !== ""
+                    ? ` • ${escapeHTML(pet.age)} ${Number(pet.age) === 1 ? "year old" : "years old"}`
+                    : "";
 
-            container.innerHTML = pets
-                .slice(0, 3)
-                .map(pet => `
-
-                    <div class="pet-preview-card">
-
-                        
-
-                        <div>
-
-                            <h3>${pet.name}</h3>
-
-                            <p>
-                                ${pet.breed || pet.species}
-                                ${pet.age ? " • " + pet.age + (Number(pet.age) === 1 ? " year old" : " years old") : ""}
-                            </p>
-
+                const photo = pet.photoDisplayUrl
+                    ? `
+                        <img
+                            src="${escapeHTML(pet.photoDisplayUrl)}"
+                            alt="${name}"
+                            class="pet-preview-photo"
+                            loading="lazy"
+                        >
+                    `
+                    : `
+                        <div class="pet-preview-photo-placeholder"
+                             aria-label="No photo available">
+                            ${name.charAt(0).toUpperCase()}
                         </div>
+                    `;
 
+                return `
+                    <div class="pet-preview-card">
+                        ${photo}
+
+                        <div class="pet-preview-info">
+                            <h3>${name}</h3>
+                            <p>${breed}${age}</p>
+                        </div>
                     </div>
+                `;
+            }).join("");
 
-                `)
-                .join("");
+            // If a photo cannot load, replace it with a simple placeholder
+            container.querySelectorAll(".pet-preview-photo").forEach(img => {
+                img.addEventListener("error", function () {
+                    const placeholder = document.createElement("div");
+                    placeholder.className = "pet-preview-photo-placeholder";
+                    placeholder.textContent =
+                        (this.alt || "P").charAt(0).toUpperCase();
+
+                    this.replaceWith(placeholder);
+                }, { once: true });
+            });
         }
 
+        loadDashboard().catch(error => {
+            console.error("DASHBOARD ERROR:", error);
 
-        // Logout
-
-        document
-            .getElementById("logoutButton")
-            .addEventListener("click", async function () {
-
-                const { error } =
-                    await supabaseClient.auth.signOut();
-
-
-                if (error) {
-
-                    console.error(error);
-
-                    alert("Unable to log out.");
-
-                    return;
-                }
-
-
-                window.location.href = "../login.html";
-
-            });
-
-
-        // Load dashboard
-
-        loadDashboard();
-
+            document.getElementById("petsContainer").innerHTML = `
+                <div class="empty-pets">
+                    <h3>Something went wrong</h3>
+                    <p>Please refresh the page and try again.</p>
+                </div>
+            `;
+        });
     </script>
 
 </body>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,13 +28,10 @@
             <div class="auth-visual-content">
 
                 <a href="index.html" class="auth-logo">
-                    🐾 Pawfect Grooming
+                    Pawfect Grooming
                 </a>
 
                 <div class="auth-message">
-
-                    
-
                     <h1>
                         Welcome back.<br>
                         We've missed you.
@@ -40,13 +41,11 @@
                         Log in to manage your pets, book grooming
                         appointments, and keep track of your queue.
                     </p>
-
                 </div>
 
             </div>
 
         </section>
-
 
         <!-- RIGHT SIDE -->
         <section class="auth-form-section">
@@ -54,10 +53,10 @@
             <div class="auth-form-container">
 
                 <a href="index.html" class="mobile-auth-logo">
-                    🐾 Pawfect Grooming
+                    Pawfect Grooming
                 </a>
 
-
+                <!-- PAGE HEADING -->
                 <div class="auth-heading">
 
                     <span class="auth-small-title">
@@ -72,10 +71,10 @@
 
                 </div>
 
-
                 <!-- LOGIN FORM -->
                 <form id="loginForm" class="auth-form">
 
+                    <!-- EMAIL -->
                     <div class="form-group">
 
                         <label for="loginEmail">
@@ -87,29 +86,45 @@
                             id="loginEmail"
                             name="email"
                             placeholder="Enter your email"
+                            autocomplete="email"
                             required
                         >
 
                     </div>
 
-
+                    <!-- PASSWORD WITH SHOW/HIDE TOGGLE -->
                     <div class="form-group">
 
                         <label for="loginPassword">
                             Password
                         </label>
 
-                        <input
-                            type="password"
-                            id="loginPassword"
-                            name="password"
-                            placeholder="Enter your password"
-                            required
-                        >
+                        <div class="password-input-wrapper">
+
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                data-target="loginPassword"
+                                aria-label="Show password"
+                                aria-pressed="false"
+                            >
+                                Show
+                            </button>
+
+                        </div>
 
                     </div>
 
-
+                    <!-- LOGIN OPTIONS -->
                     <div class="login-options">
 
                         <label class="remember-me">
@@ -117,42 +132,40 @@
                             <input
                                 type="checkbox"
                                 id="rememberMe"
+                                name="rememberMe"
                             >
 
                             <span>Remember me</span>
 
                         </label>
 
-                        <a href="#" class="forgot-password">
-                            Forgot password?
-                        </a>
+                        <a href="forgot-password.html" class="forgot-password">
+    Forgot password?
+</a>
 
                     </div>
 
-
+                    <!-- SUBMIT -->
                     <button type="submit" class="auth-button">
                         Log In
                     </button>
 
                 </form>
 
-
+                <!-- REGISTER LINK -->
                 <div class="auth-divider">
                     <span>Don't have an account?</span>
                 </div>
-
 
                 <a href="register.html" class="auth-secondary-button">
                     Create an account
                 </a>
 
-
+                <!-- HOME LINK -->
                 <p class="auth-back">
-
                     <a href="index.html">
                         ← Back to home
                     </a>
-
                 </p>
 
             </div>
@@ -161,12 +174,39 @@
 
     </main>
 
-
-    <!-- SUPABASE -->
+    <!-- SUPABASE LIBRARY -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="js/supabase.js"></script>
-    <script src="js/auth.js"></script>
+    <!-- PROJECT SCRIPTS -->
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <!-- PASSWORD VISIBILITY TOGGLE -->
+    <script>
+        document.querySelectorAll(".toggle-password").forEach(button => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(button.dataset.target);
+
+                if (!input) return;
+
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+                button.textContent = isHidden ? "Hide" : "Show";
+
+                button.setAttribute(
+                    "aria-pressed",
+                    String(isHidden)
+                );
+
+                button.setAttribute(
+                    "aria-label",
+                    `${isHidden ? "Hide" : "Show"} password`
+                );
+            });
+        });
+    </script>
 
 </body>
 </html>

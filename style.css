@@ -1,3 +1,4 @@
+
 /* =====================================
    PAWFECT GROOMING
    MAIN STYLESHEET
@@ -997,7 +998,6 @@ footer {
 
 .footer-links a {
     color: #6F766D;
-
     text-decoration: none;
 
     font-size: 13px;
@@ -1739,7 +1739,23 @@ footer {
     margin-bottom: 40px;
 }
 
+/* Keep the Services content within the page */
+.dashboard-container.services-page-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 32px;
+    padding-right: 32px;
+    box-sizing: border-box;
+}
 
+@media (max-width: 600px) {
+    .dashboard-container.services-page-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
 .small-label {
     margin: 0 0 7px;
 
@@ -2227,6 +2243,8 @@ footer {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
+padding:1px;
+    
 }
 
 .pets-page-heading h1 {
@@ -2763,6 +2781,8 @@ footer {
    GROOMING SERVICES PAGE
 ========================= */
 
+
+
 .services-page-container {
     padding-bottom: 60px;
 }
@@ -2794,15 +2814,11 @@ footer {
     width: 100%;
 }
 
+
 .services-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
-
-    margin-top: 24px;
 }
 
 .service-card {
@@ -3662,7 +3678,7 @@ footer {
    TABLET / MOBILE
 ========================= */
 
-@media (max-width: 800px) {
+@media (max-width: 00px) {
 
     .services-grid {
         grid-template-columns: 1fr !important;
@@ -3692,5 +3708,1490 @@ footer {
         width: 100% !important;
     }
 
+}
+
+
+/* =========================
+   APPOINTMENT FORM DESIGN
+========================= */
+
+.appointment-form-card {
+    background: #ffffff;
+    border: 1px solid #e9e7df;
+    border-radius: 18px;
+    padding: 32px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.appointment-form-heading {
+    margin-bottom: 28px;
+}
+
+.appointment-form-heading .card-label {
+    display: block;
+    margin-bottom: 10px;
+    color: #84958a;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.appointment-form-heading h2 {
+    margin: 0 0 8px;
+    color: #293b32;
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.appointment-form-heading p {
+    margin: 0;
+    color: #6c756f;
+    font-size: 16px;
+}
+
+/* Form layout */
+
+.appointment-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 24px;
+}
+
+.form-group {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.form-group label {
+    color: #35463c;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+/* Inputs, dropdowns, and notes */
+
+.appointment-form-grid input,
+.appointment-form-grid select,
+.appointment-form-grid textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 13px 15px;
+    border: 1px solid #dedbd1;
+    border-radius: 12px;
+    background-color: #fcfcf9;
+    color: #293b32;
+    font-family: "Nunito", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.appointment-form-grid input,
+.appointment-form-grid select {
+    min-height: 50px;
+}
+
+.appointment-form-grid select {
+    cursor: pointer;
+}
+
+.appointment-form-grid input[type="date"] {
+    min-height: 54px;
+    cursor: pointer;
+}
+
+.appointment-form-grid textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.appointment-form-grid input:focus,
+.appointment-form-grid select:focus,
+.appointment-form-grid textarea:focus {
+    border-color: #748f75;
+    box-shadow: 0 0 0 3px rgba(116, 143, 117, 0.13);
+}
+
+.appointment-form-grid input::placeholder,
+.appointment-form-grid textarea::placeholder {
+    color: #9b9d96;
+}
+
+/* Notes span both columns */
+
+.appointment-notes-group {
+    grid-column: 1 / -1;
+}
+
+/* Footer */
+
+.appointment-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 28px;
+}
+
+.required-note {
+    margin: 0;
+    color: #8b938c;
+    font-size: 14px;
+}
+
+.appointment-submit-button {
+    min-height: 52px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 14px;
+    background-color: #748f75;
+    color: #ffffff;
+    font-family: "Nunito", sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.appointment-submit-button:hover {
+    background-color: #617c63;
+}
+
+.appointment-submit-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Responsive layout */
+
+@media (max-width: 650px) {
+    .appointment-form-card {
+        padding: 22px 18px;
+    }
+
+    .appointment-form-heading h2 {
+        font-size: 23px;
+    }
+
+    .appointment-form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .appointment-notes-group {
+        grid-column: auto;
+    }
+
+    .appointment-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .appointment-submit-button {
+        width: 100%;
+    }
+}
+
+/*HISTORY PAGE*/
+
+
+.history-page {
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+.history-heading {
+    margin-bottom: 28px;
+}
+
+.history-heading h1 {
+    margin: 6px 0;
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.history-heading > p:last-child,
+.history-toolbar p {
+    color: #737373;
+
+}
+
+.history-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.history-summary-card,
+.history-panel {
+    background: #e7ebe5;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+}
+
+.history-summary-card {
+    padding: 20px;
+    
+}
+
+.history-summary-card span {
+    color: #737373;
+    font-size: 0.9rem;
+}
+
+.history-summary-card h2 {
+    margin: 8px 0 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.8rem;
+}
+
+.history-panel {
+    padding: 24px;
+}
+
+.history-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.history-toolbar h2 {
+    margin: 0 0 4px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.25rem;
+}
+
+.history-toolbar p {
+    margin: 0;
+    font-size: 0.92rem;
+}
+
+.history-book-link {
+    display: inline-block;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.history-book-link:hover {
+    background: #555;
+}
+
+.history-filters {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.history-filters input,
+.history-filters select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #dedede;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font: inherit;
+}
+
+.history-message {
+    color: #737373;
+    font-size: 0.92rem;
+    margin: 16px 0;
+}
+
+.history-list {
+    display: grid;
+    gap: 14px;
+}
+
+.history-appointment-card {
+    padding: 20px;
+    background-color: #fff;
+    border: 5px solid #fff;
+    border-radius: 12px;
+}
+
+.history-appointment-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #737373;
+}
+
+.history-card-label {
+    margin: 0 0 5px;
+    color: #858585;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.history-appointment-main h3 {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.1rem;
+}
+
+.history-status {
+    display: inline-block;
+    padding: 6px 11px;
+    border-radius: 20px;
+    background: #f2f2f2;
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fff4d9;
+    color: #8a6415;
+}
+
+.status-confirmed {
+    background: #e5f4e9;
+    color: #28663b;
+}
+
+.status-completed {
+    background: #e8efff;
+    color: #3156a3;
+}
+
+.status-cancelled {
+    background: #fce9e9;
+    color: #a33b3b;
+}
+
+.history-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding-top: 18px;
+}
+
+.history-details span {
+    color: #858585;
+    font-size: 0.83rem;
+}
+
+.history-details p {
+    margin: 5px 0 0;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+    .history-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .history-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .history-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .history-details {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    .history-panel {
+        padding: 16px;
+    }
+
+    .history-summary-card {
+        padding: 15px;
+    }
+
+    .history-appointment-card {
+        padding: 15px;
+    }
+}
+
+/*ACCOUNT PAGE */
+
+.account-page {
+    max-width: 1000px;
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+.account-heading {
+    margin-bottom: 28px;
+}
+
+.account-heading h1 {
+    margin: 6px 0;
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.account-heading > p:last-child,
+.account-card-heading p {
+    color: #737373;
+}
+
+.account-card {
+    margin-bottom: 22px;
+    padding: 28px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+}
+
+.account-card-heading {
+    margin-bottom: 24px;
+}
+
+.account-card-heading h2 {
+    margin: 0 0 5px;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.2rem;
+}
+
+.account-card-heading p {
+    margin: 0;
+    font-size: 0.93rem;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.account-field label {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #333;
+}
+
+.account-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #dedede;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font: inherit;
+    outline: none;
+}
+
+.account-field input:focus {
+    border-color: #777;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.account-field input[readonly] {
+    background: #f7f7f7;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.account-field small {
+    color: #777;
+    font-size: 0.82rem;
+}
+
+.account-button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.account-button:hover {
+    background: #555;
+}
+
+.account-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.account-message {
+    min-height: 0;
+    margin: 14px 0 0;
+    font-size: 0.9rem;
+}
+
+.account-message:empty {
+    display: none;
+}
+
+.message-success {
+    color: #28663b;
+}
+
+.message-error {
+    color: #a33b3b;
+}
+
+@media (max-width: 600px) {
+    .account-page {
+        padding-top: 28px;
+        padding-bottom: 40px;
+    }
+
+    .account-card {
+        padding: 20px;
+    }
+
+    .account-button {
+        width: 100%;
+    }
+}
+
+
+.appointment-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #eeeeee;
+}
+
+.cancel-appointment-button {
+    padding: 10px 16px;
+    border: 1px solid #d97777;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #b54747;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.cancel-appointment-button:hover {
+    background: #b54747;
+    color: #ffffff;
+}
+
+.cancel-appointment-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+
+
+
+
+
+
+/* In-app toast notifications */
+
+.toast-container {
+    position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; align-items: center; gap: 12px; width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+
+.toast {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e8e4dc;
+    border-radius: 14px;
+    box-shadow: 0 8px 28px rgba(35, 35, 35, 0.10);
+    font-family: "Nunito", sans-serif;
+    pointer-events: auto;
+    animation: toastEnter 0.25s ease-out;
+    width: 100%; box-sizing: border-box;
+}
+
+.toast-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.toast-success .toast-icon {
+    background: #e5f2e8;
+    color: #36764a;
+}
+
+.toast-error .toast-icon {
+    background: #fbe9e7;
+    color: #b54747;
+}
+
+.toast-info .toast-icon {
+    background: #e9eef8;
+    color: #49699d;
+}
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    margin: 0 0 4px;
+    color: #30352f;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.toast-message {
+    margin: 0;
+    color: #777a73;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.toast-close {
+    flex-shrink: 0;
+    padding: 0 2px;
+    border: none;
+    background: transparent;
+    color: #888888;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #e5f2e8;
+    transform-origin: left;
+    animation: toastProgress 4s linear forwards;
+}
+
+.toast-error .toast-progress {
+    background: #d97777;
+}
+
+.toast-info .toast-progress {
+    background: #8198c2;
+}
+
+.toast-exit {
+    animation: toastExit 0.2s ease-in forwards;
+}
+
+@keyframes toastEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastExit {
+    to {
+        opacity: 0;
+        transform: translateX(12px);
+    }
+}
+
+@keyframes toastProgress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        top: 12px; left: 50%; right: auto; width: calc(100vw - 24px); transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast-exit,
+    .toast-progress {
+        animation: none;
+    }
+}
+
+/* ================================
+   CENTERED TOAST NOTIFICATIONS
+================================ */
+
+
+.toast-container {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.toast {
+    width: min(360px, 100%);
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+
+.toast-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.toast-success .toast-icon {
+    background: #e7f2e8;
+    color: #477653;
+}
+
+.toast-error .toast-icon {
+    background: #fbe9e7;
+    color: #b54747;
+}
+
+.toast-info .toast-icon {
+    background: #e9eef8;
+    color: #49699d;
+}
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    margin: 0 0 4px;
+    color: #303b31;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.toast-message {
+    margin: 0;
+    color: #727970;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.toast-close {
+    flex-shrink: 0;
+    padding: 0 2px;
+    border: none;
+    background: transparent;
+    color: #888f87;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #54815d;
+    transform-origin: left;
+    animation: toastProgress 4s linear forwards;
+}
+
+.toast-error .toast-progress {
+    background: #d97777;
+}
+
+.toast-info .toast-progress {
+    background: #8198c2;
+}
+
+.toast-exit {
+    animation: toastExit 0.2s ease-in forwards;
+}
+
+
+/* ================================
+   CANCELLATION CONFIRMATION MODAL
+================================ */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.cancel-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(30, 40, 31, 0.42);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.cancel-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cancel-modal {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 26px 26px;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #e5ebe3;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(30, 50, 32, 0.18);
+    text-align: center;
+    transform: translateY(10px) scale(0.98);
+    transition: transform 0.2s ease;
+}
+
+.cancel-modal-overlay.show .cancel-modal {
+    transform: translateY(0) scale(1);
+}
+
+.cancel-modal-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #e7f2e8;
+    color: #477653;
+}
+
+.cancel-modal h2 {
+    margin: 0 0 10px;
+    color: #303b31;
+    font-family: "Poppins", sans-serif;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.cancel-modal p {
+    margin: 0;
+    color: #727970;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.cancel-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.cancel-modal-actions button {
+    flex: 1;
+    min-height: 46px;
+    padding: 11px 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-family: "Nunito", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cancel-modal-actions button:hover {
+    transform: translateY(-1px);
+}
+
+.keep-appointment-button {
+    background: #f2f4f0;
+    border-color: #e4e9e1 !important;
+    color: #444b43;
+}
+
+.keep-appointment-button:hover {
+    background: #e8ede6;
+}
+
+.confirm-cancel-button {
+    background: #54815d;
+    color: #ffffff;
+}
+
+.confirm-cancel-button:hover {
+    background: #426b4b;
+}
+
+.cancel-modal-actions button:focus-visible,
+.toast-close:focus-visible {
+    outline: 3px solid #a6c9aa;
+    outline-offset: 3px;
+}
+
+.cancel-modal-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ================================
+   ANIMATIONS AND MOBILE LAYOUT
+================================ */
+
+@keyframes toastEnter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastExit {
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes toastProgress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        top: 12px;
+        width: calc(100vw - 24px);
+    }
+
+    .cancel-modal {
+        padding: 28px 20px 22px;
+        border-radius: 18px;
+    }
+
+    .cancel-modal h2 {
+        font-size: 19px;
+    }
+
+    .cancel-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .cancel-modal-actions button {
+        width: 100%;
+        min-height: 46px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast-exit,
+    .toast-progress,
+    .cancel-modal,
+    .cancel-modal-overlay {
+        animation: none;
+        transition: none;
+    }
+}
+
+
+/* Matching Pawfect Grooming notification design */
+
+.toast {
+    align-items: center;
+    padding: 26px 22px;
+    flex-direction: column;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e5ebe3;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(30, 50, 32, 0.18);
+    gap: 10px;
+}
+
+.toast-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 25px;
+    background: #e7f2e8;
+    color: #477653;
+}
+
+.toast-success .toast-icon {
+    background: #e7f2e8;
+    color: #477653;
+}
+
+.toast-error .toast-icon {
+    background: #fbe9e7;
+    color: #b54747;
+}
+
+.toast-info .toast-icon {
+    background: #e9eef8;
+    color: #49699d;
+}
+
+.toast-title {
+    margin: 0 0 6px;
+    color: #303b31;
+    font-family: "Poppins", sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.toast-message {
+    color: #727970;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.toast-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+}
+
+.toast-progress {
+    height: 3px;
+    background: #54815d;
+}
+
+.toast-error .toast-progress {
+    background: #d97777;
+}
+
+.toast-info .toast-progress {
+    background: #8198c2;
+}
+
+
+/* FIX: Keep cancellation confirmation centered */
+
+#cancelModal.cancel-modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    transform: none !important;
+    z-index: 10000 !important;
+}
+
+#cancelModal.cancel-modal-overlay:not(.show) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+#cancelModal.cancel-modal-overlay.show {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+#cancelModal .cancel-modal {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+
+    width: 100% !important;
+    max-width: 420px !important;
+    margin: 0 auto !important;
+
+    transform: translateY(0) scale(1) !important;
+    flex: 0 1 420px !important;
+}
+
+
+
+
+
+/* FINAL FIX: Center toast on the viewport */
+
+#toastContainer.toast-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+
+    width: min(360px, calc(100vw - 32px)) !important;
+    max-width: 360px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    transform: translate(-50%, -50%) !important;
+    z-index: 10001 !important;
+    pointer-events: none !important;
+}
+
+#toastContainer .toast {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    pointer-events: auto !important;
+}
+
+
+
+
+/* Keep confirmation modal centered independently */
+
+#cancelModal.cancel-modal-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    transform: none !important;
+    z-index: 10000 !important;
+}
+
+#cancelModal .cancel-modal {
+    position: relative !important;
+    inset: auto !important;
+    flex: 0 1 420px !important;
+    width: 100% !important;
+    max-width: 420px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+
+
+/* Upcoming Appointment — View Appointments Link */
+
+.appointment-summary a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 9px 16px;
+    border: 1px solid #d7e6d8;
+    border-radius: 10px;
+    background: #f1f7f1;
+    color: #426d4b;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.appointment-summary a:hover {
+    background: #e4f0e5;
+    border-color: #b9d3bc;
+    color: #315b39;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.appointment-summary a:focus-visible {
+    outline: 2px solid #54815d;
+    outline-offset: 3px;
+}
+
+
+
+
+/* OPTIONAL PROFILE PHOTO */
+
+.account-page .account-avatar {
+    position: relative;
+    overflow: hidden;
+}
+
+.account-page .account-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.account-page .account-avatar img[hidden],
+.account-page #removeAvatarButton[hidden] {
+    display: none;
+}
+
+.account-page .account-photo-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.account-page .account-photo-button,
+.account-page #removeAvatarButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border: 1px solid #687e5e;
+    border-radius: 8px;
+    background: #687e5e;
+    color: #fffefa;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.account-page .account-photo-button:hover,
+.account-page #removeAvatarButton:hover {
+    background: #536b4a;
+}
+
+.account-page #removeAvatarButton {
+    background: transparent;
+    color: #536b4a;
+}
+
+.account-page #removeAvatarButton:hover {
+    background: #edf1e8;
+}
+
+.account-page .account-photo-actions small {
+    flex-basis: 100%;
+}
+
+
+
+
+/* ========================================
+   AUTH PAGES — LEFT PANEL ALIGNMENT
+   Applies to register and login
+======================================== */
+
+.auth-visual {
+    display: flex;
+    align-items: stretch;
+}
+
+.auth-visual-content {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.auth-logo {
+    display: inline-block;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.auth-message {
+    width: 100%;
+    max-width: 520px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 48px 0;
+    box-sizing: border-box;
+}
+
+.auth-message h1 {
+    margin: 0 0 24px;
+    font-size: clamp(42px, 4vw, 64px);
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+}
+
+.auth-message p {
+    max-width: 440px;
+    margin: 0;
+    line-height: 1.8;
+}
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+    .auth-message {
+        padding: 36px 0;
+    }
+
+    .auth-message h1 {
+        font-size: clamp(38px, 5vw, 54px);
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-visual-content {
+        min-height: 250px;
+    }
+
+    .auth-message {
+        padding: 30px 0 10px;
+    }
+
+    .auth-message h1 {
+        font-size: clamp(36px, 9vw, 46px);
+        letter-spacing: -1px;
+    }
+}
+
+
+
+/* Password visibility toggle */
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 76px;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #58745a;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+.toggle-password:hover {
+    color: #354c37;
+}
+
+.toggle-password:focus-visible {
+    outline: 2px solid #58745a;
+    outline-offset: 3px;
+    border-radius: 3px;
+}
+
+
+
+/* Reset password page */
+
+.reset-password-hint {
+    margin: -8px 0 16px;
+    color: #737b70;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#resetPasswordMessage {
+    margin: 14px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.auth-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
 }
 

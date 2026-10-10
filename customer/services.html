@@ -15,8 +15,7 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="../style.css">
-</head>
+<link rel="stylesheet" href="../customer-new.css"></head>
 
 
 <body class="dashboard-page">
@@ -25,51 +24,27 @@
          HEADER
     ========================== -->
 
-    <header class="dashboard-header">
+    
+<header class="dashboard-header">
+    <div>
+        <h2>Pawfect Grooming</h2>
+        <small>Gentle care. Happy pets.</small>
+    </div>
 
-        
+    <nav class="dashboard-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="pets.html">My Pets</a>
+        <a href="services.html" class="active">Services</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="history.html">History</a>
+        <a href="account.html">Account</a>
+    </nav>
 
-            <div>
-                <h2>Pawfect Grooming</h2>
-                <small>Gentle care. Happy pets.</small>
-            </div>
-        </a>
+    <button id="logoutButton" class="logout-button" type="button">
+        Log Out
+    </button>
+</header>
 
-
-        <nav class="dashboard-nav">
-
-            <a href="dashboard.html">
-                Dashboard
-            </a>
-
-            <a href="pets.html">
-                My Pets
-            </a>
-
-            <a href="services.html" class="active">
-                Services
-            </a>
-
-            <a href="appointments.html">
-                Appointments
-            </a>
-
-            <a href="history.html">
-                History
-            </a>
-
-        </nav>
-
-
-        <button
-            id="logoutButton"
-            class="logout-button"
-            type="button"
-        >
-            Log Out
-        </button>
-
-    </header>
 
 
     <!-- =========================
@@ -148,10 +123,19 @@
     <!-- =========================
          SUPABASE
     ========================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase client configuration -->
+<script src="../js/supabase.js"></script>
 
-    <script src="../js/supabase.js"></script>
+<!-- Shared toast notifications -->
+<script src="../js/toast.js"></script>
+
+<!-- Authentication functions -->
+<script src="../js/auth.js"></script>
+
+<!-- Shared logout confirmation -->
+<script src="../js/logout.js"></script>
 
 
     <!-- =========================
@@ -480,23 +464,7 @@ function getServiceIcon(name) {
         }
 
 
-        /* =========================
-           LOGOUT
-        ========================== */
-
-        logoutButton.addEventListener(
-            "click",
-            async function () {
-
-                await supabaseClient
-                    .auth
-                    .signOut();
-
-                window.location.href =
-                    "../login.html";
-
-            }
-        );
+        
 
 
         /* =========================
