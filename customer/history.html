@@ -18,28 +18,48 @@
     <link rel="stylesheet" href="../customer-new.css">
 </head>
 
-<body class="dashboard-page">
+<body class="dashboard-page history-page-body">
+    
+<!-- HEADER -->
+<header class="dashboard-header history-header">
+    <div class="brand">
+        <h2>Pawfect Grooming</h2>
+        <small>Gentle care. Happy pets.</small>
+    </div>
 
-    <!-- HEADER -->
-    <header class="dashboard-header">
-        <div class="brand">
-            <h2>Pawfect Grooming</h2>
-            <small>Gentle care. Happy pets.</small>
-        </div>
+    <button
+        type="button"
+        class="hamburger-button"
+        id="historyHamburger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="historyNav"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-        <nav class="dashboard-nav">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="pets.html">My Pets</a>
-            <a href="services.html">Services</a>
-            <a href="appointments.html">Appointments</a>
-            <a href="history.html" class="active">History</a>
-            <a href="account.html">Account</a>
-        </nav>
+    <nav class="dashboard-nav history-nav" id="historyNav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="pets.html">My Pets</a>
+        <a href="services.html">Services</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="history.html" class="active">History</a>
+        <a href="account.html">Account</a>
 
         <button id="logoutButton" class="logout-button" type="button">
             Log Out
         </button>
-    </header>
+    </nav>
+</header>
+
+<div
+    class="history-menu-overlay"
+    id="historyMenuOverlay"
+    aria-hidden="true"
+></div>
+
 
     <!-- MAIN CONTENT -->
     <main class="dashboard-container history-page">
@@ -653,11 +673,79 @@
             clearHistory
         );
 
+        
+        // ========================================
+        // MOBILE NAVIGATION
+        // ========================================
+
+        const historyHamburger =
+            document.getElementById("historyHamburger");
+
+        const historyNav =
+            document.getElementById("historyNav");
+
+        const historyMenuOverlay =
+            document.getElementById("historyMenuOverlay");
+
+        function setHistoryMenu(open) {
+            historyNav.classList.toggle("open", open);
+            historyHamburger.classList.toggle("active", open);
+            document.body.classList.toggle("history-menu-open", open);
+
+            historyHamburger.setAttribute(
+                "aria-expanded",
+                String(open)
+            );
+
+            historyHamburger.setAttribute(
+                "aria-label",
+                open ? "Close menu" : "Open menu"
+            );
+
+            historyMenuOverlay.setAttribute(
+                "aria-hidden",
+                String(!open)
+            );
+        }
+
+        historyHamburger.addEventListener("click", () => {
+            const isOpen = historyNav.classList.contains("open");
+            setHistoryMenu(!isOpen);
+        });
+
+        historyMenuOverlay.addEventListener("click", () => {
+            setHistoryMenu(false);
+        });
+
+        historyNav.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                setHistoryMenu(false);
+            });
+        });
+
+        document.addEventListener("keydown", event => {
+            if (
+                event.key === "Escape" &&
+                historyNav.classList.contains("open")
+            ) {
+                setHistoryMenu(false);
+                historyHamburger.focus();
+            }
+        });
+
+        // Close the mobile menu if the screen becomes desktop-sized.
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 768) {
+                setHistoryMenu(false);
+            }
+        });
+
         // ========================================
         // INITIALIZE
         // ========================================
 
         loadHistory();
+
     </script>
 
 </body>

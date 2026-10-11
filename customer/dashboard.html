@@ -17,11 +17,28 @@
 
 <body class="dashboard-page">
 
-    <header class="dashboard-header">
-        <div>
-            <h2>Pawfect Grooming</h2>
-            <small>Gentle care. Happy pets.</small>
-        </div>
+    
+<header class="dashboard-header">
+
+    <div class="dashboard-brand">
+        <h2>Pawfect Grooming</h2>
+        <small>Gentle care. Happy pets.</small>
+    </div>
+
+    <button
+        type="button"
+        class="dashboard-menu-toggle"
+        id="dashboardMenuToggle"
+        aria-label="Open navigation menu"
+        aria-controls="dashboardMenuPanel"
+        aria-expanded="false"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="dashboard-menu-panel" id="dashboardMenuPanel">
 
         <nav class="dashboard-nav">
             <a href="dashboard.html" class="active">Dashboard</a>
@@ -35,7 +52,16 @@
         <button id="logoutButton" class="logout-button">
             Log Out
         </button>
-    </header>
+
+    </div>
+
+</header>
+
+<div
+    class="dashboard-menu-overlay"
+    id="dashboardMenuOverlay"
+></div>
+
 
     <main class="dashboard-container">
 
@@ -403,6 +429,50 @@
             `;
         });
     </script>
+
+<script>
+(function () {
+    const page = document.querySelector(".dashboard-page");
+    const toggle = document.getElementById("dashboardMenuToggle");
+    const overlay = document.getElementById("dashboardMenuOverlay");
+    const panel = document.getElementById("dashboardMenuPanel");
+
+    if (!page || !toggle || !overlay || !panel) return;
+
+    function openMenu() {
+        page.classList.add("menu-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Close navigation menu");
+    }
+
+    function closeMenu() {
+        page.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open navigation menu");
+    }
+
+    toggle.addEventListener("click", function () {
+        if (page.classList.contains("menu-open")) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+
+    panel.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeMenu();
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) closeMenu();
+    });
+})();
+</script>
 
 </body>
 </html>

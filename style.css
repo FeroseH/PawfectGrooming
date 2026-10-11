@@ -4443,7 +4443,39 @@ padding:1px;
 
 @media (max-width: 480px) {
     .toast-container {
-        top: 12px; left: 50%; right: auto; width: calc(100vw - 24px); transform: translateX(-50%);
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translate(-50%, -50%) !important;
+
+        width: calc(100vw - 36px) !important;
+        max-width: 340px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 99999 !important;
+        box-sizing: border-box;
+        pointer-events: none;
+    }
+
+    .toast-container .toast {
+        position: relative !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+        pointer-events: auto;
+    }
+
+    .toast-container .toast-message {
+        overflow-wrap: anywhere;
+        line-height: 1.5;
     }
 }
 
@@ -4725,8 +4757,39 @@ body.modal-open {
 
 @media (max-width: 480px) {
     .toast-container {
-        top: 12px;
-        width: calc(100vw - 24px);
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: translate(-50%, -50%) !important;
+
+        width: calc(100vw - 36px) !important;
+        max-width: 340px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 99999 !important;
+        box-sizing: border-box;
+        pointer-events: none;
+    }
+
+    .toast-container .toast {
+        position: relative !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box;
+        pointer-events: auto;
+    }
+
+    .toast-container .toast-message {
+        overflow-wrap: anywhere;
+        line-height: 1.5;
     }
 
     .cancel-modal {
@@ -5194,4 +5257,244 @@ body.modal-open {
     opacity: 0.65;
     cursor: not-allowed;
 }
+
+
+
+
+/* Hide hamburger menu on laptops and desktops */
+.menu-toggle {
+    display: none;
+}
+
+/* Mobile navigation */
+@media (max-width: 768px) {
+
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: #35483c;
+        border-radius: 2px;
+    }
+
+    /* Mobile menu is hidden until the button is tapped */
+    .navbar .nav-links,
+    .navbar .nav-actions {
+        display: none;
+    }
+
+    .navbar.menu-open .nav-links,
+    .navbar.menu-open .nav-actions {
+        display: flex;
+    }
+}
+
+
+
+
+
+@media (max-width: 768px) {
+
+    .navbar {
+        position: relative;
+        z-index: 1000;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 12px;
+    }
+
+    .navbar .menu-toggle {
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+        order: 0;
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: #35483c;
+        border-radius: 2px;
+    }
+
+    .navbar .logo {
+        order: 1;
+        font-size: 16px;
+    }
+
+    /* Sidebar menu */
+    .navbar .nav-links,
+    .navbar .nav-actions {
+        display: flex !important;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        max-width: 82vw;
+        height: 100vh;
+        padding: 85px 20px 24px;
+        background: #ffffff;
+        box-shadow: 8px 0 24px rgba(0, 0, 0, 0.08);
+        z-index: 1001;
+        overflow-y: auto;
+        transform: translateX(-110%);
+        visibility: hidden;
+        transition: transform 0.25s ease, visibility 0.25s ease;
+    }
+
+    .navbar .nav-links {
+        padding-bottom: 250px;
+    }
+
+    .navbar .nav-actions {
+        padding-top: 320px;
+        box-shadow: none;
+        height: auto;
+        bottom: 0;
+        top: auto;
+        z-index: 1002;
+    }
+
+    .navbar.menu-open .nav-links,
+    .navbar.menu-open .nav-actions {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .navbar .nav-links a,
+    .navbar .nav-actions a {
+        display: block;
+        width: 100%;
+        padding: 14px 12px;
+        box-sizing: border-box;
+        text-align: left;
+        font-size: 15px;
+    }
+}
+
+
+
+/* Sidebar overlay */
+.sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    /* Keep the sidebar above the overlay */
+    .navbar .nav-links,
+    .navbar .nav-actions {
+        z-index: 9999;
+    }
+
+    .navbar .menu-toggle {
+        position: relative;
+        z-index: 10000;
+    }
+
+    /* Prevent background scrolling while menu is open */
+    body.sidebar-active {
+        overflow: hidden;
+    }
+}
+
+
+
+
+/* Fix services heading on mobile */
+@media (max-width: 768px) {
+    .section-heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0;
+        height: auto;
+        min-height: 0;
+        padding: 0 20px;
+        margin: 0 auto 35px;
+        position: relative;
+    }
+
+    .section-heading .section-label {
+        display: block;
+        position: static;
+        margin: 0 0 14px;
+        line-height: 1.5;
+    }
+
+    .section-heading h2 {
+        display: block;
+        position: static;
+        transform: none;
+        font-size: clamp(27px, 7vw, 36px);
+        line-height: 1.25;
+        margin: 0 0 16px;
+        padding: 0;
+        height: auto;
+        max-width: 100%;
+    }
+
+    .section-heading p {
+        display: block;
+        position: static;
+        transform: none;
+        font-size: 15px;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+
+
+
 

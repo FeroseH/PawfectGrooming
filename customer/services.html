@@ -18,32 +18,52 @@
 <link rel="stylesheet" href="../customer-new.css"></head>
 
 
-<body class="dashboard-page">
-
+<body class="dashboard-page services-page">
     <!-- =========================
          HEADER
     ========================== -->
 
     
+
 <header class="dashboard-header">
-    <div>
+
+    <div class="dashboard-brand">
         <h2>Pawfect Grooming</h2>
         <small>Gentle care. Happy pets.</small>
     </div>
 
-    <nav class="dashboard-nav">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="pets.html">My Pets</a>
-        <a href="services.html" class="active">Services</a>
-        <a href="appointments.html">Appointments</a>
-        <a href="history.html">History</a>
-        <a href="account.html">Account</a>
-    </nav>
-
-    <button id="logoutButton" class="logout-button" type="button">
-        Log Out
+    <button
+        type="button"
+        class="dashboard-menu-toggle"
+        id="dashboardMenuToggle"
+        aria-label="Open navigation menu"
+        aria-controls="dashboardMenuPanel"
+        aria-expanded="false"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
     </button>
+
+    <div class="dashboard-menu-panel" id="dashboardMenuPanel">
+        <nav class="dashboard-nav">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html" class="active">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="history.html">History</a>
+            <a href="account.html">Account</a>
+        </nav>
+
+        <button id="logoutButton" class="logout-button" type="button">
+            Log Out
+        </button>
+    </div>
+
 </header>
+
+<div class="dashboard-menu-overlay" id="dashboardMenuOverlay"></div>
+
 
 
 
@@ -161,28 +181,54 @@
            LOAD USER
         ========================== */
 
-        async function loadUser() {
+        
+async function loadUser() {
+    try {
+        console.log("Services page: checking authentication...");
 
-            const {
-                data,
-                error
-            } = await supabaseClient.auth.getUser();
-
-
-            if (error || !data.user) {
-
-                window.location.href =
-                    "../login.html";
-
-                return;
-            }
-
-
-            currentUser = data.user;
-
-            await loadServices();
-
+        if (typeof supabaseClient === "undefined") {
+            throw new Error(
+                "supabaseClient is not defined. Check ../js/supabase.js."
+            );
         }
+
+        const { data, error } =
+            await supabaseClient.auth.getUser();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data.user) {
+            window.location.href = "../login.html";
+            return;
+        }
+
+        currentUser = data.user;
+
+        console.log("Services page: user authenticated.");
+        console.log("Services page: loading services...");
+
+        await loadServices();
+
+        console.log("Services page: loading finished.");
+
+    } catch (error) {
+        console.error("SERVICES PAGE ERROR:", error);
+
+        serviceCount.textContent = "Unable to load services.";
+
+        servicesList.innerHTML = `
+            <div class="empty-services">
+                <p>
+                    Something went wrong while loading services.
+                    Please refresh the page and try again.
+                </p>
+            </div>
+        `;
+    }
+}
+
 
 
         /* =========================
@@ -474,6 +520,52 @@ function getServiceIcon(name) {
         loadUser();
 
     </script>
+
+
+<script>
+(function () {
+    const page = document.querySelector(".services-page");
+    const toggle = document.getElementById("dashboardMenuToggle");
+    const overlay = document.getElementById("dashboardMenuOverlay");
+    const panel = document.getElementById("dashboardMenuPanel");
+
+    if (!page || !toggle || !overlay || !panel) return;
+
+    function openMenu() {
+        page.classList.add("menu-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Close navigation menu");
+    }
+
+    function closeMenu() {
+        page.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open navigation menu");
+    }
+
+    toggle.addEventListener("click", function () {
+        if (toggle.getAttribute("aria-expanded") === "true") {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    overlay.addEventListener("click", closeMenu);
+
+    panel.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeMenu();
+    });
+
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) closeMenu();
+    });
+})();
+</script>
 
 </body>
 

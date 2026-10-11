@@ -9,6 +9,17 @@
             container = document.createElement("div");
             container.id = "toastContainer";
             container.className = "toast-container";
+container.style.position = "fixed";
+
+if (window.matchMedia("(max-width: 768px)").matches) {
+    container.style.setProperty("top", "50%", "important");
+    container.style.setProperty("left", "50%", "important");
+    container.style.setProperty("right", "auto", "important");
+    container.style.setProperty("bottom", "auto", "important");
+    container.style.setProperty("transform", "translate(-50%, -50%)", "important");
+    container.style.setProperty("width", "calc(100vw - 40px)", "important");
+    container.style.setProperty("max-width", "340px", "important");
+}
             container.setAttribute("aria-live", "polite");
             container.setAttribute("aria-atomic", "false");
             document.body.appendChild(container);

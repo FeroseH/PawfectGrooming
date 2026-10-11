@@ -125,17 +125,78 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmButton = overlay.querySelector(".logout-confirm");
 
     // Clicking Log Out opens the modal; it does not sign out yet.
-    logoutButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        overlay.classList.add("is-visible");
-        cancelButton.focus();
+    
+function closeHamburgerMenu() {
+    // Close the mobile navigation panels.
+    document.querySelectorAll(
+        ".dashboard-menu-panel, .dashboard-nav, #dashboardNav"
+    ).forEach(function (menu) {
+        menu.classList.remove("open", "active", "is-open");
+        menu.setAttribute("aria-expanded", "false");
     });
 
-    // Cancel closes the modal without signing out.
-    cancelButton.addEventListener("click", function () {
-        overlay.classList.remove("is-visible");
-        logoutButton.focus();
+    // Hide mobile menu overlays.
+    document.querySelectorAll(
+        ".appointments-menu-overlay, .history-menu-overlay, " +
+        ".dashboard-menu-overlay, .menu-overlay"
+    ).forEach(function (menuOverlay) {
+        menuOverlay.classList.remove(
+    "open",
+    "active",
+    "is-visible",
+    "visible"
+);
+        menuOverlay.setAttribute("aria-hidden", "true");
     });
+
+    // Reset the hamburger button so the X becomes ☰ again.
+    document.querySelectorAll(
+        ".hamburger-button, #hamburgerButton, .menu-toggle, .hamburger"
+    ).forEach(function (button) {
+        button.classList.remove("open", "active", "is-active");
+        button.setAttribute("aria-expanded", "false");
+    });
+
+    // Remove common mobile-menu states from the page.
+    document.body.classList.remove(
+        "appointments-menu-open",
+        "history-menu-open",
+        "dashboard-menu-open",
+        "menu-open",
+        "nav-open"
+    );
+}
+
+logoutButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    // Close the sidebar before displaying the logout confirmation.
+    closeHamburgerMenu();
+
+    // Keep the confirmation above the rest of the page.
+    overlay.style.zIndex = "999999";
+    overlay.classList.add("is-visible");
+
+    cancelButton.focus();
+});
+
+
+    // Cancel closes the modal without signing out.
+    
+function closeLogoutModal() {
+    overlay.classList.remove("is-visible");
+    overlay.style.display = "none";
+
+    // Restore the modal's normal display behavior for next time.
+    requestAnimationFrame(function () {
+        overlay.style.removeProperty("display");
+    });
+}
+
+cancelButton.addEventListener("click", function () {
+    closeLogoutModal();
+});
+
 
     // Clicking outside the modal also closes it.
     overlay.addEventListener("click", function (event) {

@@ -18,27 +18,46 @@
     <link rel="stylesheet" href="../customer-new.css">
 </head>
 
-<body class="dashboard-page">
+<body class="dashboard-page account-page-body">    
+<header class="dashboard-header account-header">
+    <div class="brand">
+        <h2>Pawfect Grooming</h2>
+        <small>Gentle care. Happy pets.</small>
+    </div>
 
-    <header class="dashboard-header">
-        <div>
-            <h2>Pawfect Grooming</h2>
-            <small>Gentle care. Happy pets.</small>
-        </div>
+    <button
+        type="button"
+        class="hamburger-button"
+        id="accountHamburger"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="accountNav"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-        <nav class="dashboard-nav">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="pets.html">My Pets</a>
-            <a href="services.html">Services</a>
-            <a href="appointments.html">Appointments</a>
-            <a href="history.html">History</a>
-            <a href="account.html" class="active">Account</a>
-        </nav>
+    <nav class="dashboard-nav account-nav" id="accountNav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="pets.html">My Pets</a>
+        <a href="services.html">Services</a>
+        <a href="appointments.html">Appointments</a>
+        <a href="history.html">History</a>
+        <a href="account.html" class="active">Account</a>
 
         <button id="logoutButton" class="logout-button" type="button">
             Log Out
         </button>
-    </header>
+    </nav>
+</header>
+
+<div
+    class="account-menu-overlay"
+    id="accountMenuOverlay"
+    aria-hidden="true"
+></div>
+
 
     <main class="dashboard-container account-page">
 
@@ -830,9 +849,75 @@
 
         // LOG OUT IS HANDLED BY ../js/logout.js
 
+        
+        // MOBILE NAVIGATION
+
+        const accountHamburger =
+            document.getElementById("accountHamburger");
+
+        const accountNav =
+            document.getElementById("accountNav");
+
+        const accountMenuOverlay =
+            document.getElementById("accountMenuOverlay");
+
+        function setAccountMenuOpen(open) {
+            accountNav.classList.toggle("open", open);
+            accountHamburger.classList.toggle("active", open);
+            document.body.classList.toggle("account-menu-open", open);
+
+            accountHamburger.setAttribute(
+                "aria-expanded",
+                String(open)
+            );
+
+            accountHamburger.setAttribute(
+                "aria-label",
+                open ? "Close menu" : "Open menu"
+            );
+
+            accountMenuOverlay.setAttribute(
+                "aria-hidden",
+                String(!open)
+            );
+        }
+
+        accountHamburger.addEventListener("click", () => {
+            setAccountMenuOpen(
+                !accountNav.classList.contains("open")
+            );
+        });
+
+        accountMenuOverlay.addEventListener("click", () => {
+            setAccountMenuOpen(false);
+        });
+
+        accountNav.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                setAccountMenuOpen(false);
+            });
+        });
+
+        document.addEventListener("keydown", event => {
+            if (
+                event.key === "Escape" &&
+                accountNav.classList.contains("open")
+            ) {
+                setAccountMenuOpen(false);
+                accountHamburger.focus();
+            }
+        });
+
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 768) {
+                setAccountMenuOpen(false);
+            }
+        });
+
         // INITIALIZE PAGE
 
         initializeAccount();
+
     </script>
 
 </body>

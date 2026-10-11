@@ -27,14 +27,28 @@
 
     <header class="navbar">
 
+        
+<button
+    class="menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-label="Open navigation menu"
+    aria-controls="nav-links"
+    aria-expanded="false"
+>
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+
         <a href="index.html" class="logo">
             <span class="logo-icon" aria-hidden="true"></span>
             <span>Pawfect Grooming</span>
         </a>
 
 
-        <nav class="nav-links">
-
+<nav class="nav-links" id="nav-links">
             <a href="index.html" class="active">Home</a>
             <a href="#services">Services</a>
             <a href="#about">About</a>
@@ -54,6 +68,8 @@
             </a>
 
         </div>
+
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     </header>
 
@@ -553,6 +569,78 @@
 
     </footer>
 
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.getElementById("menu-toggle");
+    const navbar = document.querySelector(".navbar");
+    const overlay = document.getElementById("sidebar-overlay");
+
+    if (!menuToggle || !navbar || !overlay) {
+        console.error("Navigation elements are missing.");
+        return;
+    }
+
+    function openMenu() {
+        navbar.classList.add("menu-open");
+        overlay.classList.add("active");
+
+        menuToggle.setAttribute("aria-expanded", "true");
+        menuToggle.setAttribute("aria-label", "Close navigation menu");
+
+        document.body.classList.add("sidebar-active");
+    }
+
+    function closeMenu() {
+        navbar.classList.remove("menu-open");
+        overlay.classList.remove("active");
+
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+
+        document.body.classList.remove("sidebar-active");
+    }
+
+    menuToggle.addEventListener("click", function () {
+        if (navbar.classList.contains("menu-open")) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    // Close when the overlay is clicked
+    overlay.addEventListener("click", closeMenu);
+
+    // Close when a navigation link is selected
+    document.querySelectorAll(".nav-links a, .nav-actions a")
+        .forEach(function (link) {
+            link.addEventListener("click", closeMenu);
+        });
+
+    // Close when Escape is pressed
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+    });
+
+    // Reset the menu when returning to desktop view
+    window.addEventListener("resize", function () {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
+    });
+});
+</script>
+</body>
+</html>
+
+</body>
+
+
+    
 </body>
 
 </html>

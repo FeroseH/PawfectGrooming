@@ -18,36 +18,60 @@
     <link rel="stylesheet" href="../customer-new.css">
 </head>
 
-<body class="dashboard-page">
-
+<body class="dashboard-page appointments-page">
     <!-- HEADER -->
 
-    <header class="dashboard-header">
+    
+<!-- HEADER -->
+<header class="dashboard-header">
 
-        <div>
-            <h2>Pawfect Grooming</h2>
-            <small>Gentle care. Happy pets.</small>
-        </div>
+    <div class="dashboard-brand">
+        <h2>Pawfect Grooming</h2>
+        <small>Gentle care. Happy pets.</small>
+    </div>
 
-        <nav class="dashboard-nav">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="pets.html">My Pets</a>
-            <a href="services.html">Services</a>
-            <a href="appointments.html" class="active">Appointments</a>
-            <a href="history.html">History</a>
-            <a href="account.html">Account</a>
-        </nav>
+    <button
+        type="button"
+        class="hamburger-button"
+        id="hamburgerButton"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="dashboardNav"
+    >
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-        <button
-            id="logoutButton"
-            class="logout-button"
-            type="button"
-        >
-            Log Out
-        </button>
+    
+<nav class="dashboard-nav" id="dashboardNav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="pets.html">My Pets</a>
+    <a href="services.html">Services</a>
+    <a href="appointments.html" class="active">Appointments</a>
+    <a href="history.html">History</a>
+    <a href="account.html">Account</a>
 
-    </header>
+    <button
+        id="logoutButton"
+        class="logout-button"
+        type="button"
+    >
+        Log Out
+    </button>
+</nav>
 
+
+</header>
+
+<!-- APPOINTMENTS MENU OVERLAY -->
+<div
+    class="appointments-menu-overlay"
+    id="appointmentsMenuOverlay"
+    aria-hidden="true"
+></div>
+
+<!-- MAIN CONTENT -->
 
     <!-- MAIN CONTENT -->
 
@@ -788,8 +812,10 @@ const confirmCancelButton =
 
 let cancelModalResolver = null;
 
-function confirmAppointmentCancellation() {
+
+function confirmAppointmentCancellation(triggerButton) {
     return new Promise((resolve) => {
+        window.cancelModalTrigger = triggerButton;
         cancelModalResolver = resolve;
 
         cancelModal.classList.add("show");
@@ -800,7 +826,18 @@ function confirmAppointmentCancellation() {
     });
 }
 
+
+
 function closeCancellationModal(confirmed) {
+    // Return focus to the button that opened the modal.
+    const previouslyFocusedButton = window.cancelModalTrigger;
+
+    if (previouslyFocusedButton && previouslyFocusedButton.isConnected) {
+        previouslyFocusedButton.focus();
+    } else {
+        document.activeElement.blur();
+    }
+
     cancelModal.classList.remove("show");
     cancelModal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("modal-open");
@@ -811,6 +848,7 @@ function closeCancellationModal(confirmed) {
         resolve(confirmed);
     }
 }
+
 
 keepAppointmentButton.addEventListener("click", () => {
     closeCancellationModal(false);
@@ -841,7 +879,7 @@ document.addEventListener("keydown", (event) => {
 /* CANCEL APPOINTMENT */
 
 async function cancelAppointment(appointmentId, cancelButton) {
-    const confirmed = await confirmAppointmentCancellation();
+    const confirmed = await confirmAppointmentCancellation(cancelButton);
 
     if (!confirmed) return;
 
@@ -1010,6 +1048,63 @@ async function cancelAppointment(appointmentId, cancelButton) {
         loadUser();
 
     </script>
+
+
+
+
+
+<script>
+    const hamburgerButton = document.getElementById("hamburgerButton");
+    const dashboardNav = document.getElementById("dashboardNav");
+    const menuOverlay = document.getElementById("appointmentsMenuOverlay");
+
+    function openAppointmentsMenu() {
+        dashboardNav.classList.add("open");
+        document.body.classList.add("appointments-menu-open");
+        menuOverlay.classList.add("visible");
+
+        hamburgerButton.setAttribute("aria-expanded", "true");
+        hamburgerButton.setAttribute("aria-label", "Close navigation menu");
+        menuOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function closeAppointmentsMenu() {
+        dashboardNav.classList.remove("open");
+        document.body.classList.remove("appointments-menu-open");
+        menuOverlay.classList.remove("visible");
+
+        hamburgerButton.setAttribute("aria-expanded", "false");
+        hamburgerButton.setAttribute("aria-label", "Open navigation menu");
+        menuOverlay.setAttribute("aria-hidden", "true");
+    }
+
+   hamburgerButton.addEventListener("click", () => {
+    const isOpen = dashboardNav.classList.toggle("open");
+
+    hamburgerButton.classList.toggle("active", isOpen);
+    hamburgerButton.setAttribute("aria-expanded", String(isOpen));
+    hamburgerButton.setAttribute(
+        "aria-label",
+        isOpen ? "Close menu" : "Open menu"
+    );
+
+    document.body.classList.toggle("appointments-menu-open", isOpen);
+    appointmentsMenuOverlay.classList.toggle("visible", isOpen);
+});
+
+    menuOverlay.addEventListener("click", closeAppointmentsMenu);
+
+    dashboardNav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", closeAppointmentsMenu);
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeAppointmentsMenu();
+        }
+    });
+</script>
+
 
 </body>
 </html>
