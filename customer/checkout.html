@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../customer-new.css">
+</head>
+
+<body class="dashboard-page checkout-page-body">
+
+    <!-- HEADER -->
+    <header class="dashboard-header checkout-header">
+
+        <div class="dashboard-brand">
+            <h2>Pawfect Grooming</h2>
+            <small>Gentle care. Happy pets.</small>
+        </div>
+
+        <!-- MOBILE HAMBURGER BUTTON -->
+        <button
+            type="button"
+            class="checkout-menu-toggle"
+            id="checkoutMenuToggle"
+            aria-label="Open navigation menu"
+            aria-expanded="false"
+            aria-controls="checkoutMobileNav"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+            >
+                <path d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+
+        <!-- NAVIGATION: ONE NAV ELEMENT ONLY -->
+        <nav
+            class="dashboard-nav checkout-nav"
+            id="checkoutMobileNav"
+        >
+            <a href="dashboard.html">Dashboard</a>
+            <a href="pets.html">My Pets</a>
+            <a href="services.html">Services</a>
+            <a href="appointments.html">Appointments</a>
+            <a href="checkout.html" class="active">Checkout</a>
+            <a href="history.html">History</a>
+            <a href="account.html">Account</a>
+
+            <button
+                id="logoutButton"
+                class="logout-button"
+                type="button"
+            >
+                Log Out
+            </button>
+        </nav>
+
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="checkout-container">
+
+        <section class="checkout-heading">
+            <p class="small-label">ALMOST THERE</p>
+            <h1>Review Your Booking</h1>
+            <p>
+                Review each pet's appointment and the combined price
+                before confirming your booking.
+            </p>
+        </section>
+
+        <div class="checkout-layout">
+
+            <!-- BOOKING DETAILS -->
+            <section class="checkout-details-card">
+
+                <div class="checkout-card-heading">
+                    <div>
+                        <p class="checkout-eyebrow">YOUR RESERVATION</p>
+                        <h2>Appointment Details</h2>
+
+                        <p
+                            id="checkoutSharedDate"
+                            class="checkout-shared-date"
+                        >
+                            Loading appointment date...
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="checkoutAppointmentsList"
+                    class="checkout-appointments-list"
+                >
+                    <p>Loading your appointments...</p>
+                </div>
+
+                <a href="appointments.html" class="checkout-edit-link">
+                    Edit Booking
+                </a>
+
+            </section>
+
+            <!-- PRICE SUMMARY -->
+            <aside class="checkout-summary-card">
+
+                <p class="checkout-eyebrow">ORDER SUMMARY</p>
+                <h2>Price Breakdown</h2>
+
+                <div
+                    id="checkoutPriceBreakdown"
+                    class="checkout-price-breakdown"
+                >
+                    <p>Loading prices...</p>
+                </div>
+
+                <div class="checkout-total-row">
+                    <div>
+                        <span>Estimated Total</span>
+                        <p>Pay at the grooming shop</p>
+                    </div>
+
+                    <strong id="checkoutTotal">₱0.00</strong>
+                </div>
+
+                <div class="checkout-payment-note">
+                    <div class="checkout-payment-icon">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <rect x="3" y="5" width="18" height="14" rx="2"/>
+                            <path d="M3 10h18M7 15h3"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <strong>Payment at the Shop</strong>
+                        <p>
+                            No online payment is required. Pay in person
+                            when you visit for your appointment.
+                        </p>
+                    </div>
+                </div>
+
+                <p
+                    id="checkoutMessage"
+                    class="checkout-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    type="button"
+                    id="confirmBookingButton"
+                    class="checkout-confirm-button"
+                    disabled
+                >
+                    Confirm Appointments
+                </button>
+
+                <a href="appointments.html" class="checkout-back-link">
+                    Back to Appointments
+                </a>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/logout.js"></script>
+
+    <script>
+        // ========================================
+        // MOBILE HAMBURGER MENU
+        // ========================================
+
+        const menuToggle =
+            document.getElementById("checkoutMenuToggle");
+
+        const mobileNav =
+            document.getElementById("checkoutMobileNav");
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = mobileNav.classList.toggle("is-open");
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+            );
+
+            menuToggle.innerHTML = isOpen
+                ? `<svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" aria-hidden="true">
+                     <path d="m6 6 12 12M18 6 6 18"/>
+                   </svg>`
+                : `<svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" aria-hidden="true">
+                     <path d="M4 6h16M4 12h16M4 18h16"/>
+                   </svg>`;
+        });
+
+        mobileNav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+                mobileNav.classList.remove("is-open");
+
+                menuToggle.setAttribute("aria-expanded", "false");
+                menuToggle.setAttribute(
+                    "aria-label",
+                    "Open navigation menu"
+                );
+            });
+        });
+
+        // ========================================
+        // CHECKOUT ELEMENTS
+        // ========================================
+
+        const confirmBookingButton =
+            document.getElementById("confirmBookingButton");
+
+        const checkoutMessage =
+            document.getElementById("checkoutMessage");
+
+        const checkoutAppointmentsList =
+            document.getElementById("checkoutAppointmentsList");
+
+        const checkoutPriceBreakdown =
+            document.getElementById("checkoutPriceBreakdown");
+
+        const checkoutSharedDate =
+            document.getElementById("checkoutSharedDate");
+
+        const checkoutTotal =
+            document.getElementById("checkoutTotal");
+
+        let currentUser = null;
+        let checkoutDraft = null;
+        let verifiedAppointments = [];
+        let submitting = false;
+        let checkoutReady = false;
+
+        // ========================================
+        // FORMATTING HELPERS
+        // ========================================
+
+        function formatPrice(value) {
+            return Number(value || 0).toLocaleString("en-PH", {
+                style: "currency",
+                currency: "PHP",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatDate(value) {
+            const date = new Date(value + "T00:00:00");
+
+            return date.toLocaleDateString("en-PH", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+        }
+
+        function formatTime(value) {
+            const [hours, minutes] = value.split(":");
+            const date = new Date();
+
+            date.setHours(Number(hours), Number(minutes), 0, 0);
+
+            return date.toLocaleTimeString("en-PH", {
+                hour: "numeric",
+                minute: "2-digit"
+            });
+        }
+
+        function setMessage(message, isError = true) {
+            checkoutMessage.textContent = message;
+            checkoutMessage.classList.toggle("error", isError);
+            checkoutMessage.classList.toggle("success", !isError);
+        }
+
+        function disableCheckout(message) {
+            checkoutReady = false;
+            confirmBookingButton.disabled = true;
+            setMessage(message);
+        }
+
+        function addTextElement(parent, tag, className, text) {
+            const element = document.createElement(tag);
+
+            if (className) {
+                element.className = className;
+            }
+
+            element.textContent = text ?? "";
+            parent.appendChild(element);
+
+            return element;
+        }
+
+        function clearCheckoutDisplay() {
+            checkoutSharedDate.textContent = "Not selected";
+            checkoutAppointmentsList.replaceChildren();
+            checkoutPriceBreakdown.replaceChildren();
+
+            addTextElement(
+                checkoutAppointmentsList,
+                "p",
+                "",
+                "No appointment details available."
+            );
+
+            addTextElement(
+                checkoutPriceBreakdown,
+                "p",
+                "",
+                "No prices available."
+            );
+
+            checkoutTotal.textContent = formatPrice(0);
+        }
+
+        function showEmptyCheckout(message) {
+            clearCheckoutDisplay();
+            disableCheckout(message);
+        }
+
+        // ========================================
+        // RENDER APPOINTMENT DETAILS AND PRICES
+        // ========================================
+
+        function renderCheckout() {
+            checkoutAppointmentsList.replaceChildren();
+            checkoutPriceBreakdown.replaceChildren();
+
+            checkoutSharedDate.textContent =
+                formatDate(checkoutDraft.date);
+
+            let total = 0;
+
+            verifiedAppointments.forEach((item, index) => {
+                const appointment = item.appointment;
+                const pet = item.pet;
+                const service = item.service;
+                const price = Number(service.price);
+
+                total += price;
+
+                const card = document.createElement("article");
+                card.className = "checkout-pet-appointment";
+
+                addTextElement(
+                    card,
+                    "p",
+                    "checkout-pet-number",
+                    `PET APPOINTMENT ${index + 1}`
+                );
+
+                addTextElement(
+                    card,
+                    "h3",
+                    "checkout-pet-name",
+                    pet.name
+                );
+
+                addTextElement(
+                    card,
+                    "p",
+                    "checkout-pet-species",
+                    pet.species || "Pet"
+                );
+
+                const serviceDetails = document.createElement("div");
+                serviceDetails.className = "checkout-pet-detail";
+
+                addTextElement(
+                    serviceDetails,
+                    "span",
+                    "",
+                    "Grooming Service"
+                );
+
+                addTextElement(
+                    serviceDetails,
+                    "strong",
+                    "",
+                    service.name
+                );
+
+                if (
+                    service.duration !== null &&
+                    service.duration !== undefined &&
+                    service.duration !== ""
+                ) {
+                    addTextElement(
+                        serviceDetails,
+                        "p",
+                        "",
+                        `${service.duration} minutes`
+                    );
+                }
+
+                card.appendChild(serviceDetails);
+
+                const timeDetails = document.createElement("div");
+                timeDetails.className = "checkout-pet-detail";
+
+                addTextElement(
+                    timeDetails,
+                    "span",
+                    "",
+                    "Appointment Time"
+                );
+
+                addTextElement(
+                    timeDetails,
+                    "strong",
+                    "",
+                    formatTime(appointment.time)
+                );
+
+                card.appendChild(timeDetails);
+
+                if (
+                    typeof appointment.notes === "string" &&
+                    appointment.notes.trim()
+                ) {
+                    const notes = document.createElement("div");
+                    notes.className = "checkout-pet-notes";
+
+                    addTextElement(
+                        notes,
+                        "span",
+                        "",
+                        "Additional Notes"
+                    );
+
+                    addTextElement(
+                        notes,
+                        "p",
+                        "",
+                        appointment.notes
+                    );
+
+                    card.appendChild(notes);
+                }
+
+                checkoutAppointmentsList.appendChild(card);
+
+                const priceRow = document.createElement("div");
+                priceRow.className = "checkout-price-row";
+
+                addTextElement(
+                    priceRow,
+                    "span",
+                    "",
+                    `${pet.name} — ${service.name}`
+                );
+
+                addTextElement(
+                    priceRow,
+                    "strong",
+                    "",
+                    formatPrice(price)
+                );
+
+                checkoutPriceBreakdown.appendChild(priceRow);
+            });
+
+            checkoutTotal.textContent = formatPrice(total);
+        }
+
+        // ========================================
+        // LOAD AND VALIDATE CHECKOUT
+        // ========================================
+
+        async function initializeCheckout() {
+            try {
+                const {
+                    data: { user },
+                    error: authError
+                } = await supabaseClient.auth.getUser();
+
+                if (authError || !user) {
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                currentUser = user;
+
+                const savedDraft =
+                    sessionStorage.getItem("pawfectCheckoutDraft");
+
+                if (!savedDraft) {
+                    showEmptyCheckout(
+                        "No appointment to review yet. Go to Appointments, complete the booking form, and continue to checkout."
+                    );
+                    return;
+                }
+
+                try {
+                    checkoutDraft = JSON.parse(savedDraft);
+                } catch (error) {
+                    console.error("INVALID CHECKOUT DRAFT:", error);
+
+                    sessionStorage.removeItem("pawfectCheckoutDraft");
+
+                    showEmptyCheckout(
+                        "Your saved booking details are invalid. Please return to Appointments and start again."
+                    );
+                    return;
+                }
+
+                if (
+                    !checkoutDraft ||
+                    typeof checkoutDraft.date !== "string" ||
+                    !/^\d{4}-\d{2}-\d{2}$/.test(checkoutDraft.date) ||
+                    !Array.isArray(checkoutDraft.appointments) ||
+                    checkoutDraft.appointments.length === 0
+                ) {
+                    showEmptyCheckout(
+                        "Your booking details are incomplete. Please return to Appointments and try again."
+                    );
+                    return;
+                }
+
+                const selectedPetIds = new Set();
+                const selectedTimes = new Set();
+
+                for (const appointment of checkoutDraft.appointments) {
+                    if (
+                        !appointment ||
+                        appointment.petId === null ||
+                        appointment.petId === undefined ||
+                        String(appointment.petId).trim() === "" ||
+                        appointment.serviceId === null ||
+                        appointment.serviceId === undefined ||
+                        String(appointment.serviceId).trim() === "" ||
+                        typeof appointment.time !== "string" ||
+                        !/^\d{2}:\d{2}$/.test(appointment.time)
+                    ) {
+                        showEmptyCheckout(
+                            "One or more appointments are incomplete. Please return to Appointments and review your booking."
+                        );
+                        return;
+                    }
+
+                    const petId = String(appointment.petId);
+
+                    if (selectedPetIds.has(petId)) {
+                        showEmptyCheckout(
+                            "A pet appears more than once in this booking. Please review your appointments."
+                        );
+                        return;
+                    }
+
+                    if (selectedTimes.has(appointment.time)) {
+                        showEmptyCheckout(
+                            "Two pets have the same appointment time. Please return to Appointments and choose different times."
+                        );
+                        return;
+                    }
+
+                    selectedPetIds.add(petId);
+                    selectedTimes.add(appointment.time);
+                }
+
+                const petIds = [...selectedPetIds];
+
+                const serviceIds = [
+                    ...new Set(
+                        checkoutDraft.appointments.map(
+                            item => String(item.serviceId)
+                        )
+                    )
+                ];
+
+                const [petsResult, servicesResult] = await Promise.all([
+                    supabaseClient
+                        .from("pets")
+                        .select("id, name, species")
+                        .eq("owner_id", user.id)
+                        .in("id", petIds),
+
+                    supabaseClient
+                        .from("services")
+                        .select("id, name, price, duration, is_active")
+                        .eq("is_active", true)
+                        .in("id", serviceIds)
+                ]);
+
+                if (petsResult.error || servicesResult.error) {
+                    console.error(
+                        "CHECKOUT DATA ERROR:",
+                        petsResult.error || servicesResult.error
+                    );
+
+                    showEmptyCheckout(
+                        "We couldn't load your booking details. Please return to Appointments and try again."
+                    );
+                    return;
+                }
+
+                const petsById = new Map(
+                    (petsResult.data || []).map(
+                        pet => [String(pet.id), pet]
+                    )
+                );
+
+                const servicesById = new Map(
+                    (servicesResult.data || []).map(
+                        service => [String(service.id), service]
+                    )
+                );
+
+                verifiedAppointments = [];
+
+                for (const appointment of checkoutDraft.appointments) {
+                    const pet = petsById.get(
+                        String(appointment.petId)
+                    );
+
+                    const service = servicesById.get(
+                        String(appointment.serviceId)
+                    );
+
+                    if (!pet || !service) {
+                        verifiedAppointments = [];
+
+                        showEmptyCheckout(
+                            "A selected pet or service is no longer available. Please return to Appointments and choose again."
+                        );
+                        return;
+                    }
+
+                    if (
+                        service.price === null ||
+                        service.price === undefined ||
+                        !Number.isFinite(Number(service.price)) ||
+                        Number(service.price) < 0
+                    ) {
+                        verifiedAppointments = [];
+
+                        showEmptyCheckout(
+                            "A service has an invalid price. Please contact the shop before confirming your booking."
+                        );
+                        return;
+                    }
+
+                    verifiedAppointments.push({
+                        appointment,
+                        pet,
+                        service
+                    });
+                }
+
+                renderCheckout();
+
+                checkoutReady = true;
+                confirmBookingButton.disabled = false;
+                setMessage("", false);
+
+            } catch (error) {
+                console.error("CHECKOUT INITIALIZATION ERROR:", error);
+
+                showEmptyCheckout(
+                    "Something went wrong while loading checkout. Please try again."
+                );
+            }
+        }
+
+        // ========================================
+        // CONFIRM ALL APPOINTMENTS
+        // ========================================
+
+        confirmBookingButton.addEventListener("click", async function () {
+            if (
+                submitting ||
+                !currentUser ||
+                !checkoutDraft ||
+                !checkoutReady ||
+                verifiedAppointments.length === 0
+            ) {
+                return;
+            }
+
+            submitting = true;
+            confirmBookingButton.disabled = true;
+            confirmBookingButton.textContent = "Confirming...";
+
+            setMessage("", false);
+
+            try {
+                const {
+                    data: { user },
+                    error: authError
+                } = await supabaseClient.auth.getUser();
+
+                if (authError || !user || user.id !== currentUser.id) {
+                    window.location.href = "../login.html";
+                    return;
+                }
+
+                const petIds = [
+                    ...new Set(
+                        verifiedAppointments.map(
+                            item => String(item.appointment.petId)
+                        )
+                    )
+                ];
+
+                const serviceIds = [
+                    ...new Set(
+                        verifiedAppointments.map(
+                            item => String(item.appointment.serviceId)
+                        )
+                    )
+                ];
+
+                const [petCheck, serviceCheck] = await Promise.all([
+                    supabaseClient
+                        .from("pets")
+                        .select("id")
+                        .eq("owner_id", user.id)
+                        .in("id", petIds),
+
+                    supabaseClient
+                        .from("services")
+                        .select("id")
+                        .eq("is_active", true)
+                        .in("id", serviceIds)
+                ]);
+
+                if (petCheck.error || serviceCheck.error) {
+                    console.error(
+                        "BOOKING VALIDATION ERROR:",
+                        petCheck.error || serviceCheck.error
+                    );
+
+                    setMessage(
+                        "We couldn't verify your pets or services. Please try again."
+                    );
+                    return;
+                }
+
+                const validPetIds = new Set(
+                    (petCheck.data || []).map(
+                        pet => String(pet.id)
+                    )
+                );
+
+                const validServiceIds = new Set(
+                    (serviceCheck.data || []).map(
+                        service => String(service.id)
+                    )
+                );
+
+                if (!petIds.every(id => validPetIds.has(id))) {
+                    disableCheckout(
+                        "We couldn't verify one or more selected pets. Please return to Appointments and try again."
+                    );
+                    return;
+                }
+
+                if (!serviceIds.every(id => validServiceIds.has(id))) {
+                    disableCheckout(
+                        "One or more selected services are no longer available. Please return to Appointments and choose again."
+                    );
+                    return;
+                }
+
+                const rowsToInsert = verifiedAppointments.map(item => ({
+                    customer_id: user.id,
+                    pet_id: item.appointment.petId,
+                    service_id: item.appointment.serviceId,
+                    appointment_date: checkoutDraft.date,
+                    appointment_time: item.appointment.time,
+                    status: "pending",
+                    notes:
+                        typeof item.appointment.notes === "string" &&
+                        item.appointment.notes.trim()
+                            ? item.appointment.notes.trim()
+                            : null
+                }));
+
+                const { error: bookingError } = await supabaseClient
+                    .from("appointments")
+                    .insert(rowsToInsert);
+
+                if (bookingError) {
+                    console.error("BOOKING ERROR:", bookingError);
+
+                    setMessage(
+                        "We couldn't confirm your appointments. Please try again."
+                    );
+                    return;
+                }
+
+                sessionStorage.removeItem("pawfectCheckoutDraft");
+
+                const appointmentCount = rowsToInsert.length;
+                const appointmentWord =
+                    appointmentCount === 1 ? "appointment" : "appointments";
+
+                document.querySelector(".checkout-layout").innerHTML = `
+                    <section class="checkout-success-card">
+                        <div class="checkout-success-mark" aria-hidden="true">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="m5 12 4 4L19 6"/>
+                            </svg>
+                        </div>
+
+                        <p class="checkout-eyebrow">BOOKING RECEIVED</p>
+                        <h2>Your ${appointmentWord} ${appointmentCount === 1 ? "is" : "are"} booked!</h2>
+                        <p>
+                            Your ${appointmentWord} ${appointmentCount === 1 ? "is" : "are"}
+                            now pending. Please wait for the shop to confirm
+                            ${appointmentCount === 1 ? "your schedule" : "your schedules"}.
+                        </p>
+
+                        <div class="checkout-success-payment">
+                            <strong>Payment is made at the shop.</strong>
+                            <span>No online payment has been taken.</span>
+                        </div>
+
+                        <a href="appointments.html" class="checkout-confirm-button">
+                            View My Appointments
+                        </a>
+                    </section>
+                `;
+
+            } catch (error) {
+                console.error("CONFIRM BOOKING ERROR:", error);
+
+                setMessage(
+                    "Something went wrong while confirming your appointments. Please try again."
+                );
+
+            } finally {
+                submitting = false;
+
+                if (document.body.contains(confirmBookingButton)) {
+                    confirmBookingButton.disabled = !checkoutReady;
+                    confirmBookingButton.textContent = "Confirm Appointments";
+                }
+            }
+        });
+
+        // START CHECKOUT
+        initializeCheckout();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointments | Pawfect Grooming Admin</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../admin.css">
+
+    <style>
+        /* APPOINTMENTS PAGE */
+
+        .appointments-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .appointments-description {
+            margin: -8px 0 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .appointment-filters {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            padding: 18px;
+            margin-bottom: 22px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .appointment-search {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .appointment-search input,
+        .appointment-filters select {
+            width: 100%;
+            min-height: 43px;
+            padding: 10px 13px;
+            background: var(--white);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .appointment-search input:focus,
+        .appointment-filters select:focus {
+            border-color: var(--green-medium);
+            box-shadow: 0 0 0 3px var(--green-pale);
+        }
+
+        .appointment-filters select {
+            width: auto;
+            min-width: 155px;
+        }
+
+        .appointment-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .summary-card {
+            padding: 19px 21px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card p {
+            margin: 0 0 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .summary-card h2 {
+            margin: 0;
+            color: var(--green-dark);
+            font-family: "Poppins", sans-serif;
+            font-size: 27px;
+            font-weight: 600;
+        }
+
+        .table-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 21px 22px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-heading h2 {
+            margin: 0;
+            color: var(--green-dark);
+            font-family: "Poppins", sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .table-count {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .appointments-table-container {
+            overflow-x: auto;
+        }
+
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .appointments-table th {
+            padding: 15px 18px;
+            background: var(--green-pale);
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .appointments-table td {
+            padding: 16px 18px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .appointments-table tbody tr:hover {
+            background: #FAFBF7;
+        }
+
+        .appointments-empty {
+            padding: 42px 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .appointments-empty strong {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        @media (max-width: 760px) {
+            .appointments-description {
+                margin-top: -8px;
+                font-size: 13px;
+            }
+
+            .appointment-summary {
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 16px 13px;
+            }
+
+            .summary-card p {
+                min-height: 36px;
+                font-size: 11px;
+            }
+
+            .summary-card h2 {
+                font-size: 23px;
+            }
+
+            .appointment-filters {
+                align-items: stretch;
+                padding: 14px;
+            }
+
+            .appointment-search {
+                flex-basis: 100%;
+                min-width: 0;
+            }
+
+            .appointment-filters select {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .table-heading {
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .appointment-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card p {
+                min-height: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <!-- NAVIGATION -->
+        <aside class="sidebar" id="adminSidebar">
+
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="appointments.html" class="active">Appointments</a>
+                <a href="customers.html">Customers &amp; Pets</a>
+                <a href="services.html">Services</a>
+                <a href="history.html">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="adminLogout"
+                >
+                    Log Out
+                </button>
+            </div>
+
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Appointments</h1>
+                    <p>Review and manage your grooming bookings.</p>
+                </div>
+
+                <div class="admin-label">Administrator</div>
+
+            </header>
+
+            <p class="appointments-description">
+                View customer requests, check booking details, and manage
+                appointment statuses from one place.
+            </p>
+
+            <!-- APPOINTMENT SUMMARY -->
+            <section class="appointment-summary">
+
+                <article class="summary-card">
+                    <p>All Appointments</p>
+                    <h2 id="allCount">—</h2>
+                </article>
+
+                <article class="summary-card">
+                    <p>Pending Requests</p>
+                    <h2 id="pendingCount">—</h2>
+                </article>
+
+                <article class="summary-card">
+                    <p>Confirmed Bookings</p>
+                    <h2 id="confirmedCount">—</h2>
+                </article>
+
+            </section>
+
+            <!-- SEARCH AND FILTERS -->
+            <section class="appointment-filters">
+
+                <div class="appointment-search">
+                    <input
+                        type="search"
+                        id="appointmentSearch"
+                        placeholder="Search appointments..."
+                        aria-label="Search appointments"
+                    >
+                </div>
+
+                <select id="statusFilter" aria-label="Filter by status">
+                    <option value="all">All statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+
+                <select id="dateFilter" aria-label="Filter by date">
+                    <option value="all">All dates</option>
+                    <option value="today">Today</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="past">Past appointments</option>
+                </select>
+
+            </section>
+
+            <!-- APPOINTMENT TABLE -->
+            <section class="appointments-panel">
+
+                <div class="table-heading">
+                    <h2>Booking Records</h2>
+                    <span class="table-count" id="tableCount">
+                        Awaiting database connection
+                    </span>
+                </div>
+
+                <div class="appointments-table-container">
+
+                    <table class="appointments-table">
+
+                        <thead>
+                            <tr>
+                                <th>Pet</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="appointmentsTableBody">
+                            <tr>
+                                <td colspan="7">
+                                    <div class="appointments-empty">
+                                        <strong>Appointment records will appear here</strong>
+                                        Connect this page to Supabase to load
+                                        bookings and enable appointment management.
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- PROJECT SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+
+    <script>
+        const sidebar = document.getElementById("adminSidebar");
+        const menuToggle = document.getElementById("menuToggle");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("visible");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation");
+        }
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = sidebar.classList.toggle("open");
+
+            overlay.classList.toggle("visible", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation" : "Open navigation"
+            );
+        });
+
+        overlay.addEventListener("click", closeSidebar);
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
+
+        document.getElementById("adminLogout").addEventListener(
+            "click",
+            async function () {
+                const { error } = await supabaseClient.auth.signOut();
+
+                if (error) {
+                    console.error("LOGOUT ERROR:", error);
+
+                    showToast(
+                        "Unable to log out. Please try again.",
+                        "error",
+                        "Logout failed"
+                    );
+
+                    return;
+                }
+
+                window.location.href = "../login.html";
+            }
+        );
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/toast.js"></script>
+
+<!-- Keep your existing navigation and logout script here. -->
+
+<script src="../js/admin-appointments.js"></script>
+</body>
+</html>
+</body>
+</html>

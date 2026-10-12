@@ -44,19 +44,16 @@
     </button>
 
     
+
 <nav class="dashboard-nav" id="dashboardNav">
     <a href="dashboard.html">Dashboard</a>
     <a href="pets.html">My Pets</a>
     <a href="services.html">Services</a>
     <a href="appointments.html" class="active">Appointments</a>
+    <a href="checkout.html">Checkout</a>
     <a href="history.html">History</a>
     <a href="account.html">Account</a>
-
-    <button
-        id="logoutButton"
-        class="logout-button"
-        type="button"
-    >
+    <button id="logoutButton" class="logout-button" type="button">
         Log Out
     </button>
 </nav>
@@ -90,99 +87,60 @@
 
         <!-- BOOKING FORM -->
 
-        <section class="appointment-form-card">
+        <!-- BOOKING FORM -->
+<section class="appointment-form-card">
 
-            <div class="appointment-form-heading">
-                <div>
-                    <span class="card-label">APPOINTMENT DETAILS</span>
-                    <h2>Schedule a Grooming</h2>
-                    <p>Please provide the details below.</p>
-                </div>
-            </div>
+    <div class="appointment-form-heading">
+        <div>
+            <span class="card-label">APPOINTMENT DETAILS</span>
+            <h2>Schedule Grooming for Your Pets</h2>
+            <p>Choose one date and a separate time for each pet.</p>
+        </div>
+    </div>
 
-            <form id="appointmentForm">
+    <form id="appointmentForm">
 
-                <div class="appointment-form-grid">
+        <!-- SHARED DATE -->
+        <div class="form-group shared-appointment-date">
+            <label for="appointmentDate">Appointment Date *</label>
+            <input type="date" id="appointmentDate" required>
+            <small>All pets will be scheduled for this date.</small>
+        </div>
 
-                    <div class="form-group">
-                        <label for="appointmentPet">Select Pet *</label>
+        <!-- PET APPOINTMENTS ARE ADDED HERE -->
+        <div id="petAppointmentsContainer"></div>
 
-                        <select id="appointmentPet" required>
-                            <option value="">Loading pets...</option>
-                        </select>
-                    </div>
+        <button
+            type="button"
+            id="addPetAppointmentButton"
+            class="add-pet-appointment-button"
+        >
+            + Add Another Pet
+        </button>
 
-                    <div class="form-group">
-                        <label for="appointmentService">Grooming Service *</label>
+        <div class="appointment-form-footer">
+            <p class="required-note">* Required fields</p>
 
-                        <select id="appointmentService" required>
-                            <option value="">Loading services...</option>
-                        </select>
-                    </div>
+            <button
+                type="submit"
+                id="bookAppointmentButton"
+                class="appointment-submit-button"
+            >
+                <span id="bookAppointmentText">
+                    Continue to Checkout
+                </span>
+            </button>
+        </div>
 
-                    <div class="form-group">
-                        <label for="appointmentDate">Preferred Date *</label>
+        <p
+            id="appointmentMessage"
+            class="appointment-message"
+            role="status"
+            aria-live="polite"
+        ></p>
 
-                        <input
-                            type="date"
-                            id="appointmentDate"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="appointmentTime">Preferred Time *</label>
-
-                        <select id="appointmentTime" required>
-                            <option value="">Select a time</option>
-                            <option value="09:00">9:00 AM</option>
-                            <option value="10:00">10:00 AM</option>
-                            <option value="11:00">11:00 AM</option>
-                            <option value="13:00">1:00 PM</option>
-                            <option value="14:00">2:00 PM</option>
-                            <option value="15:00">3:00 PM</option>
-                            <option value="16:00">4:00 PM</option>
-                            <option value="17:00">5:00 PM</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group appointment-notes-group">
-                        <label for="appointmentNotes">Additional Notes</label>
-
-                        <textarea
-                            id="appointmentNotes"
-                            rows="4"
-                            maxlength="1000"
-                            placeholder="Anything we should know about your pet's grooming appointment?"
-                        ></textarea>
-                    </div>
-
-                </div>
-
-                <div class="appointment-form-footer">
-                    <p class="required-note">* Required fields</p>
-
-                    <button
-                        type="submit"
-                        id="bookAppointmentButton"
-                        class="appointment-submit-button"
-                    >
-                        <span id="bookAppointmentText">
-                            Book Appointment
-                        </span>
-                    </button>
-                </div>
-
-                <p
-                    id="appointmentMessage"
-                    class="appointment-message"
-                    role="status"
-                    aria-live="polite"
-                ></p>
-
-            </form>
-
-        </section>
+    </form>
+</section>
 
 
         <!-- MY APPOINTMENTS -->
@@ -288,24 +246,20 @@
 
     <script>
         let currentUser = null;
-
+        let availablePets = [];
+let availableServices = [];
+let petAppointmentCount = 0;
         const appointmentForm =
             document.getElementById("appointmentForm");
 
-        const appointmentPet =
-            document.getElementById("appointmentPet");
-
-        const appointmentService =
-            document.getElementById("appointmentService");
-
         const appointmentDate =
-            document.getElementById("appointmentDate");
+    document.getElementById("appointmentDate");
 
-        const appointmentTime =
-            document.getElementById("appointmentTime");
+const petAppointmentsContainer =
+    document.getElementById("petAppointmentsContainer");
 
-        const appointmentNotes =
-            document.getElementById("appointmentNotes");
+const addPetAppointmentButton =
+    document.getElementById("addPetAppointmentButton");
 
         const appointmentsList =
             document.getElementById("appointmentsList");
@@ -371,189 +325,337 @@
 
         /* LOAD PETS */
 
-        async function loadPets() {
-            const { data: pets, error } =
-                await supabaseClient
-                    .from("pets")
-                    .select("id, name, species")
-                    .eq("owner_id", currentUser.id)
-                    .order("name", { ascending: true });
+        /* LOAD PETS */
 
-            if (error) {
-                console.error("LOAD PETS ERROR:", error);
+async function loadPets() {
+    const { data: pets, error } = await supabaseClient
+        .from("pets")
+        .select("id, name, species")
+        .eq("owner_id", currentUser.id)
+        .order("name", { ascending: true });
 
-                appointmentPet.innerHTML =
-                    `<option value="">Unable to load pets</option>`;
+    if (error) {
+        console.error("LOAD PETS ERROR:", error);
+        availablePets = [];
+        return;
+    }
 
-                return;
-            }
-
-            if (!pets || pets.length === 0) {
-                appointmentPet.innerHTML =
-                    `<option value="">No pets registered</option>`;
-
-                return;
-            }
-
-            appointmentPet.innerHTML =
-                `<option value="">Select your pet</option>`;
-
-            pets.forEach(function (pet) {
-                const option = document.createElement("option");
-
-                option.value = pet.id;
-                option.textContent = `${pet.name} (${pet.species})`;
-
-                appointmentPet.appendChild(option);
-            });
-        }
+    availablePets = pets || [];
+}
 
 
         /* LOAD SERVICES */
 
-        async function loadServices() {
-            const { data: services, error } =
-                await supabaseClient
-                    .from("services")
-                    .select("id, name, price, duration")
-                    .eq("is_active", true)
-                    .order("id", { ascending: true });
+        /* LOAD SERVICES */
 
-            if (error) {
-                console.error("LOAD SERVICES ERROR:", error);
+async function loadServices() {
+    const { data: services, error } = await supabaseClient
+        .from("services")
+        .select("id, name, price, duration")
+        .eq("is_active", true)
+        .order("id", { ascending: true });
 
-                appointmentService.innerHTML =
-                    `<option value="">Unable to load services</option>`;
+    if (error) {
+        console.error("LOAD SERVICES ERROR:", error);
+        availableServices = [];
+        renderPetAppointmentRows();
+        return;
+    }
 
-                return;
-            }
+    availableServices = services || [];
+    renderPetAppointmentRows();
+}
 
-            if (!services || services.length === 0) {
-                appointmentService.innerHTML =
-                    `<option value="">No services available</option>`;
+/* MULTI-PET APPOINTMENT FORM */
 
-                return;
-            }
+function renderPetAppointmentRows() {
+    petAppointmentsContainer.innerHTML = "";
+    petAppointmentCount = 0;
 
-            appointmentService.innerHTML =
-                `<option value="">Select a service</option>`;
+    addPetAppointmentRow();
 
-            services.forEach(function (service) {
-                const option = document.createElement("option");
+    if (availablePets.length === 0) {
+        showToast(
+            "Please register a pet before booking an appointment.",
+            "info",
+            "No pets found"
+        );
+    }
+}
 
-                option.value = service.id;
-                option.textContent =
-                    `${service.name} — ₱${formatPrice(service.price)}`;
+function addPetAppointmentRow() {
+    petAppointmentCount++;
 
-                appointmentService.appendChild(option);
-            });
+    const rowNumber = petAppointmentCount;
+    const row = document.createElement("section");
 
-            if (selectedServiceId) {
-                const serviceExists = services.some(
-                    service =>
-                        String(service.id) === String(selectedServiceId)
-                );
+    row.className = "multi-pet-appointment-row";
+    row.dataset.rowNumber = String(rowNumber);
 
-                if (serviceExists) {
-                    appointmentService.value = selectedServiceId;
-                }
-            }
-        }
+    const petOptions = availablePets.map(pet => `
+        <option value="${escapeHTML(pet.id)}">
+            ${escapeHTML(pet.name)} (${escapeHTML(pet.species || "Pet")})
+        </option>
+    `).join("");
+
+    const serviceOptions = availableServices.map(service => `
+        <option value="${escapeHTML(service.id)}">
+            ${escapeHTML(service.name)} — ₱${formatPrice(service.price)}
+        </option>
+    `).join("");
+
+    row.innerHTML = `
+        <div class="multi-pet-row-heading">
+            <h3>Pet Appointment ${rowNumber}</h3>
+
+            <button
+                type="button"
+                class="remove-pet-appointment-button"
+            >
+                Remove
+            </button>
+        </div>
+
+        <div class="appointment-form-grid">
+
+            <div class="form-group">
+                <label>Pet *</label>
+                <select class="multi-pet-select" required>
+                    <option value="">Select your pet</option>
+                    ${petOptions}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Grooming Service *</label>
+                <select class="multi-service-select" required>
+                    <option value="">Select a service</option>
+                    ${serviceOptions}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Preferred Time *</label>
+                <select class="multi-time-select" required>
+                    <option value="">Select a time</option>
+                    <option value="09:00">9:00 AM</option>
+                    <option value="10:00">10:00 AM</option>
+                    <option value="11:00">11:00 AM</option>
+                    <option value="13:00">1:00 PM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="15:00">3:00 PM</option>
+                    <option value="16:00">4:00 PM</option>
+                    <option value="17:00">5:00 PM</option>
+                </select>
+            </div>
+
+            <div class="form-group appointment-notes-group">
+                <label>Additional Notes</label>
+                <textarea
+                    class="multi-notes-input"
+                    rows="3"
+                    maxlength="1000"
+                    placeholder="Any special instructions for this pet?"
+                ></textarea>
+            </div>
+
+        </div>
+    `;
+
+    petAppointmentsContainer.appendChild(row);
+
+    const serviceSelect = row.querySelector(".multi-service-select");
+
+    // Preserve a service selected through the Services page,
+    // but apply it only to the first pet appointment.
+    if (
+        rowNumber === 1 &&
+        selectedServiceId &&
+        availableServices.some(
+            service => String(service.id) === String(selectedServiceId)
+        )
+    ) {
+        serviceSelect.value = selectedServiceId;
+    }
+
+    row.querySelector(".remove-pet-appointment-button")
+        .addEventListener("click", function () {
+            row.remove();
+            renumberPetAppointmentRows();
+        });
+
+    renumberPetAppointmentRows();
+}
+
+function renumberPetAppointmentRows() {
+    const rows = petAppointmentsContainer.querySelectorAll(
+        ".multi-pet-appointment-row"
+    );
+
+    rows.forEach((row, index) => {
+        row.querySelector("h3").textContent =
+            `Pet Appointment ${index + 1}`;
+
+        row.querySelector(".remove-pet-appointment-button").disabled =
+            rows.length === 1;
+    });
+
+    addPetAppointmentButton.disabled =
+        availablePets.length === 0 ||
+        rows.length >= availablePets.length;
+}
+
+addPetAppointmentButton.addEventListener("click", function () {
+    const currentRows = petAppointmentsContainer.querySelectorAll(
+        ".multi-pet-appointment-row"
+    );
+
+    if (currentRows.length >= availablePets.length) {
+        showToast(
+            "You have already added all your registered pets.",
+            "info",
+            "Pet limit reached"
+        );
+        return;
+    }
+
+    addPetAppointmentRow();
+});
 
 
         /* BOOK APPOINTMENT */
 
-        appointmentForm.addEventListener("submit", async function (event) {
-            event.preventDefault();
+  /* BOOK APPOINTMENT — CONTINUE TO CHECKOUT */
 
-            appointmentMessage.textContent = "";
-            appointmentMessage.classList.remove("success");
+/* BOOK APPOINTMENT — MULTI-PET CHECKOUT */
 
-            if (!currentUser) {
-    showToast(
-        "Please log in again to book an appointment.",
-        "error",
-        "Session expired"
-    );
-    return;
-}
+appointmentForm.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-            const petId = appointmentPet.value;
-            const serviceId = appointmentService.value;
-            const date = appointmentDate.value;
-            const time = appointmentTime.value;
-            const notes = appointmentNotes.value.trim();
+    appointmentMessage.textContent = "";
+    appointmentMessage.classList.remove("success", "error");
 
-            if (!petId || !serviceId || !date || !time) {
-    showToast(
-        "Please complete all required fields.",
-        "error",
-        "Missing information"
-    );
-    return;
-}
+    if (!currentUser) {
+        showToast(
+            "Please log in again to book an appointment.",
+            "error",
+            "Session expired"
+        );
+        return;
+    }
 
-            if (date < getLocalDateString()) {
-    showToast(
-        "Please select today or a future date.",
-        "error",
-        "Invalid date"
-    );
-    return;
-}
+    const date = appointmentDate.value;
 
-            bookButton.disabled = true;
-            bookText.textContent = "Booking...";
+    if (!date) {
+        showToast(
+            "Please select an appointment date.",
+            "error",
+            "Date required"
+        );
+        return;
+    }
 
-            try {
-                const { error } = await supabaseClient
-                    .from("appointments")
-                    .insert({
-                        customer_id: currentUser.id,
-                        pet_id: petId,
-                        service_id: serviceId,
-                        appointment_date: date,
-                        appointment_time: time,
-                        status: "pending",
-                        notes: notes || null
-                    });
+    if (date < getLocalDateString()) {
+        showToast(
+            "Please select today or a future date.",
+            "error",
+            "Invalid date"
+        );
+        return;
+    }
 
-                if (error) {
-                    console.error("BOOKING ERROR:", error);
+    const rows = [
+        ...petAppointmentsContainer.querySelectorAll(
+            ".multi-pet-appointment-row"
+        )
+    ];
 
-showToast(
-    "We couldn't book your appointment. Please try again.",
-    "error",
-    "Booking failed"
-);
+    if (rows.length === 0) {
+        showToast(
+            "Please add at least one pet.",
+            "error",
+            "No appointments"
+        );
+        return;
+    }
 
-return;
-                }
+    const appointments = [];
+    const selectedPetIds = new Set();
+    const selectedTimes = new Set();
 
-                appointmentForm.reset();
-appointmentDate.min = getLocalDateString();
+    for (const row of rows) {
+        const petId = row.querySelector(".multi-pet-select").value;
+        const serviceId = row.querySelector(".multi-service-select").value;
+        const time = row.querySelector(".multi-time-select").value;
+        const notes = row.querySelector(".multi-notes-input").value.trim();
 
-showToast(
-    "Your grooming appointment has been booked successfully.",
-    "success",
-    "Appointment booked"
-);
+        if (!petId || !serviceId || !time) {
+            showToast(
+                "Please select a pet, service, and time for every entry.",
+                "error",
+                "Incomplete appointment"
+            );
+            return;
+        }
 
-await loadAppointments();
+        if (selectedPetIds.has(petId)) {
+            showToast(
+                "Each pet can only be added once to this booking.",
+                "error",
+                "Duplicate pet"
+            );
+            return;
+        }
 
-            } catch (error) {
-               console.error("BOOKING ERROR:", error);
+        if (selectedTimes.has(time)) {
+            showToast(
+                "Each pet must have a different appointment time.",
+                "error",
+                "Duplicate time"
+            );
+            return;
+        }
 
-showToast(
-    "Something went wrong while booking. Please try again.",
-    "error",
-    "Booking failed"
-);
-            } finally {
-                bookButton.disabled = false;
-                bookText.textContent = "Book Appointment";
-            }
+        selectedPetIds.add(petId);
+        selectedTimes.add(time);
+
+        appointments.push({
+            petId,
+            serviceId,
+            time,
+            notes
         });
+    }
+
+    const draft = {
+        date,
+        appointments
+    };
+
+    try {
+        sessionStorage.setItem(
+            "pawfectCheckoutDraft",
+            JSON.stringify(draft)
+        );
+
+        bookButton.disabled = true;
+        bookText.textContent = "Opening Checkout...";
+
+        window.location.href = "checkout.html";
+
+    } catch (error) {
+        console.error("CHECKOUT NAVIGATION ERROR:", error);
+
+        showToast(
+            "Unable to open checkout. Please try again.",
+            "error",
+            "Something went wrong"
+        );
+
+        bookButton.disabled = false;
+        bookText.textContent = "Continue to Checkout";
+    }
+});
 
 
         /* LOAD APPOINTMENTS */

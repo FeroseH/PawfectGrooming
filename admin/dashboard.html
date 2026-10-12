@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    
+<link rel="stylesheet" href="../admin.css">
+
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <aside class="sidebar" id="adminSidebar">
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="customers.html">Customers &amp; Pets</a>
+                <a href="services.html">Services</a>
+                <a href="history.html">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button type="button" class="logout-button" id="adminLogout">
+                    Log Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Dashboard</h1>
+                    <p>Manage your grooming business at a glance.</p>
+                </div>
+
+                <div class="admin-label">Administrator</div>
+            </header>
+
+            <section class="welcome-card">
+                <h2>Welcome to Pawfect Grooming</h2>
+                <p>
+                    Here's an overview of your grooming business.
+                    You can manage bookings, customer records, pets,
+                    and grooming services from the admin menu.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="section-heading">Business Overview</h2>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p>Today's Appointments</p>
+                        <h3 id="todayCount">—</h3>
+                        <small>Scheduled for today</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Pending Requests</p>
+                        <h3 id="pendingCount">—</h3>
+                        <small>Awaiting confirmation</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Registered Customers</p>
+                        <h3 id="customerCount">—</h3>
+                        <small>Customer accounts</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <p>Registered Pets</p>
+                        <h3 id="petCount">—</h3>
+                        <small>Pets in the system</small>
+                    </article>
+                </div>
+            </section>
+
+            <section>
+                <div class="appointments-panel">
+                    <div class="panel-heading">
+                        <h2>Recent Appointments</h2>
+                        <a href="appointments.html" class="view-link">
+                            View all
+                        </a>
+                    </div>
+
+                    <div class="empty-state">
+                        <strong>Appointment overview</strong>
+                        Recent bookings will appear here once we connect
+                        this dashboard to your Supabase database.
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/toast.js"></script>
+
+    <script>
+        const sidebar = document.getElementById("adminSidebar");
+        const menuToggle = document.getElementById("menuToggle");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("visible");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open navigation");
+        }
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = sidebar.classList.toggle("open");
+
+            overlay.classList.toggle("visible", isOpen);
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation" : "Open navigation"
+            );
+        });
+
+        overlay.addEventListener("click", closeSidebar);
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
+
+        document.getElementById("adminLogout").addEventListener(
+            "click",
+            async function () {
+                const { error } = await supabaseClient.auth.signOut();
+
+                if (error) {
+                    console.error("LOGOUT ERROR:", error);
+
+                    if (typeof showToast === "function") {
+                        showToast(
+                            "Unable to log out. Please try again.",
+                            "error",
+                            "Logout failed"
+                        );
+                    }
+
+                    return;
+                }
+
+                window.location.href = "../login.html";
+            }
+        );
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/toast.js"></script>
+<script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

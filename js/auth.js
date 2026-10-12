@@ -119,6 +119,10 @@ if (registerForm) {
    LOGIN
 ============================================ */
 
+/* ============================================
+   LOGIN
+============================================ */
+
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
@@ -137,9 +141,20 @@ if (loginForm) {
                 console.error("PROFILE ERROR:", error);
 
                 showToast(
-                    "We couldn't load your account details. Please try again.",
+                    "We couldn't verify your account role. Please contact support.",
                     "error",
-                    "Account error"
+                    "Account verification failed"
+                );
+
+                return;
+            }
+
+            // Allow only the roles that we recognize.
+            if (profile.role !== "admin" && profile.role !== "customer") {
+                showToast(
+                    "Your account has an invalid role. Please contact support.",
+                    "error",
+                    "Account verification failed"
                 );
 
                 return;
@@ -169,30 +184,6 @@ if (loginForm) {
             );
         }
     }
-
-
-    /* CHECK EXISTING SESSION */
-
-    async function redirectIfLoggedIn() {
-        try {
-            const { data, error } =
-                await supabaseClient.auth.getSession();
-
-            if (error) {
-                console.error("SESSION CHECK ERROR:", error);
-                return;
-            }
-
-            if (data.session) {
-                await redirectToDashboard(data.session.user.id);
-            }
-
-        } catch (error) {
-            console.error("SESSION CHECK ERROR:", error);
-        }
-    }
-
-    //redirectIfLoggedIn();
 
 
     /* HANDLE LOGIN */
