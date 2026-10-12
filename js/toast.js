@@ -96,7 +96,7 @@ if (window.matchMedia("(max-width: 768px)").matches) {
         }
 
         close.addEventListener("click", dismissToast);
-        setTimeout(dismissToast, 4000);
+        setTimeout(dismissToast, 2000);
     };
 
     // Display a notification saved before a page redirect.

@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pets | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+<link rel="stylesheet" href="../admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="adminSidebar">
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="customers.html">Users</a>
+                <a href="pets.html" class="active">Pets</a>
+                <a href="services.html">Services</a>
+                <a href="history.html">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="adminLogout"
+                >
+                    Log Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <header class="topbar">
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Pets</h1>
+                    <p>View and manage registered pets.</p>
+                </div>
+
+                <div class="admin-label">Administrator</div>
+            </header>
+
+            <!-- PAGE INTRODUCTION -->
+            <section class="pets-intro">
+                <div>
+                    <p class="pets-eyebrow">PET MANAGEMENT</p>
+                    <h2>Registered Pets</h2>
+                    <p>
+                        Keep track of pets registered by your customers
+                        and view their details in one place.
+                    </p>
+                </div>
+            </section>
+
+            <!-- STATISTICS -->
+            <section class="pets-stats" aria-label="Pet statistics">
+
+                <article class="pets-stat-card">
+                    <div class="pets-stat-top">
+                        <span>Total Pets</span>
+                        <span class="pets-stat-mark" aria-hidden="true">P</span>
+                    </div>
+                    <strong id="totalPets">—</strong>
+                    <p>All registered pets</p>
+                </article>
+
+                <article class="pets-stat-card">
+                    <div class="pets-stat-top">
+                        <span>Dogs</span>
+                        <span class="pets-stat-mark" aria-hidden="true">D</span>
+                    </div>
+                    <strong id="totalDogs">—</strong>
+                    <p>Registered dogs</p>
+                </article>
+
+                <article class="pets-stat-card">
+                    <div class="pets-stat-top">
+                        <span>Cats</span>
+                        <span class="pets-stat-mark" aria-hidden="true">C</span>
+                    </div>
+                    <strong id="totalCats">—</strong>
+                    <p>Registered cats</p>
+                </article>
+
+            </section>
+
+            <!-- PET RECORDS -->
+            <section class="pets-panel">
+
+                <div class="pets-panel-heading">
+                    <div>
+                        <h2>Pet Records</h2>
+                        <p id="petsCount">Loading pet records...</p>
+                    </div>
+                </div>
+
+                <div class="pets-view-tabs" role="group" aria-label="Pet record view">
+                    <button type="button" class="pets-view-tab active"
+                        id="activePetsTab" aria-pressed="true">
+                        Active Pets
+                    </button>
+                    <button type="button" class="pets-view-tab"
+                        id="archivedPetsTab" aria-pressed="false">
+                        Archived Pets
+                    </button>
+                </div>
+
+                <!-- SEARCH AND FILTERS -->
+                <div class="pets-toolbar">
+
+                    <div class="pets-search">
+                        <span aria-hidden="true">&#9906;</span>
+                        <input
+                            type="search"
+                            id="petSearch"
+                            placeholder="Search pet, breed, or owner..."
+                            aria-label="Search registered pets"
+                        >
+                    </div>
+
+                    <select id="speciesFilter" aria-label="Filter by animal type">
+                        <option value="all">All pet types</option>
+                        <option value="dog">Dogs</option>
+                        <option value="cat">Cats</option>
+                        <option value="other">Other pets</option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="pets-refresh"
+                        id="refreshPets"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+                <div
+                    id="petsMessage"
+                    class="pets-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <!-- TABLE -->
+                <div class="pets-table-wrap">
+                    <table class="pets-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Pet</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Breed</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Owner</th>
+                                <th scope="col">Date Registered</th>
+                                
+                                <th scope="col">Actions</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="petsTableBody">
+                            <tr>
+                                <td colspan="6" class="pets-table-state">
+                                    Loading pet records...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div class="pets-empty" id="petsEmpty" hidden>
+                    <h3>No pets found</h3>
+                    <p>
+                        Try another search term or change the pet type filter.
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- SUPABASE -->
+    <!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/admin-toast.js"></script>
+<script src="../js/admin-pets.js"></script>
+<script src="../js/admin-logout.js"></script>
+</body>
+</html>

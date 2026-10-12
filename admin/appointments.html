@@ -15,221 +15,8 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="../admin.css">
-
-    <style>
-        /* APPOINTMENTS PAGE */
-
-        .appointments-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 14px;
-            margin-bottom: 22px;
-        }
-
-        .appointments-description {
-            margin: -8px 0 24px;
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .appointment-filters {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            width: 100%;
-            padding: 18px;
-            margin-bottom: 22px;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-        }
-
-        .appointment-search {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .appointment-search input,
-        .appointment-filters select {
-            width: 100%;
-            min-height: 43px;
-            padding: 10px 13px;
-            background: var(--white);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .appointment-search input:focus,
-        .appointment-filters select:focus {
-            border-color: var(--green-medium);
-            box-shadow: 0 0 0 3px var(--green-pale);
-        }
-
-        .appointment-filters select {
-            width: auto;
-            min-width: 155px;
-        }
-
-        .appointment-summary {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 16px;
-            margin-bottom: 26px;
-        }
-
-        .summary-card {
-            padding: 19px 21px;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .summary-card p {
-            margin: 0 0 10px;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .summary-card h2 {
-            margin: 0;
-            color: var(--green-dark);
-            font-family: "Poppins", sans-serif;
-            font-size: 27px;
-            font-weight: 600;
-        }
-
-        .table-heading {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 21px 22px;
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .table-heading h2 {
-            margin: 0;
-            color: var(--green-dark);
-            font-family: "Poppins", sans-serif;
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        .table-count {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .appointments-table-container {
-            overflow-x: auto;
-        }
-
-        .appointments-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        .appointments-table th {
-            padding: 15px 18px;
-            background: var(--green-pale);
-            color: var(--green-dark);
-            font-size: 12px;
-            font-weight: 800;
-            white-space: nowrap;
-        }
-
-        .appointments-table td {
-            padding: 16px 18px;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: 13px;
-            white-space: nowrap;
-        }
-
-        .appointments-table tbody tr:hover {
-            background: #FAFBF7;
-        }
-
-        .appointments-empty {
-            padding: 42px 20px;
-            color: var(--text-secondary);
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        .appointments-empty strong {
-            display: block;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-            font-size: 15px;
-        }
-
-        @media (max-width: 760px) {
-            .appointments-description {
-                margin-top: -8px;
-                font-size: 13px;
-            }
-
-            .appointment-summary {
-                gap: 10px;
-            }
-
-            .summary-card {
-                padding: 16px 13px;
-            }
-
-            .summary-card p {
-                min-height: 36px;
-                font-size: 11px;
-            }
-
-            .summary-card h2 {
-                font-size: 23px;
-            }
-
-            .appointment-filters {
-                align-items: stretch;
-                padding: 14px;
-            }
-
-            .appointment-search {
-                flex-basis: 100%;
-                min-width: 0;
-            }
-
-            .appointment-filters select {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .table-heading {
-                padding: 18px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .appointment-summary {
-                grid-template-columns: 1fr;
-            }
-
-            .summary-card p {
-                min-height: 0;
-            }
-        }
-    </style>
+<link rel="stylesheet" href="../admin.css">
+    
 </head>
 
 <body>
@@ -246,12 +33,13 @@
             <p class="nav-label">MAIN MENU</p>
 
             <nav class="nav-links">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="appointments.html" class="active">Appointments</a>
-                <a href="customers.html">Customers &amp; Pets</a>
-                <a href="services.html">Services</a>
-                <a href="history.html">Appointment History</a>
-            </nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="appointments.html" class="active">Appointments</a>
+    <a href="customers.html">Users</a>
+    <a href="pets.html">Pets</a>
+    <a href="services.html">Services</a>
+    <a href="history.html">Appointment History</a>
+</nav>
 
             <div class="sidebar-bottom">
                 <button
@@ -390,10 +178,12 @@
         </main>
     </div>
 
+    
     <!-- PROJECT SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase.js"></script>
-    <script src="../js/toast.js"></script>
+    <script src="../js/admin-toast.js"></script>
+    <script src="../js/admin-logout.js"></script>
 
     <script>
         const sidebar = document.getElementById("adminSidebar");
@@ -424,34 +214,13 @@
             link.addEventListener("click", closeSidebar);
         });
 
-        document.getElementById("adminLogout").addEventListener(
-            "click",
-            async function () {
-                const { error } = await supabaseClient.auth.signOut();
-
-                if (error) {
-                    console.error("LOGOUT ERROR:", error);
-
-                    showToast(
-                        "Unable to log out. Please try again.",
-                        "error",
-                        "Logout failed"
-                    );
-
-                    return;
-                }
-
-                window.location.href = "../login.html";
-            }
-        );
+        
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
-<script src="../js/toast.js"></script>
 
-<!-- Keep your existing navigation and logout script here. -->
+    <script src="../js/admin-appointments.js"></script>
+</body>
+</html>
 
-<script src="../js/admin-appointments.js"></script>
 </body>
 </html>
 </body>

@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Appointment History | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <aside class="sidebar" id="adminSidebar">
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="customers.html">Users</a>
+                <a href="pets.html">Pets</a>
+                <a href="services.html">Services</a>
+                <a href="history.html" class="active">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button type="button" class="logout-button" id="adminLogout">
+                    Log Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Appointment History</h1>
+                    <p>Review completed and cancelled grooming appointments.</p>
+                </div>
+
+                <div class="admin-label">Administrator</div>
+            </header>
+
+            <section class="history-intro">
+                <div>
+                    <p class="history-eyebrow">RECORDS &amp; ACTIVITY</p>
+                    <h2>Past Appointments</h2>
+                    <p>
+                        Keep track of previous bookings and review
+                        their details whenever needed.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="history-refresh-button"
+                    id="refreshHistory"
+                >
+                    Refresh Records
+                </button>
+            </section>
+
+            <section class="history-stats" aria-label="Appointment history statistics">
+
+                <article class="history-stat-card">
+                    <div class="history-stat-top">
+                        <span>Total Records</span>
+                        <span class="history-stat-mark">H</span>
+                    </div>
+                    <strong id="historyTotal">—</strong>
+                    <p>Past appointments</p>
+                </article>
+
+                <article class="history-stat-card">
+                    <div class="history-stat-top">
+                        <span>Completed</span>
+                        <span class="history-stat-mark">C</span>
+                    </div>
+                    <strong id="historyCompleted">—</strong>
+                    <p>Successfully completed</p>
+                </article>
+
+                <article class="history-stat-card">
+                    <div class="history-stat-top">
+                        <span>Cancelled</span>
+                        <span class="history-stat-mark">X</span>
+                    </div>
+                    <strong id="historyCancelled">—</strong>
+                    <p>Cancelled bookings</p>
+                </article>
+
+            </section>
+
+            <section class="history-panel">
+
+                <div class="history-panel-heading">
+                    <div>
+                        <h2>Appointment Records</h2>
+                        <p id="historyCount">Loading appointment records...</p>
+                    </div>
+                </div>
+
+                <div class="history-toolbar">
+                    <div class="history-search">
+                        <input
+                            type="search"
+                            id="historySearch"
+                            placeholder="Search appointments..."
+                            aria-label="Search appointment history"
+                        >
+                    </div>
+
+                    <select id="historyStatusFilter" aria-label="Filter by appointment status">
+                        <option value="all">All statuses</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div
+                    id="historyMessage"
+                    class="history-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <div class="history-table-wrap">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Appointment</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Pet</th>
+                                <th scope="col">Service</th>
+                                <th scope="col">Schedule</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="6" class="history-table-state">
+                                    Loading appointment records...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="history-empty" id="historyEmpty" hidden>
+                    <h3>No appointment records found</h3>
+                    <p>Try a different search term or status filter.</p>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="../js/admin-toast.js"></script>
+    <script src="../js/admin-logout.js"></script>
+    <script src="../js/admin-history.js"></script>
+    
+</body>
+</html>

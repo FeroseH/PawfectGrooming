@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Users | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="adminSidebar">
+
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="customers.html" class="active">Users</a>
+                <a href="pets.html">Pets</a>
+                <a href="services.html">Services</a>
+                <a href="history.html">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button
+                    type="button"
+                    class="logout-button"
+                    id="logoutButton"
+                >
+                    Log Out
+                </button>
+            </div>
+
+        </aside>
+
+        <!-- MOBILE SIDEBAR OVERLAY -->
+        <div
+            class="sidebar-overlay"
+            id="sidebarOverlay"
+        ></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOPBAR -->
+            <header class="topbar">
+
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Users</h1>
+                    <p>
+                        View and manage registered user accounts.
+                    </p>
+                </div>
+
+                <div class="admin-label">
+                    Administrator
+                </div>
+
+            </header>
+
+            <!-- PAGE INTRODUCTION -->
+            <section class="users-heading">
+                <div>
+                    <p class="users-eyebrow">ADMINISTRATION</p>
+
+                    <h2>User Management</h2>
+
+                    <p class="users-subtitle">
+                        View registered customers and administrator
+                        accounts.
+                    </p>
+                </div>
+            </section>
+
+            <!-- USER STATISTICS -->
+            <section
+                class="users-stats"
+                aria-label="User statistics"
+            >
+
+                <article class="users-stat-card">
+                    <div class="users-stat-top">
+                        <span class="users-stat-label">
+                            Total Users
+                        </span>
+
+                        <span class="users-stat-mark"
+                              aria-hidden="true">U</span>
+                    </div>
+
+                    <strong id="totalUsers">—</strong>
+
+                    <p>All registered accounts</p>
+                </article>
+
+                <article class="users-stat-card">
+                    <div class="users-stat-top">
+                        <span class="users-stat-label">
+                            Customers
+                        </span>
+
+                        <span class="users-stat-mark"
+                              aria-hidden="true">C</span>
+                    </div>
+
+                    <strong id="totalCustomers">—</strong>
+
+                    <p>Customer accounts</p>
+                </article>
+
+                <article class="users-stat-card">
+                    <div class="users-stat-top">
+                        <span class="users-stat-label">
+                            Administrators
+                        </span>
+
+                        <span class="users-stat-mark"
+                              aria-hidden="true">A</span>
+                    </div>
+
+                    <strong id="totalAdmins">—</strong>
+
+                    <p>Accounts with admin access</p>
+                </article>
+
+            </section>
+
+            <!-- REGISTERED USERS -->
+            <section class="users-panel">
+
+                <div class="users-panel-heading">
+                    <div>
+                        <h2>Registered Users</h2>
+
+                        <p id="usersCount">
+                            Loading user accounts...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SEARCH AND FILTERS -->
+                <div class="users-toolbar">
+
+                    <div class="users-search">
+                        <span aria-hidden="true">&#9906;</span>
+
+                        <input
+                            type="search"
+                            id="userSearch"
+                            placeholder="Search by name, email, or phone..."
+                            aria-label="Search users"
+                        >
+                    </div>
+
+                    <select
+                        id="roleFilter"
+                        aria-label="Filter users by role"
+                    >
+                        <option value="all">All roles</option>
+                        <option value="customer">Customers</option>
+                        <option value="admin">Administrators</option>
+                    </select>
+
+                    <button
+                        type="button"
+                        id="refreshUsers"
+                        class="users-refresh"
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+                <!-- STATUS MESSAGE -->
+                <div
+                    id="usersMessage"
+                    class="users-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <!-- USERS TABLE -->
+                <div class="users-table-wrap">
+
+                    <table class="users-table">
+
+                        
+                    <thead>
+                        <tr>
+                            <th scope="col">User</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Date Registered</th>
+                            <th scope="col">Account Status</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+
+
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td
+                                    colspan="6"
+                                    class="users-table-state"
+                                >
+                                    Loading user accounts...
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <!-- EMPTY STATE -->
+                <div
+                    id="usersEmpty"
+                    class="users-empty"
+                    hidden
+                >
+                    <h3>No users found</h3>
+
+                    <p>
+                        Try another search term or change the role filter.
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/admin-toast.js"></script>
+<script src="../js/admin-logout.js"></script>
+
+    <!-- MOBILE NAVIGATION AND LOGOUT -->
+    <script>
+        const sidebar = document.getElementById("adminSidebar");
+        const menuToggle = document.getElementById("menuToggle");
+        const overlay = document.getElementById("sidebarOverlay");
+
+        function closeSidebar() {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("visible");
+
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute(
+                "aria-label",
+                "Open navigation"
+            );
+        }
+
+        menuToggle.addEventListener("click", function () {
+            const isOpen = sidebar.classList.toggle("open");
+
+            overlay.classList.toggle("visible", isOpen);
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close navigation" : "Open navigation"
+            );
+        });
+
+        overlay.addEventListener("click", closeSidebar);
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", closeSidebar);
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeSidebar();
+            }
+        });
+
+        
+    </script>
+
+    <!-- USERS DATA AND FILTERING -->
+    <script src="../js/admin-customers.js"></script>
+
+</body>
+</html>

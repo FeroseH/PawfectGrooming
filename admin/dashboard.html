@@ -32,12 +32,13 @@
             <p class="nav-label">MAIN MENU</p>
 
             <nav class="nav-links">
-                <a href="dashboard.html" class="active">Dashboard</a>
-                <a href="appointments.html">Appointments</a>
-                <a href="customers.html">Customers &amp; Pets</a>
-                <a href="services.html">Services</a>
-                <a href="history.html">Appointment History</a>
-            </nav>
+    <a href="dashboard.html" class="active">Dashboard</a>
+    <a href="appointments.html">Appointments</a>
+    <a href="customers.html">Users</a>
+    <a href="pets.html">Pets</a>
+    <a href="services.html">Services</a>
+    <a href="history.html">Appointment History</a>
+</nav>
 
             <div class="sidebar-bottom">
                 <button type="button" class="logout-button" id="adminLogout">
@@ -126,7 +127,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase.js"></script>
-    <script src="../js/toast.js"></script>
+    <script src="../js/admin-toast.js"></script>
+    <script src="../js/admin-dashboard.js"></script>
+    <script src="../js/admin-logout.js"></script>
 
     <script>
         const sidebar = document.getElementById("adminSidebar");
@@ -157,33 +160,9 @@
             link.addEventListener("click", closeSidebar);
         });
 
-        document.getElementById("adminLogout").addEventListener(
-            "click",
-            async function () {
-                const { error } = await supabaseClient.auth.signOut();
-
-                if (error) {
-                    console.error("LOGOUT ERROR:", error);
-
-                    if (typeof showToast === "function") {
-                        showToast(
-                            "Unable to log out. Please try again.",
-                            "error",
-                            "Logout failed"
-                        );
-                    }
-
-                    return;
-                }
-
-                window.location.href = "../login.html";
-            }
-        );
+        
     </script>
+</body>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
-<script src="../js/toast.js"></script>
-<script src="../js/admin-dashboard.js"></script>
 </body>
 </html>

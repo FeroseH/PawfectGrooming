@@ -33,8 +33,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     
 function notify(message, type = "success") {
-    if (typeof showToast === "function") {
-        showToast(message, type);
+    if (typeof window.showAdminToast === "function") {
+        window.showAdminToast(
+            message,
+            type === "error"
+        );
     } else {
         console.error(message);
     }

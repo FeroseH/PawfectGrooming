@@ -106,6 +106,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
+        // Show welcome toast only once after login
+if (sessionStorage.getItem("adminWelcomeToast") === "true") {
+    sessionStorage.removeItem("adminWelcomeToast");
+
+    if (typeof window.showAdminToast === "function") {
+        window.showAdminToast(
+            "Welcome back! You're logged in successfully."
+        );
+    }
+}
+
+
+
         appointmentsContainer.innerHTML = `
             <strong>Loading appointments...</strong>
             <p>Please wait while we retrieve your booking records.</p>

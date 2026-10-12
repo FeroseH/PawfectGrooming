@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Services | Pawfect Grooming</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="../admin.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+
+        <aside class="sidebar" id="adminSidebar">
+            <div class="brand">
+                Pawfect Grooming
+                <span>ADMINISTRATION</span>
+            </div>
+
+            <p class="nav-label">MAIN MENU</p>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="appointments.html">Appointments</a>
+                <a href="customers.html">Users</a>
+                <a href="pets.html">Pets</a>
+                <a href="services.html" class="active">Services</a>
+                <a href="history.html">Appointment History</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <button type="button" class="logout-button" id="adminLogout">
+                    Log Out
+                </button>
+            </div>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <button
+                    type="button"
+                    class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                >&#9776;</button>
+
+                <div class="page-heading">
+                    <h1>Services</h1>
+                    <p>Manage your grooming services and pricing.</p>
+                </div>
+
+                <div class="admin-label">Administrator</div>
+            </header>
+
+            <!-- PAGE INTRODUCTION -->
+            <section class="services-intro">
+                <div>
+                    <p class="services-eyebrow">SERVICE MANAGEMENT</p>
+                    <h2>Grooming Services</h2>
+                    <p>
+                        Add services, update prices and durations, and
+                        control which services are available for booking.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="service-primary-button"
+                    id="addServiceButton"
+                >
+                    + Add Service
+                </button>
+            </section>
+
+            <!-- SERVICE STATISTICS -->
+            <section class="services-stats" aria-label="Service statistics">
+
+                <article class="services-stat-card">
+                    <div class="services-stat-top">
+                        <span>Total Services</span>
+                        <span class="services-stat-mark">S</span>
+                    </div>
+                    <strong id="totalServices">—</strong>
+                    <p>All service records</p>
+                </article>
+
+                <article class="services-stat-card">
+                    <div class="services-stat-top">
+                        <span>Active Services</span>
+                        <span class="services-stat-mark">A</span>
+                    </div>
+                    <strong id="activeServices">—</strong>
+                    <p>Available for booking</p>
+                </article>
+
+                <article class="services-stat-card">
+                    <div class="services-stat-top">
+                        <span>Inactive Services</span>
+                        <span class="services-stat-mark">I</span>
+                    </div>
+                    <strong id="inactiveServices">—</strong>
+                    <p>Currently unavailable</p>
+                </article>
+
+            </section>
+
+            <!-- ADD / EDIT FORM -->
+            <section class="service-form-panel" id="serviceFormPanel" hidden>
+                <div class="service-form-heading">
+                    <div>
+                        <h2 id="serviceFormTitle">Add a Service</h2>
+                        <p>Enter the service information below.</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="service-close-button"
+                        id="closeServiceForm"
+                        aria-label="Close service form"
+                    >&times;</button>
+                </div>
+
+                <form id="serviceForm">
+                    <input type="hidden" id="serviceId">
+
+                    <div class="service-form-grid">
+                        <div class="service-field">
+                            <label for="serviceName">Service Name</label>
+                            <input
+                                type="text"
+                                id="serviceName"
+                                maxlength="100"
+                                placeholder="e.g. Full Grooming"
+                                required
+                            >
+                        </div>
+
+                        <div class="service-field">
+                            <label for="servicePrice">Price (₱)</label>
+                            <input
+                                type="number"
+                                id="servicePrice"
+                                min="0"
+                                step="0.01"
+                                placeholder="e.g. 500"
+                                required
+                            >
+                        </div>
+
+                        <div class="service-field">
+                            <label for="serviceDuration">Duration (minutes)</label>
+                            <input
+                                type="number"
+                                id="serviceDuration"
+                                min="1"
+                                step="1"
+                                placeholder="e.g. 60"
+                                required
+                            >
+                        </div>
+
+                        <div class="service-field service-description-field">
+                            <label for="serviceDescription">Description</label>
+                            <textarea
+                                id="serviceDescription"
+                                rows="3"
+                                maxlength="1000"
+                                placeholder="Describe what's included in this service."
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <label class="service-active-option">
+                        <input type="checkbox" id="serviceIsActive" checked>
+                        <span>
+                            <strong>Active service</strong>
+                            <small>Customers can book this service when enabled.</small>
+                        </span>
+                    </label>
+
+                    <div class="service-form-actions">
+                        <button
+                            type="button"
+                            class="service-secondary-button"
+                            id="cancelServiceForm"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="service-primary-button"
+                            id="saveServiceButton"
+                        >
+                            Save Service
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- SERVICE LIST -->
+            <section class="services-panel">
+
+                <div class="services-panel-heading">
+                    <div>
+                        <h2>Service List</h2>
+                        <p id="servicesCount">Loading services...</p>
+                    </div>
+                </div>
+
+                <div class="services-toolbar">
+                    <div class="services-search">
+                        <input
+                            type="search"
+                            id="serviceSearch"
+                            placeholder="Search services..."
+                            aria-label="Search services"
+                        >
+                    </div>
+
+                    <select id="serviceStatusFilter" aria-label="Filter service status">
+                        <option value="all">All statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="service-secondary-button"
+                        id="refreshServices"
+                    >
+                        Refresh
+                    </button>
+                </div>
+
+                <div
+                    id="servicesMessage"
+                    class="services-message"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <div class="services-table-wrap">
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Service</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Duration</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="servicesTableBody">
+                            <tr>
+                                <td colspan="5" class="services-table-state">
+                                    Loading services...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="services-empty" id="servicesEmpty" hidden>
+                    <h3>No services found</h3>
+                    <p>Try another search or change the status filter.</p>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/admin-toast.js"></script>
+<script src="../js/admin-services.js"></script>
+<script src="../js/admin-logout.js"></script>
+</body>
+</html>
