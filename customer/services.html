@@ -346,6 +346,12 @@ async function loadUser() {
                         "service-card";
 
 
+                    serviceCard.classList.add(
+                        "service-card--tier-" +
+                        getPriceTier(service.price)
+                    );
+
+
                     serviceCard.innerHTML = `
 
                         
@@ -456,6 +462,34 @@ function getServiceIcon(name) {
 }
 
         
+
+
+        /* =========================
+           PRICE TIERS
+        ========================== */
+
+        const SERVICE_TIER_1_MAX = 250;
+        const SERVICE_TIER_2_MAX = 500;
+
+        function getPriceTier(price) {
+
+            const value = Number(price);
+
+            if (!Number.isFinite(value) || value < 0) {
+                return 1;
+            }
+
+            if (value <= SERVICE_TIER_1_MAX) {
+                return 1;
+            }
+
+            if (value <= SERVICE_TIER_2_MAX) {
+                return 2;
+            }
+
+            return 3;
+
+        }
 
 
         /* =========================

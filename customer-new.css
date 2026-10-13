@@ -18,6 +18,32 @@
     --customer-peach: #D99A82;
     --customer-radius: 18px;
     --customer-shadow: 0 8px 28px rgba(53, 66, 56, 0.06);
+
+    /* Shared customer page-heading tokens (source of truth: pets.html) */
+    --heading-card-bg: #e6eddf;
+    --heading-card-border: #d8e3d0;
+    --heading-card-radius: 20px;
+    --heading-card-padding: 32px;
+    --heading-card-gap: 28px;
+    --heading-eyebrow: #71866b;
+    --heading-title: #354d39;
+    --heading-muted: #667363;
+    --heading-title-size: clamp(28px, 4vw, 36px);
+
+    /* Shared customer page-gutter tokens (source of truth: pets.html) */
+    --page-max-width: 1120px;
+    --page-gutter-x: 20px;
+    --page-gutter-x-sm: 16px;
+    --page-gutter-x-xs: 12px;
+    --page-pad-block-start: 32px;
+    --page-pad-block-end: 60px;
+    --page-pad-block-start-sm: 22px;
+    --page-pad-block-end-sm: 34px;
+
+    /* Service-card price-tier accent strips (cooler = cheaper, warmer = pricier) */
+    --service-tier-1: #a9bd9e;
+    --service-tier-2: #d8c4a8;
+    --service-tier-3: #c08552;
 }
 
 /* Base */
@@ -9011,4 +9037,216 @@ body.account-page-body .account-menu-overlay {
         border-top: 1px solid #EEEEEE;
         text-align: center;
     }
+}
+
+
+
+
+/* ==========================================================================
+   UNIFIED CUSTOMER PAGE HEADINGS
+   Single source of truth: customer/pets.html heading card.
+   This block is appended last and uses body-scoped selectors so it wins
+   over the earlier, drifted per-page heading rules without deleting them
+   (several of those rules also target unrelated components).
+   ========================================================================== */
+
+/* Heading card (green) — shared reference colors */
+body.pets-page .pets-page-heading,
+body.services-page .services-page-heading,
+body.appointments-page .appointments-page-heading,
+body.checkout-page-body .checkout-heading,
+body.history-page-body .history-heading,
+body.account-page-body .account-heading {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    text-align: left;
+    margin: 0 0 var(--heading-card-gap);
+    padding: var(--heading-card-padding);
+    background: var(--heading-card-bg);
+    border: 1px solid var(--heading-card-border);
+    border-radius: var(--heading-card-radius);
+}
+
+/* Dashboard hero — same green heading-card colors as the reference */
+body.dashboard-page .welcome-section {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    text-align: left;
+    min-height: auto;
+    margin: 0 0 var(--heading-card-gap);
+    padding: var(--heading-card-padding);
+    background: var(--heading-card-bg);
+    border: 1px solid var(--heading-card-border);
+    border-radius: var(--heading-card-radius);
+}
+
+/* Dashboard hero accent word — match the reference title color */
+body.dashboard-page .welcome-section h1 span {
+    color: var(--heading-title);
+}
+
+/* Eyebrow / small label (plain text, no pill) */
+body.pets-page .pets-page-heading .small-label,
+body.services-page .services-page-heading .small-label,
+body.appointments-page .appointments-page-heading .small-label,
+body.checkout-page-body .checkout-heading .small-label,
+body.history-page-body .history-heading .small-label,
+body.account-page-body .account-heading .small-label,
+body.dashboard-page .welcome-section .small-label {
+    display: block;
+    margin: 0 0 10px;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    color: var(--heading-eyebrow);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+/* Title */
+body.pets-page .pets-page-heading h1,
+body.services-page .services-page-heading h1,
+body.appointments-page .appointments-page-heading h1,
+body.checkout-page-body .checkout-heading h1,
+body.history-page-body .history-heading h1,
+body.account-page-body .account-heading h1,
+body.dashboard-page .welcome-section h1 {
+    margin: 6px 0 8px;
+    color: var(--heading-title);
+    font-family: "Poppins", sans-serif;
+    font-size: var(--heading-title-size);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* Subtitle */
+body.pets-page .pets-page-heading p:not(.small-label),
+body.services-page .services-page-heading p:not(.small-label),
+body.appointments-page .appointments-page-heading p:not(.small-label),
+body.checkout-page-body .checkout-heading p:not(.small-label),
+body.history-page-body .history-heading p:not(.small-label),
+body.account-page-body .account-heading p:not(.small-label),
+body.dashboard-page .welcome-section p:not(.small-label) {
+    max-width: none;
+    margin: 0;
+    color: var(--heading-muted);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.7;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    body.pets-page .pets-page-heading,
+    body.services-page .services-page-heading,
+    body.appointments-page .appointments-page-heading,
+    body.checkout-page-body .checkout-heading,
+    body.history-page-body .history-heading,
+    body.account-page-body .account-heading,
+    body.dashboard-page .welcome-section {
+        padding: 28px 24px;
+        margin-bottom: 24px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    body.pets-page .pets-page-heading,
+    body.services-page .services-page-heading,
+    body.appointments-page .appointments-page-heading,
+    body.checkout-page-body .checkout-heading,
+    body.history-page-body .history-heading,
+    body.account-page-body .account-heading,
+    body.dashboard-page .welcome-section {
+        padding: 24px 20px;
+        margin-bottom: 22px;
+    }
+
+    body.pets-page .pets-page-heading h1,
+    body.services-page .services-page-heading h1,
+    body.appointments-page .appointments-page-heading h1,
+    body.checkout-page-body .checkout-heading h1,
+    body.history-page-body .history-heading h1,
+    body.account-page-body .account-heading h1,
+    body.dashboard-page .welcome-section h1 {
+        font-size: 28px;
+    }
+
+    body.pets-page .pets-page-heading p:not(.small-label),
+    body.services-page .services-page-heading p:not(.small-label),
+    body.appointments-page .appointments-page-heading p:not(.small-label),
+    body.checkout-page-body .checkout-heading p:not(.small-label),
+    body.history-page-body .history-heading p:not(.small-label),
+    body.account-page-body .account-heading p:not(.small-label),
+    body.dashboard-page .welcome-section p:not(.small-label) {
+        font-size: 14px;
+    }
+}
+
+/* ==========================================================================
+   UNIFIED CUSTOMER PAGE GUTTERS
+   Single source of truth: customer/pets.html container gutters.
+   Appended last and uses doubled page-container classes so it wins over the
+   earlier, drifted per-page container rules (some reach specificity 0,3,0)
+   without deleting them. Both axes are unified: 20/16/12px side gutters and
+   32/60px (22/34px <=768) block padding.
+   ========================================================================== */
+
+.dashboard-page .dashboard-container.dashboard-container,
+.checkout-page-body .checkout-container.checkout-container {
+    box-sizing: border-box;
+    width: min(var(--page-max-width), calc(100% - (var(--page-gutter-x) * 2)));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: var(--page-pad-block-start);
+    padding-bottom: var(--page-pad-block-end);
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-container.dashboard-container,
+    .checkout-page-body .checkout-container.checkout-container {
+        width: 100%;
+        max-width: var(--page-max-width);
+        padding-left: var(--page-gutter-x-sm);
+        padding-right: var(--page-gutter-x-sm);
+        padding-top: var(--page-pad-block-start-sm);
+        padding-bottom: var(--page-pad-block-end-sm);
+    }
+}
+
+/* Small mobile */
+@media (max-width: 380px) {
+    .dashboard-page .dashboard-container.dashboard-container,
+    .checkout-page-body .checkout-container.checkout-container {
+        padding-left: var(--page-gutter-x-xs);
+        padding-right: var(--page-gutter-x-xs);
+    }
+}
+
+/* ==========================================================================
+   SERVICE-CARD PRICE-TIER ACCENT STRIPS
+   Colors the top ::before strip by price tier (cooler = cheaper, warmer =
+   pricier). Appended last so, at equal specificity to the earlier nth-child
+   rules, it wins by source order. Only the strip color changes; thickness,
+   width, radius and positioning are untouched.
+   ========================================================================== */
+
+.services-page-container .service-card.service-card--tier-1::before {
+    background: var(--service-tier-1);
+}
+
+.services-page-container .service-card.service-card--tier-2::before {
+    background: var(--service-tier-2);
+}
+
+.services-page-container .service-card.service-card--tier-3::before {
+    background: var(--service-tier-3);
 }
