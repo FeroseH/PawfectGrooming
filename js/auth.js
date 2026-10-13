@@ -30,12 +30,20 @@ if (registerForm) {
         const submitButton = registerForm.querySelector('button[type="submit"]');
 
         if (password !== confirmPassword) {
-            showToast("Please make sure both passwords match.", "error", "Passwords don't match");
+            showToast(
+                "Please make sure both passwords match.",
+                "error",
+                "Passwords don't match"
+            );
             return;
         }
 
         if (password.length < 6) {
-            showToast("Your password must contain at least 6 characters.", "error", "Password too short");
+            showToast(
+                "Your password must contain at least 6 characters.",
+                "error",
+                "Password too short"
+            );
             return;
         }
 
@@ -54,28 +62,31 @@ if (registerForm) {
 
             if (error) throw error;
 
-            // Store only the details needed to display and verify the code.
-            // Never store the user's password in browser storage.
-            sessionStorage.setItem("pawfect-pending-email", email);
-            sessionStorage.setItem("pawfect-pending-name", fullName);
-
-            // If Supabase returned an active session, email confirmation
-            // may be disabled in the project settings.
-            if (data.session && data.user?.email_confirmed_at) {
+            // If email confirmation is disabled, Supabase normally
+            // returns a session for a newly registered user.
+            if (data.session && data.user) {
                 saveToastForRedirect(
-                    "Your account is ready. You can now log in.",
+                    "Your account has been created successfully. You can now access Pawfect Grooming.",
                     "success",
                     "Registration successful"
                 );
-                window.location.href = "login.html";
+
+                // Check the user's role and redirect accordingly.
+                await redirectRegisteredUser(data.user.id);
                 return;
             }
 
-            // Open the verification-code screen.
-            window.location.href = "verify-email.html";
+            // If no session is returned, confirmation may still be enabled
+            // or the account may require additional handling.
+            showToast(
+                "Your account was created, but automatic login is unavailable. Please check your Supabase email confirmation settings.",
+                "info",
+                "Registration completed"
+            );
 
         } catch (error) {
             console.error("REGISTRATION ERROR:", error);
+
             showToast(
                 error.message || "Something went wrong while creating your account.",
                 "error",
@@ -90,120 +101,52 @@ if (registerForm) {
 }
 
 
-/* ============================================
-   EMAIL VERIFICATION
-   Used by verify-email.html
-============================================ */
+/* REDIRECT A NEWLY REGISTERED USER */
 
-const verifyEmailForm = document.getElementById("verifyEmailForm");
+async function redirectRegisteredUser(userId) {
+    try {
+        const { data: profile, error } = await supabaseClient
+            .from("profiles")
+            .select("role")
+            .eq("id", userId)
+            .single();
 
-if (verifyEmailForm) {
-    const emailInput = document.getElementById("verificationEmail");
-    const codeInput = document.getElementById("verificationCode");
-    const verifyButton = verifyEmailForm.querySelector('button[type="submit"]');
-    const pendingEmail = sessionStorage.getItem("pawfect-pending-email");
+        if (error || !profile) {
+            console.error("PROFILE ERROR:", error);
 
-    if (emailInput && pendingEmail) {
-        emailInput.value = pendingEmail;
-    }
-
-    verifyEmailForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const email = emailInput?.value.trim();
-        const token = codeInput?.value.trim();
-
-        if (!email || !token) {
-            showToast("Enter your email and verification code.", "error", "Missing information");
+            showToast(
+                "Your account was created, but we couldn't retrieve your account role. Please try logging in.",
+                "error",
+                "Account created"
+            );
             return;
         }
 
-        if (verifyButton) verifyButton.disabled = true;
+        if (profile.role !== "admin" && profile.role !== "customer") {
+            await supabaseClient.auth.signOut();
 
-        try {
-            const { data, error } = await supabaseClient.auth.verifyOtp({
-                email,
-                token,
-                type: "signup"
-            });
-
-            if (error) throw error;
-
-            if (!data.user?.email_confirmed_at) {
-                throw new Error("Your email has not been verified. Please try again.");
-            }
-
-            sessionStorage.removeItem("pawfect-pending-email");
-            sessionStorage.removeItem("pawfect-pending-name");
-
-            // Verification may sign the user in automatically.
-            // Sign out so they can use the normal login flow.
-            if (data.session) {
-                const { error: signOutError } =
-                    await supabaseClient.auth.signOut();
-
-                if (signOutError) throw signOutError;
-            }
-
-            saveToastForRedirect(
-                "Your email has been verified. You can now log in.",
-                "success",
-                "Email verified"
-            );
-
-            window.location.href = "login.html";
-
-        } catch (error) {
-            console.error("EMAIL VERIFICATION ERROR:", error);
             showToast(
-                error.message || "The code is invalid or has expired.",
+                "Your account has an invalid role. Please contact support.",
                 "error",
-                "Verification failed"
+                "Account verification failed"
             );
-        } finally {
-            if (verifyButton) verifyButton.disabled = false;
+            return;
         }
-    });
 
-    /* RESEND VERIFICATION CODE */
+        if (profile.role === "admin") {
+            window.location.href = "admin/dashboard.html";
+        } else {
+            window.location.href = "customer/dashboard.html";
+        }
 
-    const resendButton = document.getElementById("resendCodeButton");
+    } catch (error) {
+        console.error("NEW USER REDIRECT ERROR:", error);
 
-    if (resendButton) {
-        resendButton.addEventListener("click", async function () {
-            const email = emailInput?.value.trim();
-
-            if (!email) {
-                showToast("Enter your email address first.", "error", "Email required");
-                return;
-            }
-
-            resendButton.disabled = true;
-
-            try {
-                const { error } = await supabaseClient.auth.resend({
-                    type: "signup",
-                    email
-                });
-
-                if (error) throw error;
-
-                showToast(
-                    "A new verification code has been requested. Check your inbox.",
-                    "success",
-                    "Code requested"
-                );
-            } catch (error) {
-                console.error("RESEND CODE ERROR:", error);
-                showToast(
-                    error.message || "Unable to resend the code. Please try again later.",
-                    "error",
-                    "Could not resend code"
-                );
-            } finally {
-                resendButton.disabled = false;
-            }
-        });
+        showToast(
+            "Your account was created. Please log in to continue.",
+            "info",
+            "Registration successful"
+        );
     }
 }
 
@@ -225,6 +168,7 @@ if (loginForm) {
 
             if (error || !profile) {
                 console.error("PROFILE ERROR:", error);
+
                 await supabaseClient.auth.signOut();
 
                 showToast(
@@ -263,6 +207,7 @@ if (loginForm) {
 
         } catch (error) {
             console.error("DASHBOARD REDIRECT ERROR:", error);
+
             showToast(
                 "Something went wrong while opening your dashboard.",
                 "error",
@@ -296,29 +241,21 @@ if (loginForm) {
             if (error) {
                 console.error("LOGIN ERROR:", error);
 
-                const message = /email not confirmed/i.test(error.message)
-                    ? "Please verify your email address before logging in."
-                    : "Please check your email and password, then try again.";
-
-                showToast(message, "error", "Login failed");
-                return;
-            }
-
-            if (!data.user?.email_confirmed_at) {
-                await supabaseClient.auth.signOut();
-
                 showToast(
-                    "Please verify your email address before logging in.",
+                    "Please check your email and password, then try again.",
                     "error",
-                    "Email not verified"
+                    "Login failed"
                 );
                 return;
             }
 
+            // Email confirmation is not checked here because it is
+            // intended to be disabled in Supabase settings.
             await redirectToDashboard(data.user.id, true);
 
         } catch (error) {
             console.error("LOGIN ERROR:", error);
+
             showToast(
                 "Something went wrong while logging in. Please try again.",
                 "error",
