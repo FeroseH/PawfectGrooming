@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
+
+    
 </head>
 
 <body class="auth-page">
@@ -19,33 +22,26 @@
     <main class="auth-container">
 
         <section class="auth-visual">
-
             <div class="auth-visual-content">
-
                 <a href="index.html" class="auth-logo">
                     Pawfect Grooming
                 </a>
 
                 <div class="auth-message">
-    <h1>
-        Gentle care.<br>
-        Happy pets.
-    </h1>
+                    <h1>
+                        Gentle care.<br>
+                        Happy pets.
+                    </h1>
 
-    <p>
-        Create an account and make grooming
-        appointments easier for you and your furry friend.
-    </p>
-</div>
-
+                    <p>
+                        Create an account and make grooming
+                        appointments easier for you and your furry friend.
+                    </p>
+                </div>
             </div>
-
         </section>
 
-
-        <!-- RIGHT SIDE -->
         <section class="auth-form-section">
-
             <div class="auth-form-container">
 
                 <a href="index.html" class="mobile-auth-logo">
@@ -53,7 +49,6 @@
                 </a>
 
                 <div class="auth-heading">
-
                     <span class="auth-small-title">
                         WELCOME TO PAWFECT
                     </span>
@@ -63,19 +58,12 @@
                     <p>
                         Join us and make your pet's grooming experience easier.
                     </p>
-
                 </div>
 
-
-                <!-- REGISTER FORM -->
                 <form id="registerForm" class="auth-form">
 
                     <div class="form-group">
-
-                        <label for="fullName">
-                            Full Name
-                        </label>
-
+                        <label for="fullName">Full Name</label>
                         <input
                             type="text"
                             id="fullName"
@@ -83,145 +71,504 @@
                             placeholder="Enter your full name"
                             required
                         >
-
                     </div>
-
 
                     <div class="form-group">
-
-                        <label for="email">
-                            Email Address
-                        </label>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            required
-                        >
+                        <label for="email">Email Address</label>
+                        
+<input
+    type="text"
+    id="email"
+    name="email"
+    placeholder="Enter your email"
+    inputmode="email"
+    autocomplete="email"
+    required
+>
 
                     </div>
 
+                    <div class="form-group">
+                        <label for="password">Password</label>
+
+                        <div class="password-input-wrapper">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                data-target="password"
+                                aria-label="Show password"
+                                aria-pressed="false"
+                            >
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+
+                        <div class="password-input-wrapper">
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Confirm your password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                data-target="confirmPassword"
+                                aria-label="Show confirm password"
+                                aria-pressed="false"
+                            >
+                                Show
+                            </button>
+                        </div>
+                    </div>
 
                     
-<div class="form-group">
-    <label for="password">Password</label>
 
-    <div class="password-input-wrapper">
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Create a password"
-            required
-        >
+                    <div class="consent-row">
+                        <input
+                            type="checkbox"
+                            id="policyConsent"
+                            name="policyConsent"
+                            required
+                            
+                        >
 
-        <button
-            type="button"
-            class="toggle-password"
-            data-target="password"
-            aria-label="Show password"
-            aria-pressed="false"
-        >
-            Show
-        </button>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="confirmPassword">Confirm Password</label>
-
-    <div class="password-input-wrapper">
-        <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm your password"
-            required
-        >
-
-        <button
-            type="button"
-            class="toggle-password"
-            data-target="confirmPassword"
-            aria-label="Show confirm password"
-            aria-pressed="false"
-        >
-            Show
-        </button>
-    </div>
-</div>
-
-
-
-                    <div class="terms-text">
-
-                        By creating an account, you agree to our
-                        <a href="#">Terms of Service</a>
-                        and
-                        <a href="#">Privacy Policy</a>.
-
+                        <label for="policyConsent">
+                            I have reviewed and agree to the
+                            <a href="#terms" data-policy-link>Terms of Service</a>
+                            and
+                            <a href="#privacy" data-policy-link>Privacy Policy</a>.
+                        </label>
                     </div>
 
-
-                    <button type="submit" class="auth-button">
+                    <button
+                        type="submit"
+                        id="registerButton"
+                        class="auth-button"
+                        disabled
+                    >
                         Create Account
                     </button>
 
                 </form>
 
-
                 <div class="auth-divider">
                     <span>Already have an account?</span>
                 </div>
-
 
                 <a href="login.html" class="auth-secondary-button">
                     Log in instead
                 </a>
 
-
                 <p class="auth-back">
-
-                    <a href="index.html">
-                        ← Back to home
-                    </a>
-
+                    <a href="index.html">← Back to home</a>
                 </p>
 
             </div>
-
         </section>
 
     </main>
 
-<!-- Supabase library must load first -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- POLICY MODAL -->
+    <div
+        class="policy-modal"
+        id="policyModal"
+        aria-hidden="true"
+    >
+        <section
+            class="policy-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="policyModalTitle"
+        >
+            <header class="policy-header">
+                <h2 id="policyModalTitle">Our Policies</h2>
 
-<!
-<!-- PROJECT SCRIPTS -->
-<script src="js/supabase.js"></script>
-<script src="js/toast.js"></script>
-<script src="js/auth.js"></script>
+                <button
+                    type="button"
+                    class="policy-close"
+                    id="closePolicyModal"
+                    aria-label="Close policies"
+                >
+                    &times;
+                </button>
+            </header>
 
+            <div class="policy-content" id="policyContent">
 
-<script>
-    document.querySelectorAll(".toggle-password").forEach(button => {
-        button.addEventListener("click", () => {
-            const input = document.getElementById(button.dataset.target);
-            const isHidden = input.type === "password";
+                <h3>Terms of Service</h3>
 
-            input.type = isHidden ? "text" : "password";
-            button.textContent = isHidden ? "Hide" : "Show";
-            button.setAttribute("aria-pressed", String(isHidden));
-            button.setAttribute(
-                "aria-label",
-                `${isHidden ? "Hide" : "Show"} ${input.name === "confirmPassword" ? "confirm password" : "password"}`
-            );
+                <p><strong>Last updated:</strong> October 2026</p>
+
+                <p>
+                    Welcome to Pawfect Grooming. By creating an account or
+                    using our website, you agree to follow these Terms of
+                    Service. Please review them before continuing.
+                </p>
+
+                <h3>1. Using Our Website</h3>
+                <p>
+                    Pawfect Grooming provides website features for customers
+                    to view grooming services, manage pet information, and
+                    request or manage appointments. You agree to provide
+                    accurate information and use the website responsibly.
+                </p>
+
+                <h3>2. Your Account</h3>
+                <p>
+                    You are responsible for maintaining the confidentiality
+                    of your login credentials and for activity conducted
+                    through your account. Notify the website administrator
+                    if you believe your account has been accessed without
+                    permission.
+                </p>
+
+                <h3>3. Pet Information and Appointments</h3>
+                <p>
+                    You are responsible for providing accurate information
+                    about your pets and appointment requests. Submitting
+                    an appointment request does not necessarily mean it
+                    has been confirmed. Check the appointment status shown
+                    on the website.
+                </p>
+
+                <h3>4. Cancellations and Changes</h3>
+                <p>
+                    Appointment availability, changes, and cancellations
+                    are subject to the options provided by Pawfect Grooming
+                    and any applicable business policies communicated to
+                    customers.
+                </p>
+
+                <h3>5. Acceptable Use</h3>
+                <p>
+                    Do not misuse the website, attempt unauthorized access,
+                    interfere with its operation, or submit information
+                    that is knowingly false or unlawful.
+                </p>
+
+                <h3>6. Website Availability</h3>
+                <p>
+                    We will make reasonable efforts to keep the website
+                    available and functioning, but uninterrupted access
+                    cannot be guaranteed. Features may be changed or
+                    temporarily unavailable for maintenance.
+                </p>
+
+                <h3>7. Changes to These Terms</h3>
+                <p>
+                    These terms may be updated when necessary. Updated
+                    terms will be posted on the website with a revised
+                    date. Where required, users will be asked to provide
+                    consent again.
+                </p>
+
+                <h3>8. Contact</h3>
+                <p>
+                    If you have questions about these terms, contact the
+                    Pawfect Grooming website administrator using the
+                    contact details provided on the website.
+                </p>
+
+                <h3>Privacy Policy</h3>
+
+                <p><strong>Last updated:</strong> October 2026</p>
+
+                <p>
+                    This Privacy Policy explains how Pawfect Grooming
+                    collects, uses, and handles information when you use
+                    the website.
+                </p>
+
+                <h3>1. Information We Collect</h3>
+                <p>Depending on the features you use, the website may collect:</p>
+                <ul>
+                    <li>Your name and email address.</li>
+                    <li>Account information needed for authentication.</li>
+                    <li>Pet details you choose to submit, such as name, species, breed, age, notes, and photos.</li>
+                    <li>Appointment details, including the selected pet, service, date, time, and notes.</li>
+                    <li>Information needed to maintain website security and troubleshoot problems, where applicable.</li>
+                </ul>
+
+                <h3>2. How We Use Your Information</h3>
+                <p>Your information may be used to:</p>
+                <ul>
+                    <li>Create and manage your account.</li>
+                    <li>Display and manage your pets and their information.</li>
+                    <li>Process appointment requests and show appointment status.</li>
+                    <li>Respond to questions and provide customer support.</li>
+                    <li>Maintain the security, functionality, and reliability of the website.</li>
+                </ul>
+
+                <h3>3. Storage and Service Providers</h3>
+                <p>
+                    The website uses Supabase for authentication and data
+                    storage. Information may be processed by service
+                    providers that support the website. Their handling of
+                    information is also subject to their applicable terms
+                    and privacy practices.
+                </p>
+
+                <h3>4. Sharing of Information</h3>
+                <p>
+                    Personal information should only be accessed or shared
+                    as needed to operate the website, provide requested
+                    services, maintain security, or comply with applicable
+                    legal requirements. We do not promise that information
+                    is never shared; actual practices must match the
+                    website's configuration and operations.
+                </p>
+
+                <h3>5. Security and Retention</h3>
+                <p>
+                    Reasonable measures should be used to protect stored
+                    information. No online system can guarantee absolute
+                    security. Information should be retained only for as
+                    long as necessary for legitimate operational, security,
+                    and legal purposes, subject to applicable requirements.
+                </p>
+
+                <h3>6. Your Choices and Rights</h3>
+                <p>
+                    Depending on applicable law, you may have rights to
+                    request access to, correction of, or deletion of your
+                    personal information, or to raise a concern about its
+                    handling. Contact the website administrator to submit
+                    a request. Some information may need to be retained
+                    where legally permitted or required.
+                </p>
+
+                <h3>7. Cookies and Technical Data</h3>
+                <p>
+                    The website or its service providers may use necessary
+                    technical storage or similar technologies to support
+                    authentication, security, and website functionality.
+                    The actual technologies used should be documented
+                    accurately in this policy.
+                </p>
+
+                <h3>8. Changes to This Policy</h3>
+                <p>
+                    This Privacy Policy may be updated to reflect changes
+                    in the website or its data practices. The updated
+                    version will be posted with a revised date.
+                </p>
+
+                <h3>9. Privacy Questions</h3>
+                <p>
+                    For privacy questions or requests concerning your
+                    information, contact the Pawfect Grooming website
+                    administrator using the contact details provided
+                    on the website.
+                </p>
+
+            </div>
+
+            <footer class="policy-footer">
+                <p class="policy-scroll-hint" id="policyScrollHint">
+                    Scroll to the bottom of both policies to enable the agreement button.
+                </p>
+
+                <button
+                    type="button"
+                    class="policy-agree"
+                    id="agreePolicyButton"
+                    disabled
+                >
+                    I Agree &amp; Continue
+                </button>
+            </footer>
+        </section>
+    </div>
+
+    <!-- Supabase library must load first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- PROJECT SCRIPTS -->
+    <script src="js/supabase.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+        // Show and hide password
+        document.querySelectorAll(".toggle-password").forEach(button => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(button.dataset.target);
+                const isHidden = input.type === "password";
+
+                input.type = isHidden ? "text" : "password";
+                button.textContent = isHidden ? "Hide" : "Show";
+                button.setAttribute("aria-pressed", String(isHidden));
+                button.setAttribute(
+                    "aria-label",
+                    `${isHidden ? "Hide" : "Show"} ${
+                        input.name === "confirmPassword"
+                            ? "confirm password"
+                            : "password"
+                    }`
+                );
+            });
         });
-    });
-</script>
+
+       
+// Policy modal and consent
+const policyModal = document.getElementById("policyModal");
+const policyContent = document.getElementById("policyContent");
+const policyTitle = document.getElementById("policyModalTitle");
+const closePolicyModal = document.getElementById("closePolicyModal");
+const agreePolicyButton = document.getElementById("agreePolicyButton");
+const policyScrollHint = document.getElementById("policyScrollHint");
+const policyConsent = document.getElementById("policyConsent");
+const registerButton = document.getElementById("registerButton");
+
+
+let previousFocus = null;
+let reachedPolicyBottom = false;
+
+function updateRegisterButton() {
+    registerButton.disabled = !policyConsent.checked;
+}
+
+function checkPolicyScroll() {
+    const atBottom =
+        policyContent.scrollTop + policyContent.clientHeight >=
+        policyContent.scrollHeight - 5;
+
+    if (atBottom) {
+        reachedPolicyBottom = true;
+        agreePolicyButton.disabled = false;
+        policyScrollHint.textContent =
+            "You've reached the bottom. Click below if you agree to both policies.";
+    }
+}
+
+function openPolicyModal(event) {
+    event.preventDefault();
+
+    previousFocus = document.activeElement;
+    reachedPolicyBottom = false;
+
+    policyConsent.checked = false;
+    policyConsent.disabled = true;
+    registerButton.disabled = true;
+    agreePolicyButton.disabled = true;
+
+    policyTitle.textContent =
+        event.currentTarget.getAttribute("href") === "#privacy"
+            ? "Privacy Policy & Terms of Service"
+            : "Terms of Service & Privacy Policy";
+
+    policyModal.classList.add("is-open");
+    policyModal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    policyContent.scrollTop = 0;
+    policyScrollHint.textContent =
+        "Scroll to the bottom of both policies to enable the agreement button.";
+
+    closePolicyModal.focus();
+
+    requestAnimationFrame(checkPolicyScroll);
+}
+
+function closeModal() {
+    policyModal.classList.remove("is-open");
+    policyModal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+
+    if (previousFocus) {
+        previousFocus.focus();
+    }
+}
+
+document.querySelectorAll("[data-policy-link]").forEach(link => {
+    link.addEventListener("click", openPolicyModal);
+});
+
+policyContent.addEventListener("scroll", checkPolicyScroll);
+
+closePolicyModal.addEventListener("click", closeModal);
+
+policyModal.addEventListener("click", event => {
+    if (event.target === policyModal) {
+        closeModal();
+    }
+});
+
+document.addEventListener("keydown", event => {
+    if (
+        event.key === "Escape" &&
+        policyModal.classList.contains("is-open")
+    ) {
+        closeModal();
+    }
+});
+
+agreePolicyButton.addEventListener("click", () => {
+    if (!reachedPolicyBottom) return;
+
+    policyConsent.disabled = false;
+    policyConsent.checked = true;
+
+    updateRegisterButton();
+    closeModal();
+});
+
+policyConsent.addEventListener("change", () => {
+    // Consent must be given through the policy modal.
+    if (!policyConsent.checked) {
+        registerButton.disabled = true;
+    } else {
+        updateRegisterButton();
+    }
+});
+
+registerForm.addEventListener("submit", event => {
+    if (!policyConsent.checked || policyConsent.disabled) {
+        event.preventDefault();
+        registerButton.disabled = true;
+        alert("Please review and agree to the Terms of Service and Privacy Policy first.");
+    }
+});
+
+updateRegisterButton();
+
+
+        policyConsent.addEventListener("change", () => {
+    if (!reachedPolicyBottom) {
+        policyConsent.checked = false;
+        registerButton.disabled = true;
+        return;
+    }
+
+    updateRegisterButton();
+});
+
+        // Prevent form submission unless the user explicitly agreed.
+        registerForm.addEventListener("submit", event => {
+            if (!policyConsent.checked) {
+                event.preventDefault();
+                registerButton.disabled = true;
+                alert("Please review and agree to the Terms of Service and Privacy Policy first.");
+            }
+        });
+
+        updateRegisterButton();
+    </script>
 
 </body>
 </html>

@@ -25,6 +25,18 @@ if (registerForm) {
 
         const fullName = document.getElementById("fullName").value.trim();
         const email = document.getElementById("email").value.trim();
+        
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+    showToast(
+        "Please enter a valid email address, such as name@example.com.",
+        "error",
+        "Invalid email address"
+    );
+    return;
+}
+
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
         const submitButton = registerForm.querySelector('button[type="submit"]');
@@ -160,11 +172,13 @@ const loginForm = document.getElementById("loginForm");
 if (loginForm) {
     async function redirectToDashboard(userId, showWelcome = false) {
         try {
-            const { data: profile, error } = await supabaseClient
-                .from("profiles")
-                .select("role")
-                .eq("id", userId)
-                .single();
+            
+const { data: profile, error } = await supabaseClient
+    .from("profiles")
+    .select("role, is_active")
+    .eq("id", userId)
+    .single();
+
 
             if (error || !profile) {
                 console.error("PROFILE ERROR:", error);
@@ -178,6 +192,20 @@ if (loginForm) {
                 );
                 return;
             }
+
+            
+if (profile.is_active === false) {
+    await supabaseClient.auth.signOut();
+
+    showToast(
+        "This account has been deactivated. Please contact the administrator for assistance.",
+        "error",
+        "Account deactivated"
+    );
+
+    return;
+}
+
 
             if (profile.role !== "admin" && profile.role !== "customer") {
                 await supabaseClient.auth.signOut();
@@ -221,6 +249,18 @@ if (loginForm) {
 
         const email = document.getElementById("loginEmail").value.trim();
         const password = document.getElementById("loginPassword").value;
+        
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+    showToast(
+        "Please enter a valid email address, such as name@example.com.",
+        "error",
+        "Invalid email address"
+    );
+    return;
+}
+
         const rememberCheckbox = document.getElementById("rememberMe");
         const rememberMe = rememberCheckbox ? rememberCheckbox.checked : false;
         const submitButton = loginForm.querySelector('button[type="submit"]');

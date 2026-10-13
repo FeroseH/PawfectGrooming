@@ -276,6 +276,77 @@
             </form>
         </section>
 
+        
+<section class="account-card account-deactivation-card">
+    <div class="account-card-heading">
+        <div>
+            <p class="account-section-label">ACCOUNT MANAGEMENT</p>
+            <h2>Account Deactivation</h2>
+            <p>
+                You can request to deactivate your Pawfect Grooming account.
+                Your account will remain active while the admin reviews
+                your request.
+            </p>
+        </div>
+    </div>
+
+    <form id="deactivationRequestForm">
+        <div class="account-field">
+            <label for="deactivationReason">
+                Why would you like to deactivate your account?
+            </label>
+
+            <select id="deactivationReason" required>
+                <option value="">Select a reason</option>
+                <option value="No longer need the service">
+                    I no longer need the service
+                </option>
+                <option value="Created another account">
+                    I created another account
+                </option>
+                <option value="Privacy concerns">
+                    Privacy concerns
+                </option>
+                <option value="Temporary break">
+                    I am taking a break from the service
+                </option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div class="account-field">
+            <label for="deactivationDetails">
+                Additional details (optional)
+            </label>
+
+            <textarea
+                id="deactivationDetails"
+                rows="4"
+                maxlength="1000"
+                placeholder="Share any additional details..."
+            ></textarea>
+        </div>
+
+        <div class="account-form-actions">
+            <button
+                type="submit"
+                id="submitDeactivationRequest"
+                class="account-button"
+            >
+                Submit Request
+            </button>
+        </div>
+
+        <p
+            id="deactivationRequestMessage"
+            class="account-message"
+            role="status"
+            aria-live="polite"
+        ></p>
+    </form>
+</section>
+
+
         <p class="account-footer-note">
             Your pet's comfort starts with a well-managed grooming account.
         </p>
@@ -428,6 +499,7 @@
                 }
 
                 currentUser = user;
+                await loadDeactivationRequest();
                 emailInput.value = user.email || "";
 
                 const {
@@ -916,6 +988,138 @@
         });
 
         // INITIALIZE PAGE
+
+const deactivationRequestForm =
+    document.getElementById("deactivationRequestForm");
+
+const deactivationReason =
+    document.getElementById("deactivationReason");
+
+const deactivationDetails =
+    document.getElementById("deactivationDetails");
+
+const submitDeactivationRequest =
+    document.getElementById("submitDeactivationRequest");
+
+const deactivationRequestMessage =
+    document.getElementById("deactivationRequestMessage");
+
+async function loadDeactivationRequest() {
+    if (!currentUser) return;
+
+    const { data, error } = await supabaseClient
+        .from("account_deactivation_requests")
+        .select("reason, details, status, requested_at")
+        .eq("customer_id", currentUser.id)
+        .eq("status", "pending")
+        .order("requested_at", { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error("DEACTIVATION REQUEST LOAD ERROR:", error);
+        return;
+    }
+
+    if (data && data.length > 0) {
+        deactivationReason.disabled = true;
+        deactivationDetails.disabled = true;
+        submitDeactivationRequest.disabled = true;
+        submitDeactivationRequest.textContent = "Request Pending";
+
+        showMessage(
+            deactivationRequestMessage,
+            "Your deactivation request is awaiting admin review.",
+            true
+        );
+    }
+}
+
+deactivationRequestForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!currentUser) return;
+
+    const reason = deactivationReason.value;
+    const details = deactivationDetails.value.trim();
+
+    if (!reason) {
+        showMessage(
+            deactivationRequestMessage,
+            "Please select a reason for your request."
+        );
+        return;
+    }
+
+    if (
+        reason === "Other" &&
+        !details
+    ) {
+        showMessage(
+            deactivationRequestMessage,
+            "Please explain your reason in the additional details field."
+        );
+        deactivationDetails.focus();
+        return;
+    }
+
+    submitDeactivationRequest.disabled = true;
+    submitDeactivationRequest.textContent = "Submitting...";
+
+    try {
+        // Prevent duplicate pending requests.
+        const { data: existing, error: checkError } =
+            await supabaseClient
+                .from("account_deactivation_requests")
+                .select("id")
+                .eq("customer_id", currentUser.id)
+                .eq("status", "pending")
+                .limit(1);
+
+        if (checkError) throw checkError;
+
+        if (existing && existing.length > 0) {
+            showMessage(
+                deactivationRequestMessage,
+                "You already have a pending deactivation request."
+            );
+
+            await loadDeactivationRequest();
+            return;
+        }
+
+        const { error } = await supabaseClient
+            .from("account_deactivation_requests")
+            .insert({
+                customer_id: currentUser.id,
+                reason,
+                details: details || null,
+                status: "pending"
+            });
+
+        if (error) throw error;
+
+        showMessage(
+            deactivationRequestMessage,
+            "Your request has been submitted. Your account remains active while the admin reviews it.",
+            true
+        );
+
+        deactivationReason.disabled = true;
+        deactivationDetails.disabled = true;
+        submitDeactivationRequest.textContent = "Request Pending";
+
+    } catch (error) {
+        console.error("DEACTIVATION REQUEST ERROR:", error);
+
+        showMessage(
+            deactivationRequestMessage,
+            "Unable to submit your request. Please try again."
+        );
+
+        submitDeactivationRequest.disabled = false;
+        submitDeactivationRequest.textContent = "Submit Request";
+    }
+});
 
         initializeAccount();
 

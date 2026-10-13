@@ -1,5 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Registered users elements
     const tableBody = document.getElementById("usersTableBody");
     const totalUsers = document.getElementById("totalUsers");
     const totalCustomers = document.getElementById("totalCustomers");
@@ -10,11 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const userSearch = document.getElementById("userSearch");
     const roleFilter = document.getElementById("roleFilter");
     const refreshButton = document.getElementById("refreshUsers");
-    
+
+    // Deactivation requests elements
+    const requestsBody = document.getElementById("deactivationRequestsBody");
+    const requestsCount = document.getElementById("deactivationRequestsCount");
+    const requestsMessage = document.getElementById("deactivationRequestsMessage");
+    const refreshRequestsButton = document.getElementById("refreshDeactivationRequests");
 
     let allUsers = [];
     let currentAdminId = null;
     let busy = false;
+    let requestsBusy = false;
+    let allRequests = [];
 
     function escapeHTML(value) {
         return String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -40,25 +48,45 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    function formatDateTime(value) {
+        if (!value) return "—";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return "—";
+
+        return date.toLocaleString("en-PH", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        });
+    }
+
     function showMessage(message, isError = false) {
+        if (!usersMessage) return;
+
         usersMessage.textContent = message;
         usersMessage.classList.toggle("is-error", isError);
         usersMessage.hidden = false;
     }
 
     function hideMessage() {
+        if (!usersMessage) return;
+
         usersMessage.hidden = true;
         usersMessage.textContent = "";
         usersMessage.classList.remove("is-error");
     }
 
-function notify(message, isError = false) {
-    if (typeof window.showAdminToast === "function") {
-        window.showAdminToast(message, isError);
-    } else {
-        console.error(message);
+    function notify(message, isError = false) {
+        if (typeof window.showAdminToast === "function") {
+            window.showAdminToast(message, isError);
+        } else {
+            console.error(message);
+        }
     }
-}
 
     function updateStats(users) {
         totalUsers.textContent = users.length;
@@ -67,6 +95,10 @@ function notify(message, isError = false) {
         totalAdmins.textContent =
             users.filter(user => user.role === "admin").length;
     }
+
+    // --------------------------------------------------
+    // MANUAL DEACTIVATION MODAL
+    // --------------------------------------------------
 
     function ensureModal() {
         if (document.getElementById("accountStatusModal")) return;
@@ -106,9 +138,7 @@ function notify(message, isError = false) {
                         <option value="Security concern">
                             Security concern
                         </option>
-                        <option value="Other">
-                            Other
-                        </option>
+                        <option value="Other">Other</option>
                     </select>
 
                     <label for="otherDeactivationReason" id="otherReasonLabel" hidden>
@@ -148,10 +178,8 @@ function notify(message, isError = false) {
             otherLabel.hidden = !showOther;
         });
 
-        document.getElementById("cancelAccountAction").addEventListener(
-            "click",
-            closeModal
-        );
+        document.getElementById("cancelAccountAction")
+            .addEventListener("click", closeModal);
 
         modal.addEventListener("click", event => {
             if (event.target === modal) closeModal();
@@ -166,6 +194,10 @@ function notify(message, isError = false) {
         const modal = document.getElementById("accountStatusModal");
         if (modal) modal.hidden = true;
     }
+
+    // --------------------------------------------------
+    // REGISTERED USERS TABLE
+    // --------------------------------------------------
 
     function renderUsers() {
         const searchTerm = userSearch.value.trim().toLowerCase();
@@ -260,10 +292,10 @@ function notify(message, isError = false) {
         if (error) throw error;
 
         notify(
-    shouldBeActive
-        ? "Customer account reactivated successfully."
-        : "Customer account deactivated successfully."
-);
+            shouldBeActive
+                ? "Customer account reactivated successfully."
+                : "Customer account deactivated successfully."
+        );
 
         await loadUsers();
     }
@@ -314,12 +346,12 @@ function notify(message, isError = false) {
             }
 
             const confirmed = await window.showAdminConfirmToast(
-    `Are you sure you want to deactivate ${
-        user.full_name || user.email || "this customer"
-    }?`
-);
+                `Are you sure you want to deactivate ${
+                    user.full_name || user.email || "this customer"
+                }?`
+            );
 
-if (!confirmed) return;
+            if (!confirmed) return;
 
             confirmButton.disabled = true;
             confirmButton.textContent = "Processing...";
@@ -343,20 +375,20 @@ if (!confirmed) return;
     async function reactivateCustomer(user) {
         const name = user.full_name || user.email || "this customer";
 
-const confirmed = await window.showAdminConfirmToast(
-    `Are you sure you want to restore ${name}'s account?`
-);
+        const confirmed = await window.showAdminConfirmToast(
+            `Are you sure you want to restore ${name}'s account?`
+        );
 
-if (!confirmed) return;
+        if (!confirmed) return;
 
         try {
             await changeAccountStatus(user.id, true);
         } catch (error) {
             console.error("Reactivation failed:", error);
             notify(
-    error.message || "Unable to reactivate this account.",
-    true
-);
+                error.message || "Unable to reactivate this account.",
+                true
+            );
         }
     }
 
@@ -428,16 +460,309 @@ if (!confirmed) return;
 
             usersCount.textContent = "User list unavailable";
             notify(
-    error.message || "Something went wrong while loading users.",
-    true
-);
-
+                error.message || "Something went wrong while loading users.",
+                true
+            );
         } finally {
             busy = false;
             refreshButton.disabled = false;
             refreshButton.textContent = "Refresh";
         }
     }
+
+    // --------------------------------------------------
+    // CUSTOMER DEACTIVATION REQUESTS
+    // --------------------------------------------------
+
+    function showRequestsMessage(message, isError = false) {
+        if (!requestsMessage) return;
+
+        requestsMessage.textContent = message;
+        requestsMessage.classList.toggle("is-error", isError);
+        requestsMessage.hidden = false;
+    }
+
+    function renderRequests() {
+        if (!requestsBody || !requestsCount) return;
+
+        if (allRequests.length === 0) {
+            requestsCount.textContent = "No deactivation requests found.";
+            requestsBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="users-table-state">
+                        No deactivation requests yet.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        const pendingCount = allRequests.filter(
+            request => request.status === "pending"
+        ).length;
+
+        requestsCount.textContent =
+            `${allRequests.length} request${allRequests.length === 1 ? "" : "s"} total · ${pendingCount} pending`;
+
+        // Pending requests appear first, followed by the most recent.
+        const sortedRequests = [...allRequests].sort((a, b) => {
+            if (a.status === "pending" && b.status !== "pending") return -1;
+            if (a.status !== "pending" && b.status === "pending") return 1;
+
+            return new Date(b.requested_at) - new Date(a.requested_at);
+        });
+
+        requestsBody.innerHTML = sortedRequests.map(request => {
+            const customer = request.customer;
+            const customerName =
+                customer?.full_name?.trim() || "Unnamed customer";
+            const customerEmail = customer?.email || "No email available";
+
+            const statusClass = request.status === "approved"
+                ? "account-status-inactive"
+                : request.status === "rejected"
+                    ? "account-status-inactive"
+                    : "account-status-active";
+
+            let actionMarkup = "Reviewed";
+
+            if (request.status === "pending") {
+                actionMarkup = `
+                    <div class="deactivation-request-actions">
+                        <button
+                            type="button"
+                            class="account-action-button deactivate-button"
+                            data-request-action="approve"
+                            data-request-id="${escapeHTML(request.id)}"
+                            ${requestsBusy ? "disabled" : ""}
+                        >
+                            Approve
+                        </button>
+                        <button
+                            type="button"
+                            class="account-action-button reactivate-button"
+                            data-request-action="reject"
+                            data-request-id="${escapeHTML(request.id)}"
+                            ${requestsBusy ? "disabled" : ""}
+                        >
+                            Reject
+                        </button>
+                    </div>
+                `;
+            }
+
+            return `
+                <tr>
+                    <td>
+                        <div class="users-identity">
+                            <span class="users-avatar">
+                                ${escapeHTML(customerName.charAt(0).toUpperCase() || "U")}
+                            </span>
+                            <div class="users-identity-details">
+                                <strong>${escapeHTML(customerName)}</strong>
+                                <span>${escapeHTML(customerEmail)}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${escapeHTML(request.reason || "—")}</td>
+                    <td class="deactivation-request-details">
+                        ${escapeHTML(request.details || "No additional details provided.")}
+                    </td>
+                    <td>${escapeHTML(formatDateTime(request.requested_at))}</td>
+                    <td>
+                        <span class="account-status ${statusClass}">
+                            ${escapeHTML(
+                                request.status.charAt(0).toUpperCase() +
+                                request.status.slice(1)
+                            )}
+                        </span>
+                        ${request.reviewed_at
+                            ? `<small class="account-status-reason">Reviewed: ${escapeHTML(formatDateTime(request.reviewed_at))}</small>`
+                            : ""}
+                    </td>
+                    <td>${actionMarkup}</td>
+                </tr>
+            `;
+        }).join("");
+    }
+
+    async function loadDeactivationRequests() {
+        if (!requestsBody || !requestsCount) return;
+        if (requestsBusy) return;
+
+        requestsBusy = true;
+
+        if (refreshRequestsButton) {
+            refreshRequestsButton.disabled = true;
+            refreshRequestsButton.textContent = "Loading...";
+        }
+
+        requestsCount.textContent = "Loading requests...";
+        requestsBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="users-table-state">
+                    Loading deactivation requests...
+                </td>
+            </tr>
+        `;
+
+        if (requestsMessage) {
+            requestsMessage.hidden = true;
+            requestsMessage.textContent = "";
+            requestsMessage.classList.remove("is-error");
+        }
+
+        try {
+            // Ensure the current session belongs to an administrator.
+            const {
+                data: { user },
+                error: authError
+            } = await supabaseClient.auth.getUser();
+
+            if (authError || !user) {
+                throw new Error("Your session has expired. Please sign in again.");
+            }
+
+            const { data: profile, error: profileError } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("role")
+                    .eq("id", user.id)
+                    .single();
+
+            if (profileError || profile?.role !== "admin") {
+                throw new Error("Only administrators can view these requests.");
+            }
+
+            currentAdminId = user.id;
+
+            const { data: requests, error: requestsError } =
+                await supabaseClient
+                    .from("account_deactivation_requests")
+                    .select("id, customer_id, reason, details, status, requested_at, reviewed_at, reviewed_by")
+                    .order("requested_at", { ascending: false });
+
+            if (requestsError) throw requestsError;
+
+            const customerIds = [
+                ...new Set((requests || []).map(request => request.customer_id))
+            ];
+
+            let profilesById = {};
+
+            if (customerIds.length > 0) {
+                const { data: customerProfiles, error: customerProfilesError } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select("id, full_name, email")
+                        .in("id", customerIds);
+
+                if (customerProfilesError) throw customerProfilesError;
+
+                profilesById = Object.fromEntries(
+                    (customerProfiles || []).map(profile => [
+                        profile.id,
+                        profile
+                    ])
+                );
+            }
+
+            allRequests = (requests || []).map(request => ({
+                ...request,
+                customer: profilesById[request.customer_id] || null
+            }));
+
+            renderRequests();
+
+        } catch (error) {
+            console.error("Unable to load deactivation requests:", error);
+
+            requestsCount.textContent = "Requests unavailable.";
+            requestsBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="users-table-state">
+                        Unable to load deactivation requests.
+                    </td>
+                </tr>
+            `;
+
+            showRequestsMessage(
+                error.message || "Unable to load deactivation requests.",
+                true
+            );
+        } finally {
+            requestsBusy = false;
+
+            if (refreshRequestsButton) {
+                refreshRequestsButton.disabled = false;
+                refreshRequestsButton.textContent = "Refresh Requests";
+            }
+
+            // Re-render to re-enable pending request actions.
+            if (allRequests.length > 0) renderRequests();
+        }
+    }
+
+    async function reviewDeactivationRequest(requestId, approve) {
+        const request = allRequests.find(item => item.id === requestId);
+
+        if (!request || request.status !== "pending") {
+            notify("This request has already been reviewed or is unavailable.", true);
+            await loadDeactivationRequests();
+            return;
+        }
+
+        const customerName =
+            request.customer?.full_name?.trim() ||
+            request.customer?.email ||
+            "this customer";
+
+        const message = approve
+            ? `Approve the deactivation request for ${customerName}? Their account will be deactivated.`
+            : `Reject the deactivation request for ${customerName}? Their account will remain active.`;
+
+        const confirmed = await window.showAdminConfirmToast(message);
+
+        if (!confirmed) return;
+
+        try {
+            const { error } = await supabaseClient.rpc(
+                "review_customer_deactivation_request",
+                {
+                    p_request_id: requestId,
+                    p_approve: approve
+                }
+            );
+
+            if (error) throw error;
+
+            notify(
+                approve
+                    ? "Request approved. The customer account has been deactivated."
+                    : "Request rejected. The customer account remains active."
+            );
+
+            // Refresh both the requests and registered users tables.
+            await Promise.all([
+                loadUsers(),
+                loadDeactivationRequests()
+            ]);
+
+        } catch (error) {
+            console.error("Unable to review deactivation request:", error);
+
+            notify(
+                error.message || "Unable to review this request.",
+                true
+            );
+
+            await loadDeactivationRequests();
+        }
+    }
+
+    // --------------------------------------------------
+    // EVENT LISTENERS
+    // --------------------------------------------------
 
     tableBody.addEventListener("click", async event => {
         const button = event.target.closest("[data-action]");
@@ -456,12 +781,37 @@ if (!confirmed) return;
         }
     });
 
+    if (requestsBody) {
+        requestsBody.addEventListener("click", async event => {
+            const button = event.target.closest("[data-request-action]");
+            if (!button || requestsBusy) return;
+
+            const action = button.dataset.requestAction;
+
+            if (action !== "approve" && action !== "reject") return;
+
+            await reviewDeactivationRequest(
+                button.dataset.requestId,
+                action === "approve"
+            );
+        });
+    }
+
     userSearch.addEventListener("input", renderUsers);
     roleFilter.addEventListener("change", renderUsers);
     refreshButton.addEventListener("click", loadUsers);
 
-    
+    if (refreshRequestsButton) {
+        refreshRequestsButton.addEventListener(
+            "click",
+            loadDeactivationRequests
+        );
+    }
 
     ensureModal();
-    loadUsers();
+
+    // Load both tables when the admin page opens.
+    loadUsers().then(() => {
+        if (currentAdminId) loadDeactivationRequests();
+    });
 });

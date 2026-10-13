@@ -9250,3 +9250,72 @@ body.dashboard-page .welcome-section p:not(.small-label) {
 .services-page-container .service-card.service-card--tier-3::before {
     background: var(--service-tier-3);
 }
+
+
+
+
+
+
+
+
+/* ACCOUNT DEACTIVATION CARD */
+
+.account-page .account-deactivation-card {
+    background: #fffaf5;
+    border: 1px solid #f0dfd2;
+    border-radius: 18px;
+    padding: 30px;
+    margin-top: 24px;
+    box-shadow: 0 5px 18px rgba(75, 55, 40, 0.05);
+    box-sizing: border-box;
+}
+
+.account-page .account-deactivation-card .account-card-heading {
+    margin-bottom: 24px;
+}
+
+.account-page .account-deactivation-card h2 {
+    margin-bottom: 8px;
+}
+
+.account-page .account-deactivation-card .account-field label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.account-page .account-deactivation-card select,
+.account-page .account-deactivation-card textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #dedbd5;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #333333;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.account-page .account-deactivation-card textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.account-page .account-deactivation-card select:focus,
+.account-page .account-deactivation-card textarea:focus {
+    outline: none;
+    border-color: #8aab91;
+    box-shadow: 0 0 0 3px rgba(138, 171, 145, 0.15);
+}
+
+.account-page .account-deactivation-card select:disabled,
+.account-page .account-deactivation-card textarea:disabled {
+    background: #f3f1ed;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .account-page .account-deactivation-card {
+        padding: 20px;
+        border-radius: 15px;
+    }
+}

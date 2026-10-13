@@ -153,6 +153,58 @@
             </section>
 
             <!-- REGISTERED USERS -->
+             
+<!-- CUSTOMER DEACTIVATION REQUESTS -->
+<section class="users-panel deactivation-requests-panel">
+    <div class="users-panel-heading">
+        <div>
+            <h2>Deactivation Requests</h2>
+            <p id="deactivationRequestsCount">
+                Loading requests...
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="refreshDeactivationRequests"
+            class="users-refresh"
+        >
+            Refresh Requests
+        </button>
+    </div>
+
+    <div
+        id="deactivationRequestsMessage"
+        class="users-message"
+        role="status"
+        aria-live="polite"
+        hidden
+    ></div>
+
+    <div class="users-table-wrap">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Reason</th>
+                    <th>Additional Details</th>
+                    <th>Requested On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="deactivationRequestsBody">
+                <tr>
+                    <td colspan="6" class="users-table-state">
+                        Loading requests...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
             <section class="users-panel">
 
                 <div class="users-panel-heading">
