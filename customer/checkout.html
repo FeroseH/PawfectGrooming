@@ -289,6 +289,24 @@
             });
         }
 
+
+function calculatePetPrice(basePrice, petSize) {
+    const multipliers = {
+        small: 1.00,
+        medium: 1.20,
+        large: 1.40,
+        "extra large": 1.60
+    };
+
+    const size = String(petSize || "").trim().toLowerCase();
+    const multiplier = multipliers[size] ?? 1.00;
+
+    return Math.round(
+        (Number(basePrice) * multiplier + Number.EPSILON) * 100
+    ) / 100;
+}
+
+
         function formatDate(value) {
             const date = new Date(value + "T00:00:00");
 
@@ -381,9 +399,12 @@
                 const appointment = item.appointment;
                 const pet = item.pet;
                 const service = item.service;
-                const price = Number(service.price);
+                const price = calculatePetPrice(
+    service.price,
+    pet.size
+);
 
-                total += price;
+total += price;
 
                 const card = document.createElement("article");
                 card.className = "checkout-pet-appointment";
@@ -403,11 +424,11 @@
                 );
 
                 addTextElement(
-                    card,
-                    "p",
-                    "checkout-pet-species",
-                    pet.species || "Pet"
-                );
+    card,
+    "p",
+    "checkout-pet-species",
+    `Size: ${pet.size || "Not specified"}`
+);
 
                 const serviceDetails = document.createElement("div");
                 serviceDetails.className = "checkout-pet-detail";
@@ -617,7 +638,7 @@
                 const [petsResult, servicesResult] = await Promise.all([
                     supabaseClient
                         .from("pets")
-                        .select("id, name, species")
+.select("id, name, species, size")
                         .eq("owner_id", user.id)
                         .in("id", petIds),
 
@@ -808,19 +829,31 @@
                     return;
                 }
 
-                const rowsToInsert = verifiedAppointments.map(item => ({
-                    customer_id: user.id,
-                    pet_id: item.appointment.petId,
-                    service_id: item.appointment.serviceId,
-                    appointment_date: checkoutDraft.date,
-                    appointment_time: item.appointment.time,
-                    status: "pending",
-                    notes:
-                        typeof item.appointment.notes === "string" &&
-                        item.appointment.notes.trim()
-                            ? item.appointment.notes.trim()
-                            : null
-                }));
+                
+const rowsToInsert = verifiedAppointments.map(item => ({
+    customer_id: user.id,
+    pet_id: item.appointment.petId,
+    service_id: item.appointment.serviceId,
+    appointment_date: checkoutDraft.date,
+    appointment_time: item.appointment.time,
+    status: "pending",
+
+    // Save the calculated price for this pet's booking.
+    price_at_booking: calculatePetPrice(
+        item.service.price,
+        item.pet.size
+    ),
+
+    // New bookings have not been paid yet.
+    payment_status: "unpaid",
+
+    notes:
+        typeof item.appointment.notes === "string" &&
+        item.appointment.notes.trim()
+            ? item.appointment.notes.trim()
+            : null
+}));
+
 
                 const { error: bookingError } = await supabaseClient
                     .from("appointments")

@@ -1,10 +1,73 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.getElementById("appointmentsTableBody");
+
     const tableCount = document.getElementById("tableCount");
     const searchInput = document.getElementById("appointmentSearch");
     const statusFilter = document.getElementById("statusFilter");
     const dateFilter = document.getElementById("dateFilter");
+    
+const queueToggle = document.getElementById("queueToggle");
+const queueContent = document.getElementById("adminQueueContent");
+const queueToggleIcon = document.getElementById("queueToggleIcon");
+const queueSearch = document.getElementById("queueSearch");
+const queueDateFilter = document.getElementById("queueDateFilter");
+const queueTimeFilter = document.getElementById("queueTimeFilter");
+const queueBody = document.getElementById("adminQueueBody");
+const queueMessage = document.getElementById("adminQueueMessage");
+// PAYMENT MANAGEMENT ELEMENTS
+const paymentToggle = document.getElementById("paymentToggle");
+const paymentContent = document.getElementById("paymentContent");
+const paymentToggleIcon = document.getElementById("paymentToggleIcon");
+const paymentSearch = document.getElementById("paymentSearch");
+const paymentStatusFilter = document.getElementById("paymentStatusFilter");
+const paymentTableBody = document.getElementById("paymentTableBody");
+paymentTableBody.addEventListener("click", async event => {
+    const button = event.target.closest(
+        "button[data-payment-action][data-id]"
+    );
+
+    if (!button || button.disabled) return;
+
+    const id = button.dataset.id;
+
+    const confirmed = await confirmToast(
+        "Confirm that payment has actually been received?",
+        "Mark as paid"
+    );
+
+    if (!confirmed) return;
+
+    button.disabled = true;
+
+    try {
+        const { error } = await supabaseClient
+            .from("appointments")
+            .update({ payment_status: "paid" })
+            .eq("id", id);
+
+        if (error) throw error;
+
+        const appointment = appointments.find(
+            item => String(item.id) === String(id)
+        );
+
+        if (appointment) {
+            appointment.payment_status = "paid";
+        }
+
+        renderPaymentManagement();
+        notify("Payment marked as paid.", "success");
+    } catch (error) {
+        console.error("PAYMENT UPDATE ERROR:", error);
+        notify(
+            error.message || "Unable to update payment status.",
+            "error"
+        );
+        button.disabled = false;
+    }
+});
+const paymentMessage = document.getElementById("paymentMessage");
 
     let appointments = [];
     let updatingIds = new Set();
@@ -81,6 +144,25 @@ function confirmToast(message, confirmLabel = "Confirm") {
 
         document.body.appendChild(toast);
         toast.querySelector(".toast-confirm-accept").focus();
+    });
+}
+
+function formatPrice(value) {
+    if (value === null || value === undefined || value === "") {
+        return "Not recorded";
+    }
+
+    const amount = Number(value);
+
+    if (!Number.isFinite(amount)) {
+        return "Not recorded";
+    }
+
+    return amount.toLocaleString("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
     });
 }
 
@@ -292,6 +374,267 @@ function confirmToast(message, confirmLabel = "Confirm") {
         }).join("");
     }
 
+
+function renderAdminQueue() {
+    const searchTerm = queueSearch.value.trim().toLowerCase();
+    const selectedDate = queueDateFilter.value;
+    const selectedTime = queueTimeFilter.value;
+
+    // Only active appointments count toward the queue.
+    const activeAppointments = appointments
+        .filter(item =>
+            ["pending", "confirmed"].includes(
+                String(item.status || "").toLowerCase()
+            )
+        )
+        .sort((a, b) => {
+            const dateCompare = String(a.appointment_date || "")
+                .localeCompare(String(b.appointment_date || ""));
+
+            if (dateCompare !== 0) return dateCompare;
+
+            const timeCompare = String(a.appointment_time || "")
+                .localeCompare(String(b.appointment_time || ""));
+
+            if (timeCompare !== 0) return timeCompare;
+
+            const createdCompare = String(a.created_at || "")
+                .localeCompare(String(b.created_at || ""));
+
+            if (createdCompare !== 0) return createdCompare;
+
+            return String(a.id).localeCompare(String(b.id), undefined, {
+                numeric: true
+            });
+        });
+
+    // Calculate queue positions before applying the display filters.
+    // Searching must not change someone's actual queue number.
+    const slotPositions = new Map();
+
+    const rankedAppointments = activeAppointments.map(item => {
+        const slotKey =
+            `${item.appointment_date}|${item.appointment_time}`;
+
+        const position = (slotPositions.get(slotKey) || 0) + 1;
+        slotPositions.set(slotKey, position);
+
+        return {
+            ...item,
+            queuePosition: position
+        };
+    });
+
+    // Count all active bookings in each date/time slot.
+    const slotTotals = new Map();
+
+    rankedAppointments.forEach(item => {
+        const slotKey =
+            `${item.appointment_date}|${item.appointment_time}`;
+
+        slotTotals.set(
+            slotKey,
+            (slotTotals.get(slotKey) || 0) + 1
+        );
+    });
+
+    // Keep the time filter options updated.
+    const previousTime = queueTimeFilter.value;
+    const availableTimes = [
+        ...new Set(
+            rankedAppointments
+                .filter(item =>
+                    !selectedDate ||
+                    item.appointment_date === selectedDate
+                )
+                .map(item => item.appointment_time)
+                .filter(Boolean)
+        )
+    ].sort();
+
+    queueTimeFilter.innerHTML =
+        '<option value="all">All time slots</option>' +
+        availableTimes.map(time => `
+            <option value="${escapeHTML(time)}">
+                ${escapeHTML(formatTime(time))}
+            </option>
+        `).join("");
+
+    if (availableTimes.includes(previousTime)) {
+        queueTimeFilter.value = previousTime;
+    }
+
+    const filtered = rankedAppointments.filter(item => {
+        const searchable = [
+            item.customerName,
+            item.customerEmail,
+            item.petName,
+            item.serviceName
+        ].join(" ").toLowerCase();
+
+        return (
+            searchable.includes(searchTerm) &&
+            (!selectedDate || item.appointment_date === selectedDate) &&
+            (queueTimeFilter.value === "all" ||
+                item.appointment_time === queueTimeFilter.value)
+        );
+    });
+
+    queueMessage.textContent = rankedAppointments.length
+        ? `${rankedAppointments.length} active booking${
+            rankedAppointments.length === 1 ? "" : "s"
+        } across all appointment slots.`
+        : "There are no active appointments in the queue.";
+
+    if (!filtered.length) {
+        queueBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="admin-queue-empty">
+                    No matching queue entries.
+                </td>
+            </tr>`;
+        return;
+    }
+
+    queueBody.innerHTML = filtered.map(item => {
+        const slotKey =
+            `${item.appointment_date}|${item.appointment_time}`;
+
+        const total = slotTotals.get(slotKey) || 0;
+        const status = String(item.status || "").toLowerCase();
+
+        return `
+            <tr>
+                <td>
+                    <span class="admin-queue-number">
+                        #${item.queuePosition}
+                    </span>
+                    <span class="admin-queue-slot">
+                        of ${total} in slot
+                    </span>
+                </td>
+                <td>${escapeHTML(item.customerName || "Unknown customer")}</td>
+                <td>${escapeHTML(item.petName || "Unknown pet")}</td>
+                <td>${escapeHTML(formatDate(item.appointment_date))}</td>
+                <td>${escapeHTML(formatTime(item.appointment_time))}</td>
+                <td>
+                    <span class="status-badge ${getStatusClass(status)}">
+                        ${escapeHTML(status)}
+                    </span>
+                </td>
+            </tr>`;
+    }).join("");
+}
+
+function renderPaymentManagement() {
+    const searchTerm = paymentSearch.value.trim().toLowerCase();
+    const selectedStatus = paymentStatusFilter.value;
+
+    const filtered = appointments.filter(item => {
+        const paymentStatus = String(
+            item.payment_status || "unpaid"
+        ).toLowerCase();
+
+        const searchable = [
+            item.customerName,
+            item.customerEmail,
+            item.petName,
+            item.serviceName,
+            item.size
+        ].join(" ").toLowerCase();
+
+        return (
+            searchable.includes(searchTerm) &&
+            (
+                selectedStatus === "all" ||
+                paymentStatus === selectedStatus
+            )
+        );
+    });
+
+    paymentMessage.textContent =
+        `${filtered.length} payment record${filtered.length === 1 ? "" : "s"} found.`;
+
+    if (!filtered.length) {
+        paymentTableBody.innerHTML = `
+            <tr>
+                <td colspan="7">No matching payment records found.</td>
+            </tr>`;
+        return;
+    }
+
+    paymentTableBody.innerHTML = filtered.map(item => {
+        const paymentStatus = String(
+            item.payment_status || "unpaid"
+        ).toLowerCase();
+
+        return `
+            <tr>
+                <td>${escapeHTML(item.customerName || "Unknown customer")}</td>
+                <td>${escapeHTML(item.petName || "Unknown pet")}</td>
+                <td>${escapeHTML(item.serviceName || "Unknown service")}</td>
+                <td>${escapeHTML(item.size || "Not recorded")}</td>
+                <td>${escapeHTML(formatPrice(item.price_at_booking))}</td>
+                <td>
+                    <span class="status-badge ${
+                        paymentStatus === "paid"
+                            ? "status-completed"
+                            : "status-pending"
+                    }">
+                        ${escapeHTML(paymentStatus)}
+                    </span>
+                </td>
+                <td>
+                    ${
+                        paymentStatus === "paid"
+                            ? '<span class="action-unavailable">Payment received</span>'
+                            : `<button
+                                type="button"
+                                class="admin-button-primary"
+                                data-payment-action="paid"
+                                data-id="${escapeHTML(item.id)}"
+                            >Mark as paid</button>`
+                    }
+                </td>
+            </tr>`;
+    }).join("");
+}
+
+queueToggle.addEventListener("click", () => {
+    const isExpanded =
+        queueToggle.getAttribute("aria-expanded") === "true";
+
+    queueToggle.setAttribute("aria-expanded", String(!isExpanded));
+    queueContent.hidden = isExpanded;
+    queueToggleIcon.textContent = isExpanded ? "+" : "−";
+});
+
+queueSearch.addEventListener("input", renderAdminQueue);
+
+queueDateFilter.addEventListener("change", () => {
+    renderAdminQueue();
+});
+
+queueTimeFilter.addEventListener("change", renderAdminQueue);
+
+paymentSearch.addEventListener("input", renderPaymentManagement);
+paymentStatusFilter.addEventListener("change", renderPaymentManagement);
+// PAYMENT MANAGEMENT DROPDOWN
+// PAYMENT MANAGEMENT DROPDOWN
+if (paymentToggle && paymentContent && paymentToggleIcon) {
+    paymentToggle.addEventListener("click", () => {
+        const isExpanded =
+            paymentToggle.getAttribute("aria-expanded") === "true";
+
+        paymentToggle.setAttribute("aria-expanded", String(!isExpanded));
+        paymentContent.hidden = isExpanded;
+        paymentToggleIcon.textContent = isExpanded ? "+" : "−";
+    });
+} else {
+    console.error(
+        "Payment dropdown elements are missing. Check the IDs in appointments.html."
+    );
+}
     async function updateAppointmentStatus(id, newStatus) {
         const appointment = appointments.find(
             item => String(item.id) === String(id)
@@ -460,6 +803,7 @@ if (newStatus === "completed") {
             return {
                 ...appointment,
                 petName: pet?.name || "Unknown pet",
+                size: pet?.size || "Not recorded",
                 serviceName: service?.name || "Unknown service",
                 customerName:
                     customer?.full_name ||
@@ -479,9 +823,11 @@ if (newStatus === "completed") {
         });
 
         updateSummary();
-        renderAppointments();
+renderAppointments();
+renderAdminQueue();
+renderPaymentManagement();
 
-        searchInput.addEventListener("input", renderAppointments);
+searchInput.addEventListener("input", renderAppointments);
         statusFilter.addEventListener("change", renderAppointments);
         dateFilter.addEventListener("change", renderAppointments);
 

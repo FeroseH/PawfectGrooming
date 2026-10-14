@@ -276,6 +276,82 @@
             `;
         }
 
+
+async function loadQueueStatus(userId) {
+    const queueContent = document.getElementById("queueContent");
+
+    if (!queueContent) return;
+
+    queueContent.innerHTML = "<p>Loading queue status...</p>";
+
+    try {
+        const { data, error } = await supabaseClient.rpc(
+            "get_my_appointment_queue"
+        );
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            queueContent.innerHTML = `
+                <p>You don't have an active queue.</p>
+            `;
+            return;
+        }
+
+        const nextAppointment = data[0];
+
+        const appointmentDate = new Date(
+            `${nextAppointment.appointment_date}T00:00:00`
+        ).toLocaleDateString("en-PH", {
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        });
+
+        const appointmentTime = new Date(
+            `2000-01-01T${nextAppointment.appointment_time}`
+        ).toLocaleTimeString("en-PH", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+        });
+
+        queueContent.innerHTML = `
+            <div class="queue-status-details">
+                <p><strong>Your Queue Number</strong></p>
+                <h2>#${nextAppointment.queue_number}</h2>
+
+                <p>
+                    You are number ${nextAppointment.queue_number}
+                    out of ${nextAppointment.queue_total}
+                    customer(s) for this time slot.
+                </p>
+
+                <p>
+                    <strong>Date:</strong> ${appointmentDate}
+                </p>
+
+                <p>
+                    <strong>Time:</strong> ${appointmentTime}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${nextAppointment.appointment_status}
+                </p>
+            </div>
+        `;
+    } catch (error) {
+        console.error("Error loading queue status:", error);
+
+        queueContent.innerHTML = `
+            <p>Unable to load queue status. Please try again later.</p>
+        `;
+    }
+}
+
+
+
         async function loadDashboard() {
             const {
                 data: { user },
@@ -288,6 +364,7 @@
             }
 
             await loadUpcomingAppointment(user.id);
+            await loadQueueStatus(user.id);
 
             // Load customer profile
             const { data: profile, error: profileError } =

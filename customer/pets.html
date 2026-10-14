@@ -102,10 +102,50 @@
                         <input type="text" id="petBreed" placeholder="e.g. Shih Tzu" maxlength="100">
                     </div>
 
-                    <div class="form-group">
-                        <label for="petAge">Age (years)</label>
-                        <input type="number" id="petAge" placeholder="e.g. 3" min="0" max="100" step="1">
-                    </div>
+                    
+<div class="form-group">
+    <label for="petSize">Pet Size *</label>
+    <select id="petSize" required>
+        <option value="">Select pet size</option>
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+        <option value="Extra Large">Extra Large</option>
+    </select>
+</div>
+
+                    
+<div class="form-group">
+    <label for="petAge">Age (years)</label>
+    <input
+        type="number"
+        id="petAge"
+        placeholder="e.g. 1"
+        min="0"
+        max="100"
+        step="1"
+    >
+</div>
+
+<div class="form-group">
+    <label for="petAgeMonths">Additional months</label>
+    <select id="petAgeMonths">
+        <option value="">Select months</option>
+        <option value="0">0 months</option>
+        <option value="1">1 month</option>
+        <option value="2">2 months</option>
+        <option value="3">3 months</option>
+        <option value="4">4 months</option>
+        <option value="5">5 months</option>
+        <option value="6">6 months</option>
+        <option value="7">7 months</option>
+        <option value="8">8 months</option>
+        <option value="9">9 months</option>
+        <option value="10">10 months</option>
+        <option value="11">11 months</option>
+    </select>
+</div>
+
 
                     <div class="form-group">
                         <label for="petPhoto">Pet Photo</label>
@@ -353,13 +393,34 @@ const petPhotoInput = document.getElementById("petPhoto");
                 }
 
                 addDetail("Species", pet.species || "Not specified");
-                addDetail("Breed", pet.breed || "Not specified");
+addDetail("Breed", pet.breed || "Not specified");
+addDetail("Size", pet.size || "Not specified");
 
-                let ageText = "Not specified";
-                if (pet.age !== null && pet.age !== undefined && pet.age !== "") {
-                    ageText = `${pet.age} ${Number(pet.age) === 1 ? "year" : "years"}`;
-                }
-                addDetail("Age", ageText);
+                
+let ageText = "Not specified";
+
+if (pet.age !== null && pet.age !== undefined && pet.age !== "") {
+    const years = Number(pet.age);
+    const months = Number(pet.age_months || 0);
+
+    const parts = [];
+
+    if (years > 0) {
+        parts.push(`${years} ${years === 1 ? "year" : "years"}`);
+    }
+
+    if (months > 0) {
+        parts.push(`${months} ${months === 1 ? "month" : "months"}`);
+    }
+
+    ageText = parts.join(" and ") || "0 months";
+} else if (pet.age_months !== null && pet.age_months !== undefined) {
+    const months = Number(pet.age_months);
+    ageText = `${months} ${months === 1 ? "month" : "months"}`;
+}
+
+addDetail("Age", ageText);
+
 
                 if (pet.notes) {
                     addDetail("Notes", pet.notes);
@@ -398,8 +459,13 @@ function startEditingPet(pet) {
     document.getElementById("petName").value = pet.name || "";
     document.getElementById("petSpecies").value = pet.species || "";
     document.getElementById("petBreed").value = pet.breed || "";
+    document.getElementById("petSize").value = pet.size || "";
     document.getElementById("petAge").value =
         pet.age === null || pet.age === undefined ? "" : pet.age;
+        document.getElementById("petAgeMonths").value =
+    pet.age_months === null || pet.age_months === undefined
+        ? ""
+        : String(pet.age_months);
     document.getElementById("petNotes").value = pet.notes || "";
 
     // File inputs cannot be prefilled by the browser.
@@ -439,7 +505,9 @@ cancelEditButton.addEventListener("click", cancelEditingPet);
             const name = document.getElementById("petName").value.trim();
             const species = document.getElementById("petSpecies").value;
             const breed = document.getElementById("petBreed").value.trim();
+            const size = document.getElementById("petSize").value;
             const ageValue = document.getElementById("petAge").value;
+const ageMonthsValue = document.getElementById("petAgeMonths").value;
             const notes = document.getElementById("petNotes").value.trim();
             const photoFile = document.getElementById("petPhoto").files[0];
 
@@ -448,10 +516,29 @@ cancelEditButton.addEventListener("click", cancelEditingPet);
                 return;
             }
 
-            if (ageValue !== "" && (!Number.isInteger(Number(ageValue)) || Number(ageValue) < 0 || Number(ageValue) > 100)) {
-                notify("Please enter a valid age between 0 and 100.", "error", "Invalid age");
-                return;
-            }
+            if (
+    ageValue !== "" &&
+    (!Number.isInteger(Number(ageValue)) ||
+        Number(ageValue) < 0 ||
+        Number(ageValue) > 100)
+) {
+    notify("Please enter a valid age between 0 and 100.", "error", "Invalid age");
+    return;
+}
+
+if (
+    ageMonthsValue !== "" &&
+    (!Number.isInteger(Number(ageMonthsValue)) ||
+        Number(ageMonthsValue) < 0 ||
+        Number(ageMonthsValue) > 11)
+) {
+    notify("Please select between 0 and 11 months.", "error", "Invalid age");
+    return;
+}
+
+if (ageValue === "" && ageMonthsValue === "") {
+    // Age is optional, so both fields may be left blank.
+}
 
             if (photoFile) {
                 const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
@@ -498,7 +585,11 @@ try {
         name,
         species,
         breed: breed || null,
-        age: ageValue === "" ? null : parseInt(ageValue, 10),
+        size: size || null,
+       age: ageValue === "" ? null : parseInt(ageValue, 10),
+age_months: ageValue === "" && ageMonthsValue === ""
+    ? null
+    : (ageMonthsValue === "" ? 0 : parseInt(ageMonthsValue, 10)),
         notes: notes || null,
         photo_url: photoPath
     };

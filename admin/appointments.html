@@ -102,8 +102,139 @@
 
             </section>
 
-            <!-- SEARCH AND FILTERS -->
-            <section class="appointment-filters">
+            
+<!-- APPOINTMENT QUEUE -->
+<section class="admin-queue-panel">
+    <button
+        type="button"
+        class="admin-queue-toggle"
+        id="queueToggle"
+        aria-expanded="false"
+        aria-controls="adminQueueContent"
+    >
+        <span>
+            <strong>Appointment Queue</strong>
+            <small>View customer positions by appointment time.</small>
+        </span>
+        <span class="queue-toggle-icon" id="queueToggleIcon" aria-hidden="true">+</span>
+    </button>
+
+    <div class="admin-queue-content" id="adminQueueContent" hidden>
+        <div class="admin-queue-filters">
+            <input
+                type="search"
+                id="queueSearch"
+                placeholder="Search customer or pet..."
+                aria-label="Search appointment queue"
+            >
+
+            <input
+                type="date"
+                id="queueDateFilter"
+                aria-label="Filter queue by date"
+            >
+
+            <select id="queueTimeFilter" aria-label="Filter queue by time">
+                <option value="all">All time slots</option>
+            </select>
+        </div>
+
+        <p class="admin-queue-note">
+            Queue positions are calculated separately for each date and time slot.
+        </p>
+
+        <div id="adminQueueMessage" class="admin-queue-message">
+            Queue information will appear here.
+        </div>
+
+        <div class="admin-queue-table-wrap">
+            <table class="admin-queue-table">
+                <thead>
+                    <tr>
+                        <th>Queue</th>
+                        <th>Customer</th>
+                        <th>Pet</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="adminQueueBody">
+                    <tr>
+                        <td colspan="6">Loading queue...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+<!-- PAYMENT MANAGEMENT -->
+<section class="admin-queue-panel payment-management-panel">
+    <button
+        type="button"
+    class="admin-queue-toggle"
+    id="paymentToggle"
+    aria-expanded="false"
+    aria-controls="paymentContent"
+    >
+        <span>
+            <strong>Payment Management</strong>
+            <small>Review booking amounts and update payment status.</small>
+        </span>
+        <span class="queue-toggle-icon" id="paymentToggleIcon" aria-hidden="true">+</span>
+    </button>
+
+    <div class="admin-queue-content" id="paymentContent" hidden>
+        <div class="admin-queue-filters">
+            <input
+                type="search"
+                id="paymentSearch"
+                placeholder="Search customer or pet..."
+                aria-label="Search payments"
+            >
+
+            <select id="paymentStatusFilter" aria-label="Filter payments by status">
+                <option value="all">All payment statuses</option>
+                <option value="unpaid">Unpaid</option>
+                <option value="paid">Paid</option>
+            </select>
+        </div>
+
+        <p class="admin-queue-note">
+            Review each booking's recorded amount and mark payments as paid when payment is received.
+        </p>
+
+        <div id="paymentMessage" class="admin-queue-message">
+            Payment information will appear here.
+        </div>
+
+        <div class="admin-queue-table-wrap">
+            <table class="admin-queue-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Pet</th>
+                        <th>Service</th>
+                        <th>Size</th>
+                        <th>Amount Due</th>
+                        <th>Payment Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentTableBody">
+                    <tr>
+                        <td colspan="7">Loading payment records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- SEARCH AND FILTERS -->
+<section class="appointment-filters">
 
                 <div class="appointment-search">
                     <input
@@ -207,6 +338,15 @@
                 isOpen ? "Close navigation" : "Open navigation"
             );
         });
+        
+    
+// PAYMENT MANAGEMENT DROPDOWN
+const paymentToggle = document.getElementById("paymentToggle");
+const paymentContent = document.getElementById("paymentContent");
+const paymentToggleIcon = document.getElementById("paymentToggleIcon");
+
+
+
 
         overlay.addEventListener("click", closeSidebar);
 

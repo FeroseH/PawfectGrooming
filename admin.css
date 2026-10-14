@@ -4993,3 +4993,166 @@ body {
 
 
 
+
+/* ========================================
+   ADMIN APPOINTMENT QUEUE
+======================================== */
+
+.admin-queue-panel {
+    margin: 24px 0;
+    background: #fff;
+    border: 1px solid #e8e8ed;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.admin-queue-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    border: 0;
+    background: #fff;
+    color: #292936;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.admin-queue-toggle:hover {
+    background: #faf9fc;
+}
+
+.admin-queue-toggle > span:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.admin-queue-toggle strong {
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.admin-queue-toggle small {
+    color: #777783;
+    font-size: 13px;
+}
+
+.queue-toggle-icon {
+    flex-shrink: 0;
+    font-size: 25px;
+    line-height: 1;
+    color: #6654a5;
+}
+
+.admin-queue-content {
+    padding: 0 22px 22px;
+}
+
+.admin-queue-content[hidden] {
+    display: none;
+}
+
+.admin-queue-filters {
+    display: grid;
+    grid-template-columns: minmax(180px, 2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.admin-queue-filters input,
+.admin-queue-filters select {
+    width: 100%;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid #dedee6;
+    border-radius: 8px;
+    background: #fff;
+    color: #33333d;
+    font: inherit;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.admin-queue-note {
+    margin: 0 0 14px;
+    color: #777783;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.admin-queue-message {
+    margin-bottom: 12px;
+    color: #777783;
+    font-size: 13px;
+}
+
+.admin-queue-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-queue-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+
+.admin-queue-table th,
+.admin-queue-table td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #eeeeF2;
+    white-space: nowrap;
+}
+
+.admin-queue-table th {
+    background: #faf9fc;
+    color: #696977;
+    font-weight: 700;
+}
+
+.admin-queue-table td {
+    color: #383844;
+}
+
+.admin-queue-number {
+    font-weight: 800;
+    color: #6654a5;
+}
+
+.admin-queue-slot {
+    display: block;
+    margin-top: 3px;
+    color: #777783;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.admin-queue-empty {
+    padding: 22px 12px !important;
+    text-align: center;
+    color: #777783 !important;
+    white-space: normal !important;
+}
+
+@media (max-width: 700px) {
+    .admin-queue-toggle {
+        padding: 17px;
+    }
+
+    .admin-queue-content {
+        padding: 0 14px 16px;
+    }
+
+    .admin-queue-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-queue-table {
+        min-width: 650px;
+    }
+}

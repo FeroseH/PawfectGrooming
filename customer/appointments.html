@@ -103,7 +103,7 @@
         <!-- SHARED DATE -->
         <div class="form-group shared-appointment-date">
             <label for="appointmentDate">Appointment Date *</label>
-            <input type="date" id="appointmentDate" required>
+            <input type="date" id="appointmentDate" name="appointment_date" required>
             <small>All pets will be scheduled for this date.</small>
         </div>
 
@@ -290,6 +290,8 @@ const addPetAppointmentButton =
 
         /* SET MINIMUM DATE */
 
+
+
         function getLocalDateString() {
             const now = new Date();
             const year = now.getFullYear();
@@ -330,8 +332,8 @@ const addPetAppointmentButton =
 async function loadPets() {
     const { data: pets, error } = await supabaseClient
         .from("pets")
-        .select("id, name, species")
-        .eq("owner_id", currentUser.id)
+.select("id, name, species, size")        
+.eq("owner_id", currentUser.id)
         .order("name", { ascending: true });
 
     if (error) {
@@ -393,10 +395,11 @@ function addPetAppointmentRow() {
     row.dataset.rowNumber = String(rowNumber);
 
     const petOptions = availablePets.map(pet => `
-        <option value="${escapeHTML(pet.id)}">
-            ${escapeHTML(pet.name)} (${escapeHTML(pet.species || "Pet")})
-        </option>
-    `).join("");
+    <option value="${escapeHTML(pet.id)}">
+        ${escapeHTML(pet.name)}
+        (${escapeHTML(pet.species || "Pet")} — ${escapeHTML(pet.size || "Size not set")})
+    </option>
+`).join("");
 
     const serviceOptions = availableServices.map(service => `
         <option value="${escapeHTML(service.id)}">
@@ -619,12 +622,17 @@ appointmentForm.addEventListener("submit", function (event) {
         selectedPetIds.add(petId);
         selectedTimes.add(time);
 
-        appointments.push({
-            petId,
-            serviceId,
-            time,
-            notes
-        });
+        const selectedPet = availablePets.find(
+    pet => String(pet.id) === String(petId)
+);
+
+appointments.push({
+    petId,
+    petSize: selectedPet?.size || null,
+    serviceId,
+    time,
+    notes
+});
     }
 
     const draft = {
