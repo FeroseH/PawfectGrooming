@@ -5677,4 +5677,18 @@ body.modal-open {
 
 
 
-        
+ /* Center the email contact card */
+.cta-section .contact-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.cta-section .contact-links a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+}       

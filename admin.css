@@ -2753,8 +2753,8 @@ body {
 
 .pets-stats {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
     margin-bottom: 30px;
 }
 
@@ -5156,3 +5156,5 @@ body {
         min-width: 650px;
     }
 }
+
+

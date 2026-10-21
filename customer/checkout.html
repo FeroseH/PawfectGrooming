@@ -829,7 +829,68 @@ total += price;
                     return;
                 }
 
-                
+  // Check whether any selected pet already has
+// an appointment at the same date and time.
+const duplicateChecks = await Promise.all(
+    verifiedAppointments.map(async (item) => {
+        const { data, error } = await supabaseClient
+            .from("appointments")
+            .select("id")
+            .eq("customer_id", user.id)
+            .eq("pet_id", item.appointment.petId)
+            .eq("appointment_date", checkoutDraft.date)
+            .eq("appointment_time", item.appointment.time)
+            .neq("status", "cancelled")
+            .limit(1);
+
+        return { data, error, item };
+    })
+);
+
+// Stop if Supabase could not check the existing bookings.
+const failedCheck = duplicateChecks.find(
+    result => result.error
+);
+
+if (failedCheck) {
+    console.error(
+        "DUPLICATE BOOKING CHECK ERROR:",
+        failedCheck.error
+    );
+
+    setMessage(
+        "We couldn't check for duplicate bookings. Please try again."
+    );
+    return;
+}
+
+// Find an existing booking for the same pet and schedule.
+const duplicateBooking = duplicateChecks.find(
+    result => result.data && result.data.length > 0
+);
+
+
+if (duplicateBooking) {
+    const petName = duplicateBooking.item.pet.name;
+    const time = formatTime(
+        duplicateBooking.item.appointment.time
+    );
+
+    const message =
+        `${petName} already has an appointment on ` +
+        `${formatDate(checkoutDraft.date)} at ${time}. ` +
+        `Please choose another schedule.`;
+
+    setMessage(message);
+    window.showToast(
+        message,
+        "error",
+        "Duplicate Booking"
+    );
+
+    return;
+}
+   
 const rowsToInsert = verifiedAppointments.map(item => ({
     customer_id: user.id,
     pet_id: item.appointment.petId,

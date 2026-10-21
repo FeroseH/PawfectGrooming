@@ -80,7 +80,13 @@
             <div>
                 <p class="small-label">RESERVE A GROOMING SESSION</p>
                 <h1>Book an Appointment</h1>
-                <p>Choose your pet, service, and preferred schedule.</p>
+               <p>Choose your pet, service, and preferred schedule.</p>
+
+<p class="pricing-notice">
+    <strong>Pricing Notice:</strong>
+    Service prices vary depending on your pet's size.
+    Your size-adjusted price will be shown at checkout.
+</p>
             </div>
         </section>
 
@@ -678,14 +684,16 @@ appointments.push({
             const { data: appointments, error } = await supabaseClient
     .from("appointments")
     .select(`
-        id,
-        appointment_date,
-        appointment_time,
-        status,
-        notes,
-        pets(name, species),
-        services(name, price, duration)
-    `)
+    id,
+    appointment_date,
+    appointment_time,
+    status,
+    notes,
+    price_at_booking,
+    payment_status,
+    pets(name, species, size),
+    services(name, price, duration)
+`)
     .eq("customer_id", currentUser.id)
     .neq("status", "cancelled")
     .order("appointment_date", { ascending: true });
@@ -733,12 +741,15 @@ appointments.push({
 
                 const petSpecies =
                     appointment.pets?.species || "";
-
+const petSize =
+    appointment.pets?.size || "";
                 const serviceName =
                     appointment.services?.name || "Unknown service";
 
                 const price =
-                    appointment.services?.price ?? 0;
+    appointment.price_at_booking ??
+    appointment.services?.price ??
+    0;
 
                 const duration =
                     appointment.services?.duration ?? 0;
@@ -771,10 +782,15 @@ appointments.push({
 
                     <div class="appointment-card-details">
                         <p>
-                            <strong>Pet</strong>
-                            ${escapeHTML(petName)}
-                            ${petSpecies ? `(${escapeHTML(petSpecies)})` : ""}
-                        </p>
+    <strong>Pet</strong>
+    ${escapeHTML(petName)}
+    ${petSpecies ? `(${escapeHTML(petSpecies)})` : ""}
+</p>
+
+<p>
+    <strong>Pet Size</strong>
+    ${escapeHTML(petSize || "Not specified")}
+</p>
 
                         <p>
                             <strong>Time</strong>

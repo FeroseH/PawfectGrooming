@@ -18,9 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const petsMessage = document.getElementById("petsMessage");
     const petsEmpty = document.getElementById("petsEmpty");
 
-    const totalPets = document.getElementById("totalPets");
-    const totalDogs = document.getElementById("totalDogs");
-    const totalCats = document.getElementById("totalCats");
+   const totalPets = document.getElementById("totalPets");
+const totalDogs = document.getElementById("totalDogs");
+const totalCats = document.getElementById("totalCats");
+const totalOtherPets = document.getElementById("totalOtherPets");
 
     const activePetsTab = document.getElementById("activePetsTab");
     const archivedPetsTab = document.getElementById("archivedPetsTab");
@@ -390,6 +391,7 @@ function askArchiveReason(petName) {
             totalPets.textContent = "—";
             totalDogs.textContent = "—";
             totalCats.textContent = "—";
+            totalOtherPets.textContent = "—";
 
             notify(
     error.message || "An error occurred while loading services.",
@@ -407,10 +409,14 @@ function askArchiveReason(petName) {
     ======================================== */
 
     function updateStatistics() {
-        totalPets.textContent = pets.length;
-        totalDogs.textContent = pets.filter(isDog).length;
-        totalCats.textContent = pets.filter(isCat).length;
-    }
+    totalPets.textContent = pets.length;
+    totalDogs.textContent = pets.filter(isDog).length;
+    totalCats.textContent = pets.filter(isCat).length;
+
+    totalOtherPets.textContent = pets.filter(pet => {
+        return !isDog(pet) && !isCat(pet);
+    }).length;
+}
 
     /* ========================================
        RENDER PET RECORDS

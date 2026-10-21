@@ -87,15 +87,27 @@
                         <input type="text" id="petName" placeholder="e.g. Luna" maxlength="80" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="petSpecies">Species *</label>
-                        <select id="petSpecies" required>
-                            <option value="">Select species</option>
-                            <option value="Dog">Dog</option>
-                            <option value="Cat">Cat</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                   
+<div class="form-group">
+    <label for="petSpecies">Species *</label>
+    <select id="petSpecies" required>
+        <option value="">Select species</option>
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
+
+<div class="form-group" id="otherSpeciesGroup" hidden>
+    <label for="otherSpecies">What kind of pet? *</label>
+    <input
+        type="text"
+        id="otherSpecies"
+        placeholder="e.g. Rabbit, Hamster, Bird"
+        maxlength="80"
+    >
+</div>
+
 
                     <div class="form-group">
                         <label for="petBreed">Breed</label>
@@ -238,6 +250,23 @@ const petFormTitle = document.getElementById("petFormTitle");
 const petFormDescription = document.getElementById("petFormDescription");
 const cancelEditButton = document.getElementById("cancelEditButton");
 const petPhotoInput = document.getElementById("petPhoto");
+
+const petSpeciesSelect = document.getElementById("petSpecies");
+const otherSpeciesGroup = document.getElementById("otherSpeciesGroup");
+const otherSpeciesInput = document.getElementById("otherSpecies");
+
+function updateOtherSpeciesField() {
+    const isOther = petSpeciesSelect.value === "Other";
+
+    otherSpeciesGroup.hidden = !isOther;
+    otherSpeciesInput.required = isOther;
+
+    if (!isOther) {
+        otherSpeciesInput.value = "";
+    }
+}
+
+petSpeciesSelect.addEventListener("change", updateOtherSpeciesField);
 
         const petForm = document.getElementById("petForm");
         const petsList = document.getElementById("petsList");
@@ -457,7 +486,20 @@ function startEditingPet(pet) {
     editingPet = pet;
 
     document.getElementById("petName").value = pet.name || "";
-    document.getElementById("petSpecies").value = pet.species || "";
+   const standardSpecies = ["Dog", "Cat"];
+
+if (standardSpecies.includes(pet.species)) {
+    petSpeciesSelect.value = pet.species;
+    otherSpeciesInput.value = "";
+} else if (pet.species) {
+    petSpeciesSelect.value = "Other";
+    otherSpeciesInput.value = pet.species;
+} else {
+    petSpeciesSelect.value = "";
+    otherSpeciesInput.value = "";
+}
+
+updateOtherSpeciesField();
     document.getElementById("petBreed").value = pet.breed || "";
     document.getElementById("petSize").value = pet.size || "";
     document.getElementById("petAge").value =
@@ -489,7 +531,7 @@ function startEditingPet(pet) {
 function cancelEditingPet() {
     editingPet = null;
     petForm.reset();
-
+updateOtherSpeciesField();
     petFormTitle.textContent = "Add a New Pet";
     petFormDescription.textContent = "Tell us a little about your pet.";
     saveText.textContent = "＋ Add Pet";
@@ -503,7 +545,12 @@ cancelEditButton.addEventListener("click", cancelEditingPet);
             event.preventDefault();
 
             const name = document.getElementById("petName").value.trim();
-            const species = document.getElementById("petSpecies").value;
+           const selectedSpecies = petSpeciesSelect.value;
+const customSpecies = otherSpeciesInput.value.trim();
+
+const species = selectedSpecies === "Other"
+    ? customSpecies
+    : selectedSpecies;
             const breed = document.getElementById("petBreed").value.trim();
             const size = document.getElementById("petSize").value;
             const ageValue = document.getElementById("petAge").value;
@@ -511,10 +558,24 @@ const ageMonthsValue = document.getElementById("petAgeMonths").value;
             const notes = document.getElementById("petNotes").value.trim();
             const photoFile = document.getElementById("petPhoto").files[0];
 
-            if (!name || !species) {
-                notify("Please enter your pet's name and species.", "error", "Missing information");
-                return;
-            }
+           if (!name || !selectedSpecies) {
+    notify(
+        "Please enter your pet's name and select a species.",
+        "error",
+        "Missing information"
+    );
+    return;
+}
+
+if (selectedSpecies === "Other" && !customSpecies) {
+    notify(
+        "Please specify what kind of pet you have.",
+        "error",
+        "Species required"
+    );
+    otherSpeciesInput.focus();
+    return;
+}
 
             if (
     ageValue !== "" &&
